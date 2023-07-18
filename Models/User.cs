@@ -1,31 +1,29 @@
 using System.ComponentModel.DataAnnotations;
+using MoneyFlow.Constants;
+using MoneyFlow.Utils.Validator;
 
 namespace MoneyFlow.Models
 {
     public class User : Entity
     {
-        [Required(AllowEmptyStrings = true)]
+        [Required(AllowEmptyStrings = true, ErrorMessage = ErrorMessage.USERNAME_EMPTY)]
         [StringLength(64)]
-        public string Username { get; set;}
+        [UsernameValidation(ErrorMessage = ErrorMessage.FULLNAME_FORMAT_INVALID)]
+        public string Username { get; set;} = "";
 
-        [Required(AllowEmptyStrings = true)]
+        [Required(AllowEmptyStrings = true, ErrorMessage = ErrorMessage.FULLNAME_EMPTY)]
         [StringLength(255)]
-        public string FullName { get; set;}
+        [FullNameValidation(ErrorMessage = ErrorMessage.FULLNAME_FORMAT_INVALID)]
+        public string FullName { get; set;} = "";
 
-        [Required(AllowEmptyStrings = true)]
+        [Required(AllowEmptyStrings = true, ErrorMessage = ErrorMessage.PASSWORD_EMPTY),]
         [StringLength(64)]
-        public string Password { get; set;}
+        [PasswordValidation(ErrorMessage = ErrorMessage.PASSWORD_FORMAT_INVALID)]
+        public string Password { get; set;} = "";
 
-        [Required(AllowEmptyStrings = true)]
+        [Required(AllowEmptyStrings = true, ErrorMessage = ErrorMessage.EMAIL_EMPTY)]
         [StringLength(255)]
-        public string Email { get; set;}
-
-        public User() 
-        {
-            Username = "";
-            FullName = "";
-            Password = "";
-            Email = "";
-        }
+        [EmailValidation(ErrorMessage = ErrorMessage.EMAIL_FORMAT_INVALID)]
+        public string Email { get; set;} = "";
     }
 }
