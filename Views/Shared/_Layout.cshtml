@@ -1,5 +1,6 @@
 ﻿@{
-    var baseUrl = "http://localhost:5000";
+    var baseUrl = ViewBag.baseUrl;
+    var token = Context.Request.Cookies["TokenBearer"];
 }
 
 <!DOCTYPE html>

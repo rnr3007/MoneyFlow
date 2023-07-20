@@ -1,6 +1,8 @@
 using System;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using MoneyFlow.Constants;
 using MoneyFlow.Context;
 using MoneyFlow.Models;
@@ -13,34 +15,42 @@ namespace MoneyFlow.Services
     {
         private readonly UserContext _context;
 
-        public UserService(UserContext context)
+        private readonly IHttpContextAccessor _httpContext;
+
+        private HttpContext HttpContext => _httpContext.HttpContext;
+
+        public UserService(UserContext context, IHttpContextAccessor httpContext)
         {
             _context = context;
+            _httpContext = httpContext;
         }
 
-        public string Register(User user)
+        public async Task Register(User user)
         {
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             _context.Users.Add(user);
             var jwtToken = AuthUtilites.GenerateJwt(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public string Login(User user)
+        public async Task Login(User user)
         {
             var userResult = _context.Users.Where(x => x.Username == user.Username).FirstOrDefault() ?? throw new DataException(ErrorMessage.USER_NOT_FOUND);
             if (!BCrypt.Net.BCrypt.Verify(user.Password, userResult.Password)) { throw new DataException(ErrorMessage.WRONG_PASSWORD);}
-            var jwtToken = AuthUtilites.GenerateJwt(userResult);
-            
-            return jwtToken;
+            var jwtToken = AuthUtilites.GenerateJwt(userResult) ?? throw new Exception(ErrorMessage.SERVER_ERROR);
+            HttpContext.Response.Cookies.Append("TokenBearer", jwtToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict
+            });
         }
 
-        public string Edit(User user)
+        public void Edit(User user)
         {
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             _context.Update(user);
             var jwtToken = AuthUtilites.GenerateJwt(user);
-            return jwtToken;
         }
 
         public void Delete(User user)

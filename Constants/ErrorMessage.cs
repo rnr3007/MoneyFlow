@@ -13,5 +13,6 @@ namespace MoneyFlow.Constants
         public const string USER_NOT_FOUND = "User tidak ditemukan";
         public const string WRONG_PASSWORD = "Password salah";
         public const string FIELD_EMPTY = "Data kosong";
+        public const string SERVER_ERROR = "Kesalahan server";
     }
 }

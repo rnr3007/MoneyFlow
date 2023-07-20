@@ -1,0 +1,7 @@
+@{
+    var baseUrl = "http://localhost:5000";
+    var token = Context.Request.Cookies["TokenBearer"];
+
+    ViewBag.baseUrl = baseUrl;
+    ViewBag.token = token;
+}

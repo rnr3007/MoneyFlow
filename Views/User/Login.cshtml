@@ -1,7 +1,13 @@
 @model MoneyFlow.Models.User
 
 @{
-    Layout = "_Layout";
+    if (ViewBag.token != null)
+    {
+        Layout = "_LoggedInLayout";
+    } else
+    {
+        Layout = "_Layout";
+    }
 }
 
 <!DOCTYPE html>

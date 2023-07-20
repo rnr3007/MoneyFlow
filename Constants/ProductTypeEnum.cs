@@ -4,6 +4,9 @@ namespace MoneyFlow.Constants
 {
     public enum ProductTypeEnum
     {
+        [StringValue("")]
+        NONE,
+
         [StringValue("Makanan")]
         FOOD_AND_BEVERAGE,
 

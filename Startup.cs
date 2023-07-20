@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 using MoneyFlow.Context;
 using MoneyFlow.Services;
 
@@ -28,6 +29,8 @@ namespace MoneyFlow
                 options.UseSqlServer(Configuration.GetConnectionString("DbConn"))
             );
             
+            services.AddHttpContextAccessor();
+
             services.AddScoped<UserService>();
 
             services.AddControllersWithViews();

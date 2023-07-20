@@ -37,7 +37,7 @@ namespace MoneyFlow.Controllers
             {
                 if (ModelState.IsValid) 
                 {
-                    _userService.Register(user);    
+                    await _userService.Register(user);    
                 }
                 return View(user);
             } catch (Exception e)
@@ -60,7 +60,7 @@ namespace MoneyFlow.Controllers
             {
                 if (iv.IsNotEmpty(user.Password) && iv.IsNotEmpty(user.Username)) 
                 {
-                    _userService.Login(user);
+                    await _userService.Login(user);
                 }
                 return View(user);
             } catch(DataException e) 
@@ -85,11 +85,10 @@ namespace MoneyFlow.Controllers
         {
             try
             {
-                string jwtToken = _userService.Edit(user);
+                _userService.Edit(user);
                 return new OkObjectResult(new ResponseGenerator(
                     200,
-                    SuccessMessage.UPDATE_PROFILE_SUCCESS,
-                    new {token = jwtToken}
+                    SuccessMessage.UPDATE_PROFILE_SUCCESS
                 ));
             } catch (DataException e){
                 return new UnauthorizedObjectResult(new ResponseGenerator(
