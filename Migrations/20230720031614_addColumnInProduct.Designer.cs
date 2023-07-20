@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoneyFlow.Context;
 
 namespace MoneyFlow.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UsercontextModelSnapshot : ModelSnapshot
+    [Migration("20230720031614_addColumnInProduct")]
+    partial class addColumnInProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,9 +48,6 @@ namespace MoneyFlow.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Id", "Name")
-                        .IsUnique();
 
                     b.ToTable("Products");
                 });
@@ -86,7 +85,7 @@ namespace MoneyFlow.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Id", "Username", "Email")
+                    b.HasIndex("Username", "Email")
                         .IsUnique();
 
                     b.ToTable("Users");

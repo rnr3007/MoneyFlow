@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using MoneyFlow.Context;
 using MoneyFlow.Services;
+using System.Collections.Generic;
+using MoneyFlow.Middleware;
 
 namespace MoneyFlow
 {
@@ -50,6 +52,26 @@ namespace MoneyFlow
                 app.UseHsts();
             }
             // app.UseHttpsRedirection();
+
+            List<string> protectedBranch = new List<string> 
+            {
+                "/product", "/user"
+            };
+            
+            List<string> unprotectedBranch = new List<string> 
+            {
+                "/user/register"
+            };
+
+            app.UseWhen(context => (
+                protectedBranch.Contains(context.Request.Path) 
+                && !unprotectedBranch.Contains(context.Request.Path)
+            ), builder =>
+            {
+                builder.UseMiddleware<AuthValidation>();
+                builder.UseAuthorization();
+            });
+
             app.UseStaticFiles();
             
             app.UseRouting();

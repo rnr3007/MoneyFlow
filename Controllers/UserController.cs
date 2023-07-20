@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MoneyFlow.Constants;
@@ -17,6 +18,8 @@ namespace MoneyFlow.Controllers
         private readonly UserService _userService;
 
         private readonly ILogger<UserController> _logger;
+
+        private readonly static string baseUrl = Startup.StaticConfiguration.GetSection("BASE_URL").Value;
 
         public UserController(UserService userService, ILogger<UserController> logger)
         {
@@ -39,7 +42,7 @@ namespace MoneyFlow.Controllers
                 {
                     await _userService.Register(user);    
                 }
-                return View(user);
+                return Redirect($"{baseUrl}/user/login");
             } catch (Exception e)
             {
                 Console.WriteLine(e);
@@ -61,6 +64,7 @@ namespace MoneyFlow.Controllers
                 if (iv.IsNotEmpty(user.Password) && iv.IsNotEmpty(user.Username)) 
                 {
                     await _userService.Login(user);
+                    return Redirect($"{baseUrl}/product");
                 }
                 return View(user);
             } catch(DataException e) 
@@ -77,6 +81,20 @@ namespace MoneyFlow.Controllers
             {   
                 Console.WriteLine(e);
                 return View(user);
+            }
+        }
+
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            try
+            {
+                Response.Cookies.Delete("TokenBearer");
+                return Redirect($"{baseUrl}/user/login");
+            } catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return Redirect($"{baseUrl}/");
             }
         }
 
@@ -97,7 +115,7 @@ namespace MoneyFlow.Controllers
                 ));
             } catch (Exception e)
             {
-                System.Console.WriteLine(e);
+                Console.WriteLine(e);
                 return new StatusCodeResult(500);
             }
         }
@@ -114,7 +132,7 @@ namespace MoneyFlow.Controllers
                 ));
             } catch (Exception e)
             {
-                System.Console.WriteLine(e);
+                Console.WriteLine(e);
                 return new StatusCodeResult(500);
             }
         }

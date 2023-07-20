@@ -16,7 +16,11 @@ namespace MoneyFlow.Context
             base.OnModelCreating(model);
             model.Entity<User>(b =>
             {
-                b.HasIndex(u => new {u.Username, u.Email}).IsUnique();
+                b.HasIndex(u => new {u.Id, u.Username, u.Email}).IsUnique();
+            });
+            model.Entity<Product>(b =>
+            {
+                b.HasIndex(p => new {p.Id, p.Name}).IsUnique();
             });
         }
     }

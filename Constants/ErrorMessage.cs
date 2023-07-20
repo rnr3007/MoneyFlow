@@ -14,5 +14,6 @@ namespace MoneyFlow.Constants
         public const string WRONG_PASSWORD = "Password salah";
         public const string FIELD_EMPTY = "Data kosong";
         public const string SERVER_ERROR = "Kesalahan server";
+        public const string INVALID_TOKEN = "Token tidak valid";
     }
 }
