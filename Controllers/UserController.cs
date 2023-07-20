@@ -41,8 +41,9 @@ namespace MoneyFlow.Controllers
                 if (ModelState.IsValid) 
                 {
                     await _userService.Register(user);    
+                    return Redirect($"{baseUrl}/user/login");
                 }
-                return Redirect($"{baseUrl}/user/login");
+                return View(user);
             } catch (Exception e)
             {
                 Console.WriteLine(e);
@@ -85,13 +86,14 @@ namespace MoneyFlow.Controllers
         }
 
         [HttpGet("logout")]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
             try
             {
                 Response.Cookies.Delete("TokenBearer");
                 return Redirect($"{baseUrl}/user/login");
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e);
                 return Redirect($"{baseUrl}/");
@@ -99,7 +101,7 @@ namespace MoneyFlow.Controllers
         }
 
         [HttpPut("edit")]
-        public async Task<IActionResult> Edit(User user)
+        public IActionResult Edit(User user)
         {
             try
             {
@@ -108,12 +110,15 @@ namespace MoneyFlow.Controllers
                     200,
                     SuccessMessage.UPDATE_PROFILE_SUCCESS
                 ));
-            } catch (DataException e){
+            }
+            catch (DataException e)
+            {
                 return new UnauthorizedObjectResult(new ResponseGenerator(
                     401,
                     e.Message
                 ));
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e);
                 return new StatusCodeResult(500);
@@ -121,7 +126,7 @@ namespace MoneyFlow.Controllers
         }
 
         [HttpDelete("deactivate")]
-        public async Task<IActionResult> Deactivate(User user)
+        public IActionResult Deactivate(User user)
         {
             try
             {
@@ -130,7 +135,8 @@ namespace MoneyFlow.Controllers
                     200,
                     SuccessMessage.DEACTIVATE_ACCOUNT_SUCCESS
                 ));
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e);
                 return new StatusCodeResult(500);

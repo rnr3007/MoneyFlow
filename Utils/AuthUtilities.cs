@@ -52,9 +52,8 @@ namespace MoneyFlow.Utils
                 var validToken = (JwtSecurityToken)validatedToken;
                 string id = validToken.Claims.First(j => j.Type == "id").Value;
                 return id;
-            } catch (SecurityTokenException e)
+            } catch (Exception)
             {
-                Console.WriteLine(e);
                 throw new SecurityTokenException(ErrorMessage.INVALID_TOKEN);
             }
         }

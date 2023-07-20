@@ -13,7 +13,7 @@ namespace MoneyFlow.Services
 {
     public class UserService
     {
-        private readonly UserContext _context;
+        private readonly UserContext _dbContext;
 
         private readonly IHttpContextAccessor _httpContext;
 
@@ -21,41 +21,42 @@ namespace MoneyFlow.Services
 
         public UserService(UserContext context, IHttpContextAccessor httpContext)
         {
-            _context = context;
+            _dbContext = context;
             _httpContext = httpContext;
         }
 
         public async Task Register(User user)
         {
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            _context.Users.Add(user);
+            _dbContext.Users.Add(user);
             var jwtToken = AuthUtilites.GenerateJwt(user);
-            await _context.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task Login(User user)
         {
-            var userResult = _context.Users.Where(x => x.Username == user.Username).FirstOrDefault() ?? throw new DataException(ErrorMessage.USER_NOT_FOUND);
+            var userResult = _dbContext.Users.Where(x => x.Username == user.Username).FirstOrDefault() ?? throw new DataException(ErrorMessage.USER_NOT_FOUND);
             if (!BCrypt.Net.BCrypt.Verify(user.Password, userResult.Password)) { throw new DataException(ErrorMessage.WRONG_PASSWORD);}
             var jwtToken = AuthUtilites.GenerateJwt(userResult) ?? throw new Exception(ErrorMessage.SERVER_ERROR);
             HttpContext.Response.Cookies.Append("TokenBearer", jwtToken, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddDays(1)
             });
         }
 
         public void Edit(User user)
         {
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            _context.Update(user);
+            _dbContext.Update(user);
             var jwtToken = AuthUtilites.GenerateJwt(user);
         }
 
         public void Delete(User user)
         {
-            _context.Remove(user);
+            _dbContext.Remove(user);
         }
     }
 }

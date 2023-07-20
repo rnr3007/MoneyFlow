@@ -9,6 +9,7 @@ using MoneyFlow.Context;
 using MoneyFlow.Services;
 using System.Collections.Generic;
 using MoneyFlow.Middleware;
+using System;
 
 namespace MoneyFlow
 {
@@ -34,6 +35,9 @@ namespace MoneyFlow
             services.AddHttpContextAccessor();
 
             services.AddScoped<UserService>();
+            services.AddScoped<ProductService>();
+
+            services.AddTransient<UserContext>();
 
             services.AddControllersWithViews();
         }
@@ -63,9 +67,10 @@ namespace MoneyFlow
                 "/user/register"
             };
 
-            app.UseWhen(context => (
-                protectedBranch.Contains(context.Request.Path) 
-                && !unprotectedBranch.Contains(context.Request.Path)
+            app.UseWhen(context => 
+            (
+                !unprotectedBranch.Contains((string)context.Request.Path)
+                && protectedBranch.Exists(c => ((string)context.Request.Path).StartsWith(c))
             ), builder =>
             {
                 builder.UseMiddleware<AuthValidation>();

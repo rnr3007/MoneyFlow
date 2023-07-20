@@ -23,6 +23,8 @@ namespace MoneyFlow.Middleware
 
         public async Task Invoke(HttpContext _context, UserContext _dbContext)
         {
+            string requestPath = _context.Request.Path;
+            string loginPath = "/user/login";
             try {
                 var jwt = _context.Request.Cookies["TokenBearer"];
                 string id = AuthUtilites.ValidateJwt(jwt);
@@ -30,33 +32,31 @@ namespace MoneyFlow.Middleware
                 var user = _dbContext.Users.Where(x => x.Id == id).FirstOrDefaultAsync() 
                     ?? throw new DataException(ErrorMessage.USER_NOT_FOUND);
 
-                _context.Response.Cookies.Append("TokenBearer", id, new CookieOptions
+                _context.Response.Cookies.Append("TokenBearer", jwt, new CookieOptions
                 {
                     HttpOnly = true,
                     Secure = true,
-                    SameSite = SameSiteMode.Strict
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddDays(1)
                 });
-                _context.Response.Cookies.Append("Id", id);
+                _context.Items["id"] = id;
+                if (requestPath == loginPath)
+                {
+                    _context.Response.Redirect("/");
+                    return;
+                }
                 await _next.Invoke(_context);
-            } catch (DataException)
-            {
-                _context.Response.Cookies.Delete("TokenBearer");
-                _context.Response.Cookies.Delete("Id");
-                _context.Response.Redirect("/user/login");
-                return;
-            } catch (SecurityTokenException)
-            {
-                _context.Response.Cookies.Delete("TokenBearer");
-                _context.Response.Cookies.Delete("Id");
-                _context.Response.Redirect("/user/login");
-                return;
             } catch (Exception e)
             {
-                Console.WriteLine(e);
+                Type exceptionType = e.GetType();
+                if (!(exceptionType == typeof(DataException) || exceptionType == typeof(SecurityTokenException)))
+                {
+                    Console.WriteLine(e);
+                }
                 _context.Response.Cookies.Delete("TokenBearer");
                 _context.Response.Cookies.Delete("Id");
-                _context.Response.Redirect("/user/login");
-                return;
+                if (requestPath != loginPath) { _context.Response.Redirect("/user/login"); return; }
+                else { await _next.Invoke(_context); }
             }
         }
     }
