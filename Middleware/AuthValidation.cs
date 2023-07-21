@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MoneyFlow.Constants;
 using MoneyFlow.Context;
-using MoneyFlow.Models;
 using MoneyFlow.Utils;
 
 namespace MoneyFlow.Middleware
@@ -21,7 +20,7 @@ namespace MoneyFlow.Middleware
             _next = next;
         }
 
-        public async Task Invoke(HttpContext _context, UserContext _dbContext)
+        public Task Invoke(HttpContext _context, UserContext _dbContext)
         {
             string requestPath = _context.Request.Path;
             string loginPath = "/user/login";
@@ -43,9 +42,8 @@ namespace MoneyFlow.Middleware
                 if (requestPath == loginPath)
                 {
                     _context.Response.Redirect("/");
-                    return;
                 }
-                await _next.Invoke(_context);
+                return _next.Invoke(_context);
             } catch (Exception e)
             {
                 Type exceptionType = e.GetType();
@@ -55,8 +53,8 @@ namespace MoneyFlow.Middleware
                 }
                 _context.Response.Cookies.Delete("TokenBearer");
                 _context.Response.Cookies.Delete("Id");
-                if (requestPath != loginPath) { _context.Response.Redirect("/user/login"); return; }
-                else { await _next.Invoke(_context); }
+                if (requestPath != loginPath) { _context.Response.Redirect("/user/login"); }
+                return _next.Invoke(_context);
             }
         }
     }

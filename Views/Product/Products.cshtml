@@ -1,6 +1,7 @@
 @model IEnumerable<MoneyFlow.Models.Product>
 
 @{
+    var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
     Layout = "_InitLayout";
 }
 
@@ -13,7 +14,7 @@
 </head>
 <body>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a href="@baseUrl/product/create">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -49,15 +50,21 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.ImageUrl)
                     </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <td class="row">
+                        <form href="@baseUrl/product/delete/@item.Id">
+                            <div class="form-group flex-grow-1">
+                                <input type="submit" value="Delete" class="btn btn-primary" />
+                            </div>
+                        </form>
+                        <form method="" href="@baseUrl/product/delete">
+                            <div class="form-group flex-grow-1">
+                                <input type="submit" value="Update" class="btn btn-primary" />
+                            </div>
+                        </form>
                     </td>
                 </tr>
             }
         }
-
     </tbody>
 </table>
 </body>

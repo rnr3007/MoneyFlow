@@ -8,7 +8,7 @@ using MoneyFlow.Constants;
 using MoneyFlow.Models;
 using MoneyFlow.Services;
 using MoneyFlow.Utils;
-using iv = MoneyFlow.Utils.InputValidator;
+using iv = MoneyFlow.Utils.Validator.InputValidator;
 
 namespace MoneyFlow.Controllers
 {

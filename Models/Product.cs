@@ -5,17 +5,16 @@ namespace MoneyFlow.Models
 {
     public class Product : Entity
     {
-        [Required(AllowEmptyStrings = true)]
+        [Required(AllowEmptyStrings = true, ErrorMessage = ErrorMessage.PRODUCT_NAME_EMPTY)]
         [StringLength(255)]
         public string Name { get; set; } = "";
 
-        [Required(AllowEmptyStrings = true)]
+        [Required(AllowEmptyStrings = true, ErrorMessage = ErrorMessage.PRODUCT_TYPE_EMPTY)]
         public ProductTypeEnum ProductType{ get; set; } = 0;
 
-        [Required(AllowEmptyStrings = true)]
+        [Required(ErrorMessage = ErrorMessage.PRODUCT_COST_EMPTY)]
         public int Price { get; set; } = 0;
 
-        [Required(AllowEmptyStrings = true)]
         public string ImageUrl { get; set; } = "";
     }
 }

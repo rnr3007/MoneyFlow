@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using iv = MoneyFlow.Utils.InputValidator;
+using iv = MoneyFlow.Utils.Validator.InputValidator;
 
 namespace MoneyFlow.Utils.Validator
 {

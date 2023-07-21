@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace MoneyFlow.Utils
+namespace MoneyFlow.Utils.Validator
 {
     public class InputValidator
     {

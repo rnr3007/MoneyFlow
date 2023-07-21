@@ -1,5 +1,5 @@
 ﻿@{
-    var baseUrl = "http://localhost:5000";
+    var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
     var token = Context.Request.Cookies["TokenBearer"];
 }
 
@@ -23,6 +23,9 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1 justify-content-end">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="@baseUrl/product">Produk</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" href="@baseUrl/user/logout">Logout</a>
                         </li>

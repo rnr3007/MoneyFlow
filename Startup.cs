@@ -35,6 +35,7 @@ namespace MoneyFlow
             services.AddHttpContextAccessor();
 
             services.AddScoped<UserService>();
+
             services.AddScoped<ProductService>();
 
             services.AddTransient<UserContext>();

@@ -7,7 +7,6 @@ using MoneyFlow.Constants;
 using MoneyFlow.Context;
 using MoneyFlow.Models;
 using MoneyFlow.Utils;
-using iv = MoneyFlow.Utils.InputValidator;
 
 namespace MoneyFlow.Services
 {
@@ -33,7 +32,7 @@ namespace MoneyFlow.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task Login(User user)
+        public Task Login(User user)
         {
             var userResult = _dbContext.Users.Where(x => x.Username == user.Username).FirstOrDefault() ?? throw new DataException(ErrorMessage.USER_NOT_FOUND);
             if (!BCrypt.Net.BCrypt.Verify(user.Password, userResult.Password)) { throw new DataException(ErrorMessage.WRONG_PASSWORD);}
@@ -45,6 +44,7 @@ namespace MoneyFlow.Services
                 SameSite = SameSiteMode.Strict,
                 Expires = DateTime.UtcNow.AddDays(1)
             });
+            return Task.CompletedTask;
         }
 
         public void Edit(User user)

@@ -1,5 +1,5 @@
 ﻿@{
-    var baseUrl = "http://localhost:5000";
+    var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
     var token = Context.Request.Cookies["TokenBearer"];
 }
 
