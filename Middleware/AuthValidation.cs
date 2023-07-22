@@ -35,7 +35,7 @@ namespace MoneyFlow.Middleware
                 {
                     HttpOnly = true,
                     Secure = true,
-                    SameSite = SameSiteMode.Strict,
+                    SameSite = SameSiteMode.None,
                     Expires = DateTime.UtcNow.AddDays(1)
                 });
                 _context.Items["id"] = id;
@@ -51,6 +51,7 @@ namespace MoneyFlow.Middleware
                 {
                     Console.WriteLine(e);
                 }
+                Console.WriteLine(e);
                 _context.Response.Cookies.Delete("TokenBearer");
                 _context.Response.Cookies.Delete("Id");
                 if (requestPath != loginPath) { _context.Response.Redirect("/user/login"); }

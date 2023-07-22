@@ -13,6 +13,7 @@ namespace MoneyFlow.Constants
         public const string USERNAME_FORMAT_INVALID = "Format username tidak sesuai";
         public const string PASSWORD_FORMAT_INVALID = "Format password tidak sesuai";
         public const string EMAIL_FORMAT_INVALID = "Format email tidak sesuai";
+        public const string PRODUCT_COST_INVALID = "Harga produk harus lebih dari 0";
         public const string USER_NOT_FOUND = "User tidak ditemukan";
         public const string PRODUCT_NOT_FOUND = "Data produk tidak ditemukan";
         public const string WRONG_PASSWORD = "Password salah";

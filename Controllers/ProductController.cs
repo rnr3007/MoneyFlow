@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MoneyFlow.Models;
+using MoneyFlow.Models.ViewModels;
 using MoneyFlow.Services;
+using iv = MoneyFlow.Utils.Validator.InputValidator;
 
 namespace MoneyFlow.Controllers
 {
@@ -25,19 +27,31 @@ namespace MoneyFlow.Controllers
         }
 
         [HttpGet]
-        public IActionResult ProductsAsync()
+        public IActionResult Products(string keyword, string page, string limit)
         {
-            var products = _productService.GetProducts();
-            if (products == null)
+            try
+            {
+                ViewData["Title"] = "Produk";
+                ViewData["searchKeyword"] = keyword ?? "";
+
+                var productsObject = _productService.GetProducts(keyword, 
+                    iv.GetValidIntegerFromString(page, 1), 
+                    iv.GetValidIntegerFromString(limit, 10)
+                );
+
+                ViewData["page"] = productsObject.PaginationView.ChoosenPage;
+                ViewData["limit"] = productsObject.PaginationView.LimitData;
+                return View(productsObject);
+            } catch (Exception)
             {
                 return View();
             }
-            return View(products);
         }
 
         [HttpGet("create")]
         public IActionResult CreateProduct()
         {
+            ViewData["Title"] = "Tambah Produk";
             return View();
         }
 
@@ -62,12 +76,49 @@ namespace MoneyFlow.Controllers
         [HttpGet("delete/{productId}")]
         public async Task<IActionResult> DeleteProduct(string productId)
         {
-            Console.WriteLine(productId);
-            try {
+            try 
+            {
                 await _productService.DeleteProduct(productId);
                 return Redirect($"{baseUrl}/product");
             } catch (Exception e)
             {   
+                Type exceptionType = e.GetType();
+                if (exceptionType != typeof(DataException))
+                {
+                    Console.WriteLine(e);
+                }
+                return Redirect($"{baseUrl}/product");
+            }
+        }
+
+        [HttpGet("update/{productId}")]
+        public IActionResult UpdateProduct(string productId)
+        {
+            try
+            {
+                ViewData["Title"] = "Ubah Produk";
+                Product product = _productService.GetProduct(productId);
+                return View(product);
+            }
+            catch (Exception)
+            {
+                return Redirect($"{baseUrl}/product");
+            }
+        }
+
+        [HttpPost("update/{productId}")]
+        public async Task<IActionResult> UpdateProduct(string productId, Product product)
+        {
+            try 
+            {
+                if (ModelState.IsValid)
+                {
+                    await _productService.UpdateProduct(productId, product);
+                    return Redirect($"{baseUrl}/product");
+                }
+                return View(product);
+            } catch (Exception e)
+            {
                 Type exceptionType = e.GetType();
                 if (exceptionType != typeof(DataException))
                 {

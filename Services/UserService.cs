@@ -41,7 +41,7 @@ namespace MoneyFlow.Services
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict,
+                SameSite = SameSiteMode.None,
                 Expires = DateTime.UtcNow.AddDays(1)
             });
             return Task.CompletedTask;

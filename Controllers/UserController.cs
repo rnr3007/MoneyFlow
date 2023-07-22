@@ -62,7 +62,7 @@ namespace MoneyFlow.Controllers
         {
             try
             {
-                if (iv.IsNotEmpty(user.Password) && iv.IsNotEmpty(user.Username)) 
+                if (!string.IsNullOrWhiteSpace(user.Password) && !string.IsNullOrWhiteSpace(user.Username)) 
                 {
                     await _userService.Login(user);
                     return Redirect($"{baseUrl}/product");

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Data;
 using MoneyFlow.Constants;
+using MoneyFlow.Models.ViewModels;
 
 namespace MoneyFlow.Services
 {
@@ -24,9 +25,34 @@ namespace MoneyFlow.Services
             _httpContext = httpContext;
         }
 
-        public List<Product> GetProducts()
+        public Product GetProduct(string productId)
         {
-            return _dbContext.Products.ToList();;
+            var productData = _dbContext.Products.FirstOrDefault(x => x.Id == productId)
+                ?? throw new DataException(ErrorMessage.PRODUCT_NOT_FOUND);
+            return productData;
+        }
+
+        public TableViewModel<Product> GetProducts(string keyword, int page, int limit)
+        {
+            var searchKeyword = keyword ?? "";
+            int totalProduct = _dbContext.Products.Where(x =>(
+                x.Name.Contains(searchKeyword)
+            )).Count();
+            PaginationViewModel paginationViewModel = new PaginationViewModel(
+                page,
+                limit,
+                totalProduct,
+                $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/product"
+            );
+            var products = _dbContext.Products
+                .Where(x => x.Name.Contains(searchKeyword))
+                .Skip(paginationViewModel.LimitData * (paginationViewModel.ChoosenPage - 1))
+                .Take(paginationViewModel.LimitData)
+                .ToList();
+            return new TableViewModel<Product>(
+                products,
+                paginationViewModel
+            );
         }
 
         public async Task CreateProduct(Product product)

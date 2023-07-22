@@ -3,21 +3,11 @@
 @using de = MoneyFlow.Utils.DataExtractor
 
 @{
-    Layout = "_InitLayout";
     var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
     var productType = de.GetEnumDataList<ProductTypeEnum>();
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Create Product</title>
-</head>
-<body>
-
-<h4 class="text-center">Product</h4>
+<h4 class="text-center">Produk Baru</h4>
 <hr />
 <div class="row justify-content-center">
     <div class="col-md-4">
@@ -51,13 +41,10 @@
                 <input type="submit" value="Buat produk" class="btn btn-primary w-100" />
             </div>
         </form>
-        <form method="get" href="@baseUrl/product">
+        <form method="get" action="/product">
             <div class="form-group flex-grow-1">
                 <input type="submit" value="Kembali" class="btn btn-primary w-100" />
             </div>
         </form>
     </div>
 </div>
-
-</body>
-</html>

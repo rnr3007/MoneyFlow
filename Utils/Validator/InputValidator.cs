@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 
 namespace MoneyFlow.Utils.Validator
@@ -28,9 +29,15 @@ namespace MoneyFlow.Utils.Validator
             return Regex.IsMatch(value, regex);
         }
 
-        public static bool IsNotEmpty(string value)
+        public static int GetValidIntegerFromString(object value, int defaultValue)
         {
-            return value != null && value != "";
+            try 
+            {
+                return int.Parse((string)value);
+            } catch (Exception)
+            {
+                return defaultValue;
+            }
         }
     }
 }

@@ -1,23 +1,10 @@
 @model MoneyFlow.Models.User
 
-@{
-    Layout = "_InitLayout";
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>MoneyFlow - Login</title>
-</head>
-<body>
-
 <h4 class="top-0 start-50 translate-middle text-center">Login</h4>
 <hr />
 <div class="row justify-content-center">
     <div class="col-md-4">
-        <form asp-action="Login">
+        <form action="/user/login" method="post">
             <div class="form-group">
                 <label asp-for="Username" class="control-label"></label>
                 <input asp-for="Username" class="form-control" placeholder="Masukkan username"/>
@@ -34,6 +21,3 @@
         </form>
     </div>
 </div>
-
-</body>
-</html>

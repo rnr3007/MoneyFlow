@@ -1,21 +1,21 @@
-@model IEnumerable<MoneyFlow.Models.Product>
+@using MoneyFlow.Models;
+@model MoneyFlow.Models.ViewModels.TableViewModel<Product>;
 
 @{
     var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
-    Layout = "_InitLayout";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Products</title>
-</head>
-<body>
 <p>
-    <a href="@baseUrl/product/create">Create New</a>
+    <a href="@baseUrl/product/create">Buat baru</a>
 </p>
+<form action="/product" method="get">
+    <div class="form-actions">
+        <p>
+            Cari produk: <input type="text" name="keyword" value="@ViewData["searchKeyword"]" placeholder="Cari..." />
+            <input type="submit" value="Cari" class="btn btn-primary" /> | <a href="@baseUrl/product">Reset pencarian</a>
+        </p>
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -35,8 +35,8 @@
         </tr>
     </thead>
     <tbody>
-        @if (Model != null) {
-            foreach (var item in Model) {
+        @if (Model.Data.Count != 0) {
+            foreach (var item in Model.Data) {
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.Name)
@@ -50,15 +50,15 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.ImageUrl)
                     </td>
-                    <td class="row">
-                        <form href="@baseUrl/product/delete/@item.Id">
+                    <td class="row justify-content-around">
+                        <form action="/product/delete/@item.Id" method="get">
                             <div class="form-group flex-grow-1">
-                                <input type="submit" value="Delete" class="btn btn-primary" />
+                                <input type="submit" value="Hapus" class="btn btn-danger" />
                             </div>
                         </form>
-                        <form method="" href="@baseUrl/product/delete">
+                        <form action="/product/update/@item.Id" method="get">
                             <div class="form-group flex-grow-1">
-                                <input type="submit" value="Update" class="btn btn-primary" />
+                                <input type="submit" value="Ubah" class="btn btn-primary" />
                             </div>
                         </form>
                     </td>
@@ -67,5 +67,4 @@
         }
     </tbody>
 </table>
-</body>
-</html>
+@await Html.PartialAsync("~/Views/Shared/Components/PaginationView.cshtml", Model.PaginationView);

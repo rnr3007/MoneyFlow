@@ -1,6 +1,5 @@
 ﻿@{
     var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
-    var token = Context.Request.Cookies["TokenBearer"];
 }
 
 <body>
@@ -38,7 +37,6 @@
             @RenderBody()
         </main>
     </div>
-
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2023 - MoneyFlow - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

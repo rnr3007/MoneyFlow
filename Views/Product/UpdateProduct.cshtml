@@ -1,0 +1,51 @@
+@model MoneyFlow.Models.Product
+@using MoneyFlow.Constants
+@using de = MoneyFlow.Utils.DataExtractor
+
+@{
+    var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
+    var productType = de.GetEnumDataList<ProductTypeEnum>();
+}
+
+<h4 class="text-center">@Model.Name</h4>
+<hr />
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <form action="/product/update/@Model.Id" method="post">
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Produk</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductType" class="control-label"></label>
+                <select asp-for="ProductType" class="form-control">
+                    @foreach (string enumData in productType)
+                    {
+                        <option value="@enumData">@enumData</option>
+                    }
+                </select>
+                <span asp-validation-for="ProductType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageUrl" class="control-label"></label>
+                <input asp-for="ImageUrl" class="form-control" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <input type="submit" value="Simpan perubahan" class="btn btn-primary w-100" />
+            </div>
+        </form>
+        <form method="get" action="/product">
+            <div class="form-group flex-grow-1">
+                <input type="submit" value="Kembali" class="btn btn-primary w-100" />
+            </div>
+        </form>
+    </div>
+</div>

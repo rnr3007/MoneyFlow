@@ -1,0 +1,30 @@
+@model MoneyFlow.Models.ViewModels.PaginationViewModel
+
+@{
+    var previousBtnConf = (int)ViewData["page"] == 1 ? "disabled" : "";
+    var nextBtnConf = (int)ViewData["page"] == Model.EndPage ? "disabled" : "";
+    var previousPage = (int)ViewData["page"] - 1;
+    var nextPage = (int)ViewData["page"] + 1;    
+}
+
+<nav aria-label="Page navigation example">
+
+    <ul class="pagination justify-content-center">
+        <li class="page-item @previousBtnConf">
+            <a class="page-link" href="@Model.ActionUrl?page=@previousPage&limit=@Model.LimitData">Sebelumnya</a>
+        </li>
+        @foreach (string pageNum in Model.PageList)
+        {
+            if (pageNum != Model.ChoosenPage.ToString())
+            {
+                <li class="page-item"><a class="page-link" href="@Model.ActionUrl?page=@pageNum&limit=@Model.LimitData">@pageNum</a></li>
+            } else
+            {
+                <li class="page-item"><a class="page-link" href="#">@pageNum<span class="sr-only">(current)</span></a></li>
+            }            
+        }
+        <li class="page-item @nextBtnConf">
+            <a class="page-link" href="@Model.ActionUrl?page=@nextPage&limit=@Model.LimitData">Selanjutnya</a>
+        </li>
+    </ul>
+</nav>
