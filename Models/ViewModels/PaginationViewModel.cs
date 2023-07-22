@@ -14,12 +14,15 @@ namespace MoneyFlow.Models.ViewModels
 
         public int TotalData { get; set; } = 1;
         
+        public string SearchKeyword { get; set; } = "";
+
         public string ActionUrl { get; set; } = "";
 
         public List<string> PageList { get; set; } = new List<string>{"1"};
 
-        public PaginationViewModel(int choosenPage, int limitData, int totalData, string actionUrl)
+        public PaginationViewModel(int choosenPage, int limitData, int totalData, string keyword, string actionUrl)
         {
+            SearchKeyword = keyword;
             LimitData = limitData < 0 ? 10 : limitData;                                                                                                                   
             TotalData = totalData;
             ActionUrl = actionUrl;

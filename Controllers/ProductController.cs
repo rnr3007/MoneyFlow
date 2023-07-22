@@ -32,13 +32,13 @@ namespace MoneyFlow.Controllers
             try
             {
                 ViewData["Title"] = "Produk";
-                ViewData["searchKeyword"] = keyword ?? "";
 
                 var productsObject = _productService.GetProducts(keyword, 
                     iv.GetValidIntegerFromString(page, 1), 
                     iv.GetValidIntegerFromString(limit, 10)
                 );
 
+                ViewData["keyword"] = productsObject.PaginationView.SearchKeyword;
                 ViewData["page"] = productsObject.PaginationView.ChoosenPage;
                 ViewData["limit"] = productsObject.PaginationView.LimitData;
                 return View(productsObject);

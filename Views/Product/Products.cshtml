@@ -5,17 +5,24 @@
     var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
 }
 
-<p>
-    <a href="@baseUrl/product/create">Buat baru</a>
-</p>
-<form action="/product" method="get">
-    <div class="form-actions">
-        <p>
-            Cari produk: <input type="text" name="keyword" value="@ViewData["searchKeyword"]" placeholder="Cari..." />
-            <input type="submit" value="Cari" class="btn btn-primary" /> | <a href="@baseUrl/product">Reset pencarian</a>
-        </p>
+<h4 class="text-center my-3"><b>@ViewData["Title"]</b></h4>
+
+<div class="d-flex align-items-center my-2">
+    <div>Cari produk:</div>
+    <div class="col d-flex flex-grow-1">
+        <form action="/product" method="get" class="d-flex flex-grow-1 mb-0">
+            <input type="text" name="keyword" value="@ViewData["keyword"]" placeholder="Cari..." class="flex-grow-1 m-1">
+            <button type="submit" class="btn btn-primary m-1"><i class="bi bi-search mr-1"></i>Cari</button>
+        </form>
     </div>
-</form>
+    <div class="d-flex">
+        <form action="/product/create" method="get" class="mb-0">
+            <button type="submit" class="btn btn-success"><i class="bi bi-plus-lg mr-1"></i>Buat baru</button>
+        </form>
+    </div>
+</div>
+
+
 <table class="table">
     <thead>
         <tr>

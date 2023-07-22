@@ -34,18 +34,19 @@ namespace MoneyFlow.Services
 
         public TableViewModel<Product> GetProducts(string keyword, int page, int limit)
         {
-            var searchKeyword = keyword ?? "";
+            keyword = keyword ?? "";
             int totalProduct = _dbContext.Products.Where(x =>(
-                x.Name.Contains(searchKeyword)
+                x.Name.Contains(keyword)
             )).Count();
             PaginationViewModel paginationViewModel = new PaginationViewModel(
                 page,
                 limit,
                 totalProduct,
+                keyword,
                 $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/product"
             );
             var products = _dbContext.Products
-                .Where(x => x.Name.Contains(searchKeyword))
+                .Where(x => x.Name.Contains(keyword))
                 .Skip(paginationViewModel.LimitData * (paginationViewModel.ChoosenPage - 1))
                 .Take(paginationViewModel.LimitData)
                 .ToList();
