@@ -1,8 +1,11 @@
 @using MoneyFlow.Models;
+@using MoneyFlow.Models.ViewModels;
 @model MoneyFlow.Models.ViewModels.TableViewModel<Product>;
 
 @{
     var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
+    List<ConfirmationModalViewModel<string>> modalDeleteList = new List<ConfirmationModalViewModel<string>>();
+    ViewData["ModalDelete"] = "deleteProductModal";
 }
 
 <h4 class="text-center my-3"><b>@ViewData["Title"]</b></h4>
@@ -26,52 +29,65 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
+            <th class="text-center">
                 Produk
             </th>
-            <th>
+            <th class="text-center">
                 Tipe
             </th>
-            <th>
+            <th class="text-center">
                 Harga
             </th>
-            <th>
+            <th class="text-center">
                 URL Gambar
             </th>
-            <th>Aksi</th>
+            <th class="text-center">Aksi</th>
         </tr>
     </thead>
-    <tbody>
-        @if (Model.Data.Count != 0) {
-            foreach (var item in Model.Data) {
+    @if (Model.Data.Count != 0) 
+    {
+        <tbody>    
+            @foreach (var item in Model.Data) 
+            {;
+                var modalDeleteId = $"modalDelete{item.Id}";
+                modalDeleteList.Add(new ConfirmationModalViewModel<string>(
+                    "delete", modalDeleteId, $"/product/delete/{item.Id}", "hapus produk"
+                ));
                 <tr>
-                    <td>
+                    <td class="align-middle">
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
-                    <td>
+                    <td class="align-middle">
                         @Html.DisplayFor(modelItem => item.ProductType)
                     </td>
-                    <td>
+                    <td class="align-middle">
                         @Html.DisplayFor(modelItem => item.Price)
                     </td>
-                    <td>
+                    <td class="align-middle">
                         @Html.DisplayFor(modelItem => item.ImageUrl)
                     </td>
-                    <td class="row justify-content-around">
-                        <form action="/product/delete/@item.Id" method="get">
-                            <div class="form-group flex-grow-1">
-                                <input type="submit" value="Hapus" class="btn btn-danger" />
-                            </div>
-                        </form>
-                        <form action="/product/update/@item.Id" method="get">
-                            <div class="form-group flex-grow-1">
+                    <td class="row justify-content-center align-middle">
+                        <button type="button" onclick="openModal('@modalDeleteId')" class="btn btn-danger">Hapus</button>
+                        <form action="/product/update/@item.Id" method="get" class="mb-0">
+                            <div class="form-group flex-grow-1 ml-1 my-0">
                                 <input type="submit" value="Ubah" class="btn btn-primary" />
                             </div>
                         </form>
                     </td>
                 </tr>
             }
-        }
-    </tbody>
+        </tbody>
+    } 
 </table>
-@await Html.PartialAsync("~/Views/Shared/Components/PaginationView.cshtml", Model.PaginationView);
+@if (Model.Data.Count == 0)
+{
+    @await Html.PartialAsync("~/Views/Shared/Components/EmptyDataView.cshtml");
+} else
+{
+    foreach (ConfirmationModalViewModel<string> modalDelete in modalDeleteList)
+    {
+        @await Html.PartialAsync("~/Views/Shared/Components/ConfirmationModalView.cshtml", modalDelete);
+    }
+}
+
+@await Html.PartialAsync("~/Views/Shared/Components/PaginationView.cshtml", Model.PaginationView)

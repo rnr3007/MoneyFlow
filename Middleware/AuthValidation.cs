@@ -51,7 +51,6 @@ namespace MoneyFlow.Middleware
                 {
                     Console.WriteLine(e);
                 }
-                Console.WriteLine(e);
                 _context.Response.Cookies.Delete("TokenBearer");
                 _context.Response.Cookies.Delete("Id");
                 if (requestPath != loginPath) { _context.Response.Redirect("/user/login"); }
