@@ -1,0 +1,48 @@
+@model MoneyFlow.Models.ViewModels.ModalViewModel<Product>
+@using MoneyFlow.Models
+
+@{
+    var ariaLabelTitle = $"modalLabel{Model.ModalId}";
+    Product product = Model.Data;
+}
+
+<div class="modal fade" id="@Model.ModalId" tabindex="-1" aria-labelledby="@ariaLabelTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div id="@ariaLabelTitle" class="modal-title fs-5"><strong>@Html.DisplayFor(model => product.Name)</strong></div>
+                <i class="bi bi-x-circle" onpointerenter="changeCursorToHand('closeButton')" onpointerleave="changeCursorToPointer('closeButton')" id="closeButton" onclick="closeModal('@Model.ModalId')"></i>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="container px-0 my-4">
+                            <div class="row justify-content-center">
+                                <div>@Html.DisplayFor(model => product.ImageUrl)</div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                            <div class="container px-0">
+                                <strong>Tipe produk</strong>
+                                <p>@Html.DisplayFor(model => product.ProductType )</p>
+                            </div>
+                        </div>
+                            <div class="row">
+                        <div class="container px-0">
+                            <strong>Harga</strong>
+                            <p>@Html.DisplayFor(model => product.Price, "Price")</p>
+                        </div>
+                    </div>        
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <div class="row d-flex align-items-center">
+                        <button class="btn btn-primary w-100" onclick="closeModal('@Model.ModalId')">Kembali</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

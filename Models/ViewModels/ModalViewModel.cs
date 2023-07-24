@@ -2,10 +2,8 @@ using System.Collections.Generic;
 
 namespace MoneyFlow.Models.ViewModels
 {
-    public class ConfirmationModalViewModel<T>
+    public class ModalViewModel<T>
     {
-        public string ModalType { get; set; }
-
         public string ModalId { get; set; }
 
         public string ActionUrl { get; set; }
@@ -14,9 +12,8 @@ namespace MoneyFlow.Models.ViewModels
 
         public T Data { get; set; }
 
-        public ConfirmationModalViewModel(string modalType, string modalId, string actionUrl, string confirmMessage, T data = default)
+        public ModalViewModel(string modalId, string actionUrl = "", string confirmMessage = "", T data = default)
         {
-            ModalType = modalType;
             ModalId = modalId;
             ActionUrl = actionUrl;
             ConfirmationMessage = confirmMessage;

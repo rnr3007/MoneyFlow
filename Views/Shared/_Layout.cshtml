@@ -5,21 +5,13 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
+            <div class="container px-2">
                 <a class="navbar-brand" href="@baseUrl/">MoneyFlow</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1 justify-content-end">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="@baseUrl/user/login">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="@baseUrl/user/register">Register</a>
-                        </li>
-                    </ul>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row">
                     <ul class="navbar-nav flex-grow-1 justify-content-start">
                         <li class="nav-item">
                             <a class="nav-link text-dark" href="@baseUrl/">Home</a>
@@ -28,23 +20,30 @@
                             <a class="nav-link text-dark" href="@baseUrl/privacy">Privacy</a>
                         </li>
                     </ul>
+                    <ul class="navbar-nav flex-grow-1 justify-content-end">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="@baseUrl/user/login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="@baseUrl/user/register">Register</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container px-2">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
     <footer class="border-top footer text-muted">
-        <div class="container">
+        <div class="container px-2">
             &copy; 2023 - MoneyFlow - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/toggle-modal.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
