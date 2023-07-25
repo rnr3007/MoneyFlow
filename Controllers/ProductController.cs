@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics;
+using System.Security;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MoneyFlow.Models;
@@ -52,24 +54,36 @@ namespace MoneyFlow.Controllers
         public IActionResult CreateProduct()
         {
             ViewData["Title"] = "Tambah Produk";
-            return View();
+
+            CreateDataFormViewModel<Product> createProductView = new CreateDataFormViewModel<Product>(
+                new Product()
+            );
+
+            return View(createProductView);
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateProduct(Product product)
+        public async Task<IActionResult> CreateProduct(CreateDataFormViewModel<Product> createDataView, IFormFile FormFile)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    await _productService.CreateProduct(product);
+                    await _productService.CreateProduct(createDataView.Data, FormFile);
                     return Redirect($"{baseUrl}/product");
                 }
-                return View(product);
+                return View(createDataView);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return View(product);
+                Type exceptionType = e.GetType();
+                if (exceptionType == typeof(SecurityException))
+                {
+                    Response.Cookies.Delete("TokenBearer");
+                    return Redirect($"{baseUrl}/user/login");
+                }
+                Console.WriteLine(e);
+                return View(createDataView);
             }
         }
 

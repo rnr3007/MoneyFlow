@@ -1,4 +1,5 @@
-@model MoneyFlow.Models.Product
+@model MoneyFlow.Models.ViewModels.CreateDataFormViewModel<Product>
+@using MoneyFlow.Models.ViewModels
 @using MoneyFlow.Constants
 @using de = MoneyFlow.Utils.DataExtractor
 
@@ -11,31 +12,29 @@
 <hr />
 <div class="row justify-content-center">
     <div class="col-md-4">
-        <form method="post" asp-action="CreateProduct">
+        <form method="post" action="/product/create" enctype="multipart/form-data">
             <div class="form-group">
-                <label asp-for="Name" class="control-label">Produk</label>
-                <input asp-for="Name" class="form-control" placeholder="Nama produk"/>
-                <span asp-validation-for="Name" class="text-danger"></span>
+                @await Html.PartialAsync("~/Views/Shared/Components/File/UploadImageFormView.cshtml", Model.UploadFileForm)
             </div>
             <div class="form-group">
-                <label asp-for="ProductType" class="control-label">Tipe Produk</label>
-                <select asp-for="ProductType" class="form-control">
+                <label asp-for="Data.Name" class="control-label">Produk</label>
+                <input asp-for="Data.Name" class="form-control" placeholder="Nama produk"/>
+                <span asp-validation-for="Data.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Data.ProductType" class="control-label">Tipe Produk</label>
+                <select asp-for="Data.ProductType" class="form-control">
                     @foreach (string enumData in productType)
                     {
                         <option value="@enumData">@enumData</option>
                     }
                 </select>
-                <span asp-validation-for="ProductType" class="text-danger"></span>
+                <span asp-validation-for="Data.ProductType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Price" class="control-label">Harga</label>
-                <input asp-for="Price" class="form-control" placeholder="Harga satuan produk"/>
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label">URL gambar</label>
-                <input asp-for="ImageUrl" class="form-control" placeholder="URL gambar" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                <label asp-for="Data.Price" class="control-label">Harga</label>
+                <input asp-for="Data.Price" class="form-control" placeholder="Harga satuan produk"/>
+                <span asp-validation-for="Data.Price" class="text-danger"></span>
             </div>
             <div class="form-group flex-grow-1">
                 <input type="submit" value="Buat produk" class="btn btn-primary w-100" />

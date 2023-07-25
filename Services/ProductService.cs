@@ -8,6 +8,8 @@ using System;
 using System.Data;
 using MoneyFlow.Constants;
 using MoneyFlow.Models.ViewModels;
+using fu = MoneyFlow.Utils.FileUtilites;
+using System.Security;
 
 namespace MoneyFlow.Services
 {
@@ -56,8 +58,20 @@ namespace MoneyFlow.Services
             );
         }
 
-        public async Task CreateProduct(Product product)
-        {
+        public async Task CreateProduct(Product product, IFormFile formFile)
+        {   
+            if (formFile != null)
+            {
+                if (HttpContext.Items.TryGetValue("id", out var ownerId))
+                {
+                    Console.WriteLine("test123");
+                    Console.WriteLine("product", formFile.FileName, (string)ownerId);
+                    product.ImageUrl = await fu.SaveFile("product", formFile, (string)ownerId);
+                } else 
+                {
+                    throw new SecurityException(ErrorMessage.USER_NOT_FOUND);
+                }
+            }
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
         }

@@ -10,6 +10,7 @@ using MoneyFlow.Services;
 using System.Collections.Generic;
 using MoneyFlow.Middleware;
 using System;
+using MoneyFlow.Utils;
 
 namespace MoneyFlow
 {
@@ -19,6 +20,7 @@ namespace MoneyFlow
         {
             Configuration = configuration;
             StaticConfiguration = configuration;
+
         }
 
         public IConfiguration Configuration { get; }
@@ -57,6 +59,8 @@ namespace MoneyFlow
                 app.UseHsts();
             }
             // app.UseHttpsRedirection();
+            
+            FileUtilites.Configure(env);
 
             List<string> protectedBranch = new List<string> 
             {

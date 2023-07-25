@@ -1,0 +1,8 @@
+@model MoneyFlow.Models.ViewModels.UploadFileFormViewModel
+
+<dl>
+    <dd>
+        <input type="file" asp-for="FormFile" name="FormFile"/>
+        <span asp-validation-for="FormFile" class="text-danger"></span>
+    </dd>
+</dl>
