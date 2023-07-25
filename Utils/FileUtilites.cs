@@ -17,17 +17,52 @@ namespace MoneyFlow.Utils
 
         public static async Task<string> SaveFile(string purpose, IFormFile formFile, string ownerId = "")
         {
+            string filePath = $"UserData/{ownerId}/{purpose}";
             string fileName = $"{Guid.NewGuid()}{Path.GetExtension(formFile.FileName)}";
-            string filePath = Path.Combine(_environment.ContentRootPath, "UserData", ownerId, purpose);
-            if (!Directory.Exists(filePath))
+            string storagePath = Path.Combine(_environment.ContentRootPath, filePath);
+            if (!Directory.Exists(storagePath))
             {
-                Directory.CreateDirectory(filePath);
+                Directory.CreateDirectory(storagePath);
             }
-            using (var file = File.Create($"{filePath}/{fileName}"))
+            using (var file = File.Create($"{storagePath}/{fileName}"))
             {
                 await formFile.CopyToAsync(file);
             }
-            return fileName;
+            return $"{filePath}/{fileName}";
+        }
+
+        public static async Task<string> UpdateFile(string purpose, IFormFile formFile, string fileName, string ownerId = "")
+        {
+            string filePath = $"UserData/{ownerId}/{purpose}";
+            if (fileName == null || fileName == "")
+            {
+                fileName = $"{Guid.NewGuid()}{Path.GetExtension(formFile.FileName)}";
+            }
+            string storagePath = Path.Combine(_environment.ContentRootPath, filePath);
+            if (!Directory.Exists(storagePath))
+            {
+                Directory.CreateDirectory(storagePath);
+            }
+            using (var file = File.Create($"{storagePath}/{fileName}"))
+            {
+                await formFile.CopyToAsync(file);
+            }
+            return $"{filePath}/{fileName}";
+        }
+
+        public static async Task<byte[]> GetFileByte(string filePath)
+        {
+            try
+            {
+                string storedFilePath = Path.Combine(_environment.ContentRootPath, filePath);
+                byte[] file = await File.ReadAllBytesAsync(storedFilePath);
+                return file;
+            }
+            catch (Exception)
+            {
+                return new byte[0];
+            }
+            
         }
     }
 }

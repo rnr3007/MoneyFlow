@@ -1,9 +1,10 @@
-@model MoneyFlow.Models.ViewModels.ModalViewModel<Product>
+@model MoneyFlow.Models.ViewModels.ModalViewModel<DataViewModel<Product, byte[]>>
 @using MoneyFlow.Models
+@using MoneyFlow.Models.ViewModels
 
 @{
     var ariaLabelTitle = $"modalLabel{Model.ModalId}";
-    Product product = Model.Data;
+    Product product = Model.Data.Data;
 }
 
 <div class="modal fade" id="@Model.ModalId" tabindex="-1" aria-labelledby="@ariaLabelTitle" aria-hidden="true">
@@ -18,7 +19,8 @@
                     <div class="row">
                         <div class="container px-0 my-4">
                             <div class="row justify-content-center">
-                                <div>@Html.DisplayFor(model => product.ImageUrl)</div>
+                                
+                                <div>@Html.DisplayFor(model => Model.Data.SpecialData, "SmallImage")</div>
                             </div>
                         </div>
                         </div>

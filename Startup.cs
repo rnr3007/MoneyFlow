@@ -20,7 +20,6 @@ namespace MoneyFlow
         {
             Configuration = configuration;
             StaticConfiguration = configuration;
-
         }
 
         public IConfiguration Configuration { get; }
@@ -61,7 +60,7 @@ namespace MoneyFlow
             // app.UseHttpsRedirection();
             
             FileUtilites.Configure(env);
-
+            
             List<string> protectedBranch = new List<string> 
             {
                 "/product", "/user"

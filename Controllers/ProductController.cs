@@ -10,6 +10,7 @@ using MoneyFlow.Models;
 using MoneyFlow.Models.ViewModels;
 using MoneyFlow.Services;
 using iv = MoneyFlow.Utils.Validator.InputValidator;
+using fu = MoneyFlow.Utils.FileUtilites;
 
 namespace MoneyFlow.Controllers
 {
@@ -29,21 +30,22 @@ namespace MoneyFlow.Controllers
         }
 
         [HttpGet]
-        public IActionResult Products(string keyword, string page, string limit)
+        public async Task<IActionResult> Products(string keyword, string page, string limit)
         {
             try
             {
                 ViewData["Title"] = "Produk";
 
-                var productsObject = _productService.GetProducts(keyword, 
+                var tableView = await _productService.GetProductsAsync(keyword, 
                     iv.GetValidIntegerFromString(page, 1), 
                     iv.GetValidIntegerFromString(limit, 10)
                 );
 
-                ViewData["keyword"] = productsObject.PaginationView.SearchKeyword;
-                ViewData["page"] = productsObject.PaginationView.ChoosenPage;
-                ViewData["limit"] = productsObject.PaginationView.LimitData;
-                return View(productsObject);
+                ViewData["keyword"] = tableView.PaginationView.SearchKeyword;
+                ViewData["page"] = tableView.PaginationView.ChoosenPage;
+                ViewData["limit"] = tableView.PaginationView.LimitData;
+
+                return View(tableView);
             } catch (Exception)
             {
                 return View();
@@ -63,13 +65,13 @@ namespace MoneyFlow.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateProduct(CreateDataFormViewModel<Product> createDataView, IFormFile FormFile)
+        public async Task<IActionResult> CreateProduct(CreateDataFormViewModel<Product> createDataView, IFormFile formFile)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    await _productService.CreateProduct(createDataView.Data, FormFile);
+                    await _productService.CreateProduct(createDataView.Data, formFile);
                     return Redirect($"{baseUrl}/product");
                 }
                 return View(createDataView);
@@ -106,13 +108,19 @@ namespace MoneyFlow.Controllers
         }
 
         [HttpGet("update/{productId}")]
-        public IActionResult UpdateProduct(string productId)
+        public async Task<IActionResult> UpdateProduct(string productId)
         {
             try
             {
                 ViewData["Title"] = "Ubah Produk";
                 Product product = _productService.GetProduct(productId);
-                return View(product);
+                UploadFileFormViewModel fileFormView = new UploadFileFormViewModel();
+                fileFormView.FileUrl = product.ImageUrl;
+                fileFormView.FileData = await fu.GetFileByte(product.ImageUrl);
+                return View(new CreateDataFormViewModel<Product>(
+                    product,
+                    fileFormView
+                ));
             }
             catch (Exception)
             {
@@ -121,24 +129,39 @@ namespace MoneyFlow.Controllers
         }
 
         [HttpPost("update/{productId}")]
-        public async Task<IActionResult> UpdateProduct(string productId, Product product)
+        public async Task<IActionResult> UpdateProduct(string productId, CreateDataFormViewModel<Product> createDataView, IFormFile formFile)
         {
             try 
             {
                 if (ModelState.IsValid)
                 {
-                    await _productService.UpdateProduct(productId, product);
+                    await _productService.UpdateProduct(productId, createDataView.Data, formFile);
                     return Redirect($"{baseUrl}/product");
                 }
-                return View(product);
+                UploadFileFormViewModel fileFormView = new UploadFileFormViewModel();
+                fileFormView.FileUrl = createDataView.Data.ImageUrl;
+                return View(new CreateDataFormViewModel<Product>(
+                    createDataView.Data,
+                    fileFormView
+                ));
             } catch (Exception e)
             {
                 Type exceptionType = e.GetType();
-                if (exceptionType != typeof(DataException))
+                if (exceptionType != typeof(DataException) || exceptionType != typeof(SecurityException))
                 {
                     Console.WriteLine(e);
                 }
-                return Redirect($"{baseUrl}/product");
+                if (exceptionType == typeof(SecurityException))
+                {
+                    Response.Cookies.Delete("TokenBearer");
+                    return Redirect($"{baseUrl}/user/login");
+                }
+                UploadFileFormViewModel fileFormView = new UploadFileFormViewModel();
+                fileFormView.FileUrl = createDataView.Data.ImageUrl;
+                return View(new CreateDataFormViewModel<Product>(
+                    createDataView.Data,
+                    fileFormView
+                ));
             }
         }
 
@@ -146,6 +169,13 @@ namespace MoneyFlow.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpGet("/test")]
+        public async Task<IActionResult> Test()
+        {
+            var test = await fu.GetFileByte("UserData/0669c07e-a061-4be4-b483-d447c9831829/product/0be2d2a7-bafe-478d-b8ef-406a23477bf2.png");
+            return File(test, "image/jpeg");
         }
     }
 }

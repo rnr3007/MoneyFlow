@@ -1,11 +1,11 @@
 @using MoneyFlow.Models;
 @using MoneyFlow.Models.ViewModels;
-@model MoneyFlow.Models.ViewModels.TableViewModel<Product>;
+@model MoneyFlow.Models.ViewModels.TableViewModel<DataViewModel<Product, byte[]>>;
 
 @{
     var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
     List<ModalViewModel<string>> modalDeleteList = new List<ModalViewModel<string>>();
-    List<ModalViewModel<Product>> modalDetailList = new List<ModalViewModel<Product>>();
+    List<ModalViewModel<DataViewModel<Product, byte[]>>> modalDetailList = new List<ModalViewModel<DataViewModel<Product, byte[]>>>();
 }
 
 <h4 class="text-center my-3"><b>@ViewData["Title"]</b></h4>
@@ -47,25 +47,25 @@
     @if (Model.Data.Count != 0) 
     {
         <tbody>    
-            @foreach (Product product in Model.Data) 
+            @foreach (DataViewModel<Product, byte[]> product in Model.Data) 
             {;
-                string modalDeleteId = $"modalDelete{product.Id}";
-                string modalDetailId = $"modalDetail{product.Id}";
+                string modalDeleteId = $"modalDelete{product.Data.Id}";
+                string modalDetailId = $"modalDetail{product.Data.Id}";
                 modalDeleteList.Add(new ModalViewModel<string>(
-                    modalDeleteId, $"/product/delete/{product.Id}", "hapus produk"
+                    modalDeleteId, $"/product/delete/{product.Data.Id}", "hapus produk"
                 ));
-                modalDetailList.Add(new ModalViewModel<Product>(
+                modalDetailList.Add(new ModalViewModel<DataViewModel<Product, byte[]>>(
                     modalDetailId, data: product
                 ));
                 <tr>
                     <td class="align-middle">
-                        @Html.DisplayFor(modelItem => product.Name)
+                        @Html.DisplayFor(modelItem => product.Data.Name)
                     </td>
                     <td class="align-middle">
-                        @Html.DisplayFor(modelItem => product.ProductType)
+                        @Html.DisplayFor(modelItem => product.Data.ProductType)
                     </td>
                     <td class="align-middle">
-                        @Html.DisplayFor(modelItem => product.Price, "Price")
+                        @Html.DisplayFor(modelItem => product.Data.Price, "Price")
                     </td>
                     <td>
                         <div class="container">
@@ -76,7 +76,7 @@
                     </td>
                     <td class="row justify-content-center align-middle">
                         <button type="button" onclick="openModal('@modalDeleteId')" class="btn btn-danger">Hapus</button>
-                        <form action="/product/update/@product.Id" method="get" class="mb-0">
+                        <form action="/product/update/@product.Data.Id" method="get" class="mb-0">
                             <div class="form-group flex-grow-1 ml-1 my-0">
                                 <input type="submit" value="Ubah" class="btn btn-primary" />
                             </div>

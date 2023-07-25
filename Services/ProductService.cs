@@ -10,6 +10,7 @@ using MoneyFlow.Constants;
 using MoneyFlow.Models.ViewModels;
 using fu = MoneyFlow.Utils.FileUtilites;
 using System.Security;
+using System.IO;
 
 namespace MoneyFlow.Services
 {
@@ -34,12 +35,13 @@ namespace MoneyFlow.Services
             return productData;
         }
 
-        public TableViewModel<Product> GetProducts(string keyword, int page, int limit)
+        public async Task<TableViewModel<DataViewModel<Product, byte[]>>> GetProductsAsync(string keyword, int page, int limit)
         {
             keyword = keyword ?? "";
             int totalProduct = _dbContext.Products.Where(x =>(
                 x.Name.Contains(keyword)
             )).Count();
+
             PaginationViewModel paginationViewModel = new PaginationViewModel(
                 page,
                 limit,
@@ -47,13 +49,34 @@ namespace MoneyFlow.Services
                 keyword,
                 $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/product"
             );
-            var products = _dbContext.Products
+
+            if (totalProduct == 0) 
+            {
+                return new TableViewModel<DataViewModel<Product, byte[]>>(
+                    new List<DataViewModel<Product, byte[]>>(),
+                    paginationViewModel
+                );
+            }
+
+            List<Product> products = _dbContext.Products
                 .Where(x => x.Name.Contains(keyword))
                 .Skip(paginationViewModel.LimitData * (paginationViewModel.ChoosenPage - 1))
                 .Take(paginationViewModel.LimitData)
                 .ToList();
-            return new TableViewModel<Product>(
-                products,
+            
+            List<DataViewModel<Product, byte[]>> resultProducts = new List<DataViewModel<Product, byte[]>>();
+            foreach (Product product in products)
+            {
+                resultProducts.Add(
+                    new DataViewModel<Product, byte[]>(
+                        product,
+                        await fu.GetFileByte(product.ImageUrl)
+                    )
+                );
+            }
+
+            return new TableViewModel<DataViewModel<Product, byte[]>>(
+                resultProducts,
                 paginationViewModel
             );
         }
@@ -64,8 +87,6 @@ namespace MoneyFlow.Services
             {
                 if (HttpContext.Items.TryGetValue("id", out var ownerId))
                 {
-                    Console.WriteLine("test123");
-                    Console.WriteLine("product", formFile.FileName, (string)ownerId);
                     product.ImageUrl = await fu.SaveFile("product", formFile, (string)ownerId);
                 } else 
                 {
@@ -84,13 +105,26 @@ namespace MoneyFlow.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateProduct(string productId, Product product)
+        public async Task UpdateProduct(string productId, Product product, IFormFile formFile)
         {
             var productData = _dbContext.Products.FirstOrDefault(x => x.Id == productId) 
                 ?? throw new DataException(ErrorMessage.PRODUCT_NOT_FOUND);
+
             productData.Name = product.Name;
             productData.Price = product.Price;
-            productData.ImageUrl = product.ImageUrl;
+            if (formFile == null)
+            {
+                productData.ImageUrl = "";
+            } else
+            {
+                if (HttpContext.Items.TryGetValue("id", out var ownerId))
+                {
+                    productData.ImageUrl = await fu.UpdateFile("product", formFile, productData.ImageUrl, (string)ownerId);
+                } else 
+                {
+                    throw new SecurityException(ErrorMessage.USER_NOT_FOUND);
+                }
+            }
             productData.ProductType = product.ProductType;
             productData.UpdatedAt = DateTime.UtcNow;
             await _dbContext.SaveChangesAsync();
