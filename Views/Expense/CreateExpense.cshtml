@@ -1,0 +1,48 @@
+@model MoneyFlow.Models.Expense
+@using MoneyFlow.Constants.Enum
+@using de = MoneyFlow.Utils.DataExtractor
+
+@{
+    var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
+    var costType = de.GetEnumDataList<CostTypeEnum>();
+}
+
+<h4 class="text-center">Buat Pengeluaran</h4>
+<hr />
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <form method="post" action="/expense/create" enctype="multipart/form-data">
+            <div class="form-group">
+                @await Html.PartialAsync("~/Views/Shared/Components/File/UploadFileFormView.cshtml", "")
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Nama pengeluaran</label>
+                <input asp-for="Name" class="form-control" placeholder="Nama pengeluaran"/>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CostType" class="control-label">Tipe Pengeluaran</label>
+                <select asp-for="CostType" class="form-control">
+                    @foreach (string enumData in costType)
+                    {
+                        <option value="@enumData">@enumData</option>
+                    }
+                </select>
+                <span asp-validation-for="CostType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cost" class="control-label">Biaya</label>
+                <input asp-for="Cost" class="form-control" placeholder="Biaya yang dikeluarkan"/>
+                <span asp-validation-for="Cost" class="text-danger"></span>
+            </div>
+            <div class="form-group flex-grow-1">
+                <input type="submit" value="Buat produk" class="btn btn-primary w-100" />
+            </div>
+        </form>
+        <form method="get" action="/expenses">
+            <div class="form-group flex-grow-1">
+                <input type="submit" value="Kembali" class="btn btn-primary w-100" />
+            </div>
+        </form>
+    </div>
+</div>

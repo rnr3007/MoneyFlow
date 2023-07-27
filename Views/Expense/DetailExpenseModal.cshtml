@@ -1,0 +1,65 @@
+@model MoneyFlow.Models.ViewModels.ModalViewModel<Expense>
+@using MoneyFlow.Models
+@using MoneyFlow.Models.ViewModels
+@using fu = MoneyFlow.Utils.FileUtilites
+
+@{
+    
+    var ariaLabelTitle = $"modalLabel{Model.ModalId}";
+    Expense expense = Model.Data;
+    var fileType = fu.GetFileType(System.IO.Path.GetExtension(Model.Data.ReceiptFile));
+    var imageUrl = $"{fileType}/expense/{expense.ReceiptFile}";
+}
+
+<div class="modal fade" id="@Model.ModalId" tabindex="-1" aria-labelledby="@ariaLabelTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div id="@ariaLabelTitle" class="modal-title fs-5"><strong>@Html.DisplayFor(model => expense.Name)</strong></div>
+                <i class="bi bi-x-circle" onmouseover="changeCursorToHand('detailCloseButton')" id="detailCloseButton" onclick="closeModal('@Model.ModalId')"></i>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="container px-0 my-4">
+                            @switch (fileType)
+                            {
+                                case "image":
+                                    @Html.DisplayFor(model => imageUrl, "SmallImage");
+                                    break;
+                                case "pdf":
+                                    @Html.DisplayFor(model => imageUrl, "PdfPreview");
+                                    break;
+                                case "excel":
+                                    @Html.DisplayFor(model => imageUrl, "ExcelPreview");
+                                    break;
+                                default:
+                                    @Html.DisplayFor(model => imageUrl, "UnsupportedFile");
+                                    break;
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="container px-0">
+                            <strong>Tipe pengeluaran</strong>
+                            <p>@Html.DisplayFor(model => expense.CostType )</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="container px-0">
+                            <strong>Harga</strong>
+                            <p>@Html.DisplayFor(model => expense.Cost, "Money")</p>
+                        </div>
+                    </div>        
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <div class="row d-flex align-items-center">
+                        <button class="btn btn-primary w-100" onclick="closeModal('@Model.ModalId')">Kembali</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

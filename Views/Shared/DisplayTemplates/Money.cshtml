@@ -1,0 +1,7 @@
+@model long
+@using System.Globalization;
+@{
+    CultureInfo culture = new CultureInfo("id-ID");
+    string money = $"Rp{Model.ToString("N0", culture)}";
+}
+<span>@money</span>

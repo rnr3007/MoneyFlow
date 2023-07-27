@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MoneyFlow.Constants;
 using MoneyFlow.Context;
+using MoneyFlow.Models;
 using MoneyFlow.Utils;
 
 namespace MoneyFlow.Middleware
@@ -28,7 +29,7 @@ namespace MoneyFlow.Middleware
                 var jwt = _context.Request.Cookies["TokenBearer"];
                 string id = AuthUtilites.ValidateJwt(jwt);
                 
-                var user = _dbContext.Users.Where(x => x.Id == id).FirstOrDefaultAsync() 
+                var user = _dbContext.TUser.Where(x => x.Id == id).FirstOrDefault() 
                     ?? throw new DataException(ErrorMessage.USER_NOT_FOUND);
 
                 _context.Response.Cookies.Append("TokenBearer", jwt, new CookieOptions
@@ -38,7 +39,7 @@ namespace MoneyFlow.Middleware
                     SameSite = SameSiteMode.None,
                     Expires = DateTime.UtcNow.AddDays(1)
                 });
-                _context.Items["id"] = id;
+                _context.Request.Headers.Add("userId", user.Id);
                 if (requestPath == loginPath)
                 {
                     _context.Response.Redirect("/");
@@ -52,7 +53,6 @@ namespace MoneyFlow.Middleware
                     Console.WriteLine(e);
                 }
                 _context.Response.Cookies.Delete("TokenBearer");
-                _context.Response.Cookies.Delete("Id");
                 if (requestPath != loginPath) { _context.Response.Redirect("/user/login"); }
                 return _next.Invoke(_context);
             }

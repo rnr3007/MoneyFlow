@@ -6,8 +6,6 @@ namespace MoneyFlow.Models.ViewModels
     {
         public IFormFile FormFile { get; set; }
 
-        public byte[] FileData { get; set; }
-
         public string FileUrl { get; set; }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoneyFlow.Context;
 
 namespace MoneyFlow.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UsercontextModelSnapshot : ModelSnapshot
+    [Migration("20230726041926_addUserExpenses")]
+    partial class addUserExpenses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,69 +21,37 @@ namespace MoneyFlow.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("MoneyFlow.Models.Expense", b =>
+            modelBuilder.Entity("MoneyFlow.Models.Product", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<long>("Cost")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("CostType")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<string>("ReceiptFile")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TExpense");
-                });
-
-            modelBuilder.Entity("MoneyFlow.Models.Income", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("IncomeMoney")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("IncomeType")
+                    b.Property<int>("ProductType")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("Id", "Name")
+                        .IsUnique();
 
-                    b.ToTable("TIncome");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("MoneyFlow.Models.User", b =>
@@ -120,23 +90,46 @@ namespace MoneyFlow.Migrations
                     b.HasIndex("Id", "Username", "Email")
                         .IsUnique();
 
-                    b.ToTable("TUser");
+                    b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("MoneyFlow.Models.Expense", b =>
+            modelBuilder.Entity("MoneyFlow.Models.UserExpense", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Cost")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CostType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserDataId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserDataId");
+
+                    b.ToTable("UserExpenses");
+                });
+
+            modelBuilder.Entity("MoneyFlow.Models.UserExpense", b =>
                 {
                     b.HasOne("MoneyFlow.Models.User", "UserData")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("MoneyFlow.Models.Income", b =>
-                {
-                    b.HasOne("MoneyFlow.Models.User", "UserData")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserDataId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

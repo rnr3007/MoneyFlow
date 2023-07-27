@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using iv = MoneyFlow.Utils.Validator.InputValidator;
 
@@ -7,8 +8,14 @@ namespace MoneyFlow.Utils.Validator
     {
         public override bool IsValid(object value)
         {   
-            return !string.IsNullOrWhiteSpace(value as string)
-                && iv.IsUsernameValid(value.ToString());
+            try 
+            {
+                return !string.IsNullOrWhiteSpace(value as string)
+                    && iv.IsUsernameValid(value.ToString());
+            } catch (Exception)
+            {
+                return false;
+            }
         }
     }
 
@@ -16,8 +23,14 @@ namespace MoneyFlow.Utils.Validator
     {
         public override bool IsValid(object value)
         {   
-            return !string.IsNullOrWhiteSpace(value as string)
-                && iv.IsPasswordValid(value.ToString());
+            try
+            {
+                return !string.IsNullOrWhiteSpace(value as string)
+                    && iv.IsPasswordValid(value.ToString());
+            } catch (Exception)
+            {
+                return false;
+            }
         }
     }
 
@@ -25,8 +38,15 @@ namespace MoneyFlow.Utils.Validator
     {
         public override bool IsValid(object value)
         {
-            return !string.IsNullOrWhiteSpace(value as string)
-                && iv.IsEmailValid(value.ToString());
+            try 
+            {
+                return !string.IsNullOrWhiteSpace(value as string)
+                    && iv.IsEmailValid(value.ToString());
+
+            } catch (Exception)
+            {
+                return false;
+            }
         }
     }
 
@@ -34,8 +54,14 @@ namespace MoneyFlow.Utils.Validator
     {
         public override bool IsValid(object value)
         {
-            return !string.IsNullOrWhiteSpace(value as string)
-                && iv.IsFullnameValid(value.ToString());
+            try
+            {
+                return !string.IsNullOrWhiteSpace(value as string)
+                    && iv.IsFullnameValid(value.ToString());
+            } catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

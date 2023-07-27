@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoneyFlow.Context;
 
 namespace MoneyFlow.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UsercontextModelSnapshot : ModelSnapshot
+    [Migration("20230726155447_changeTable")]
+    partial class changeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,34 +58,6 @@ namespace MoneyFlow.Migrations
                     b.ToTable("TExpense");
                 });
 
-            modelBuilder.Entity("MoneyFlow.Models.Income", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("IncomeMoney")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("IncomeType")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TIncome");
-                });
-
             modelBuilder.Entity("MoneyFlow.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -124,15 +98,6 @@ namespace MoneyFlow.Migrations
                 });
 
             modelBuilder.Entity("MoneyFlow.Models.Expense", b =>
-                {
-                    b.HasOne("MoneyFlow.Models.User", "UserData")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("MoneyFlow.Models.Income", b =>
                 {
                     b.HasOne("MoneyFlow.Models.User", "UserData")
                         .WithMany()

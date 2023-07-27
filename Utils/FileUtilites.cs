@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -28,7 +29,7 @@ namespace MoneyFlow.Utils
             {
                 await formFile.CopyToAsync(file);
             }
-            return $"{filePath}/{fileName}";
+            return fileName;
         }
 
         public static async Task<string> UpdateFile(string purpose, IFormFile formFile, string fileName, string ownerId = "")
@@ -47,22 +48,37 @@ namespace MoneyFlow.Utils
             {
                 await formFile.CopyToAsync(file);
             }
-            return $"{filePath}/{fileName}";
+            return fileName;
         }
 
         public static async Task<byte[]> GetFileByte(string filePath)
         {
-            try
+            string storedFilePath = Path.Combine(_environment.ContentRootPath, filePath);
+            byte[] file = await File.ReadAllBytesAsync(storedFilePath);
+            return file;
+        }
+
+        public static string GetFileType(string fileExtension)
+        {
+            List<string> imageExt = new List<string>{".png", ".jpg", ".jpeg"};
+            List<string> pdfExt = new List<string>{".pdf", ".pdfa", ".pdfx", ".pdfe", ".pdfua"};
+            List<string> excelExt = new List<string>{".xls", ".xlsx", ".xlsm", ".xlsb", ".csv", ".xltx", ".xltm", ".xlshtml"};
+            if (imageExt.Exists(x => x == fileExtension))
             {
-                string storedFilePath = Path.Combine(_environment.ContentRootPath, filePath);
-                byte[] file = await File.ReadAllBytesAsync(storedFilePath);
-                return file;
-            }
-            catch (Exception)
+                return "image";
+            } else if (pdfExt.Exists(x => x == fileExtension))
             {
-                return new byte[0];
+                return "pdf";
+            } else if (excelExt.Exists(x => x == fileExtension))
+            {
+                return "excel";
             }
-            
+            return "none";
+        }
+
+        public static void DeleteFile(string filePath)
+        {
+            File.Delete(filePath);
         }
     }
 }

@@ -31,6 +31,7 @@ namespace MoneyFlow.Controllers
             return View();
         }
 
+        [HttpGet("/error")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

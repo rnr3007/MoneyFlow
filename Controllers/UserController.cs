@@ -65,7 +65,7 @@ namespace MoneyFlow.Controllers
                 if (!string.IsNullOrWhiteSpace(user.Password) && !string.IsNullOrWhiteSpace(user.Username)) 
                 {
                     await _userService.Login(user);
-                    return Redirect($"{baseUrl}/product");
+                    return Redirect($"{baseUrl}/expenses");
                 }
                 return View(user);
             } catch(DataException e) 
@@ -97,49 +97,6 @@ namespace MoneyFlow.Controllers
             {
                 Console.WriteLine(e);
                 return Redirect($"{baseUrl}/");
-            }
-        }
-
-        [HttpPut("edit")]
-        public IActionResult Edit(User user)
-        {
-            try
-            {
-                _userService.Edit(user);
-                return new OkObjectResult(new ResponseGenerator(
-                    200,
-                    SuccessMessage.UPDATE_PROFILE_SUCCESS
-                ));
-            }
-            catch (DataException e)
-            {
-                return new UnauthorizedObjectResult(new ResponseGenerator(
-                    401,
-                    e.Message
-                ));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return new StatusCodeResult(500);
-            }
-        }
-
-        [HttpDelete("deactivate")]
-        public IActionResult Deactivate(User user)
-        {
-            try
-            {
-                _userService.Delete(user);
-                return new OkObjectResult(new ResponseGenerator(
-                    200,
-                    SuccessMessage.DEACTIVATE_ACCOUNT_SUCCESS
-                ));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return new StatusCodeResult(500);
             }
         }
     }

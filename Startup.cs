@@ -37,7 +37,7 @@ namespace MoneyFlow
 
             services.AddScoped<UserService>();
 
-            services.AddScoped<ProductService>();
+            services.AddScoped<ExpenseService>();
 
             services.AddTransient<UserContext>();
 
@@ -63,7 +63,7 @@ namespace MoneyFlow
             
             List<string> protectedBranch = new List<string> 
             {
-                "/product", "/user"
+                "/user", "/file", "/expense", "/expenses"
             };
             
             List<string> unprotectedBranch = new List<string> 

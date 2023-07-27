@@ -8,8 +8,9 @@ namespace MoneyFlow.Context
         public UserContext (DbContextOptions<UserContext> options) : base(options)
         {}
 
-        public DbSet<User> Users => Set<User>();
-        public DbSet<Product> Products => Set<Product>();
+        public DbSet<User> TUser => Set<User>();
+        public DbSet<Expense> TExpense => Set<Expense>();
+        public DbSet<Income> TIncome => Set<Income>();
 
         protected override void OnModelCreating (ModelBuilder model)
         {
@@ -17,10 +18,6 @@ namespace MoneyFlow.Context
             model.Entity<User>(b =>
             {
                 b.HasIndex(u => new {u.Id, u.Username, u.Email}).IsUnique();
-            });
-            model.Entity<Product>(b =>
-            {
-                b.HasIndex(p => new {p.Id, p.Name}).IsUnique();
             });
         }
     }

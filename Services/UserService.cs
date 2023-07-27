@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using MoneyFlow.Constants;
 using MoneyFlow.Context;
 using MoneyFlow.Models;
@@ -27,14 +28,14 @@ namespace MoneyFlow.Services
         public async Task Register(User user)
         {
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            _dbContext.Users.Add(user);
-            var jwtToken = AuthUtilites.GenerateJwt(user);
+            _dbContext.TUser.Add(user);
             await _dbContext.SaveChangesAsync();
         }
 
-        public Task Login(User user)
+        public async Task Login(User user)
         {
-            var userResult = _dbContext.Users.Where(x => x.Username == user.Username).FirstOrDefault() ?? throw new DataException(ErrorMessage.USER_NOT_FOUND);
+            var userResult = await _dbContext.TUser.Where(x => x.Username == user.Username).FirstOrDefaultAsync() 
+                ?? throw new DataException(ErrorMessage.USER_NOT_FOUND);
             if (!BCrypt.Net.BCrypt.Verify(user.Password, userResult.Password)) { throw new DataException(ErrorMessage.WRONG_PASSWORD);}
             var jwtToken = AuthUtilites.GenerateJwt(userResult) ?? throw new Exception(ErrorMessage.SERVER_ERROR);
             HttpContext.Response.Cookies.Append("TokenBearer", jwtToken, new CookieOptions
@@ -44,19 +45,11 @@ namespace MoneyFlow.Services
                 SameSite = SameSiteMode.None,
                 Expires = DateTime.UtcNow.AddDays(1)
             });
-            return Task.CompletedTask;
         }
 
-        public void Edit(User user)
+        public async Task<User> GetUser(string userId)
         {
-            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            _dbContext.Update(user);
-            var jwtToken = AuthUtilites.GenerateJwt(user);
-        }
-
-        public void Delete(User user)
-        {
-            _dbContext.Remove(user);
+            return await _dbContext.TUser.Where(x => x.Id == userId).FirstOrDefaultAsync();
         }
     }
 }

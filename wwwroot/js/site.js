@@ -46,3 +46,10 @@ function changeShownImage(inputFileId, targetId) {
             </div>`
     }
 }
+
+function openNewTab(url) {
+    window.open(
+        url,
+        '_blank'
+    );
+}

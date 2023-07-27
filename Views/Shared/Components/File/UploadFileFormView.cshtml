@@ -1,0 +1,52 @@
+@model string
+@using fu = MoneyFlow.Utils.FileUtilites
+
+@{
+    var imageFormId = "imageFormId";
+    var imageFormContainerId = "imageFormContainerId";
+    var formFileState = ViewData.ModelState["FormFile"];
+    string cfgShowError = formFileState == null ? "hidden" : "";
+    string errorMessage = formFileState?.Errors?.FirstOrDefault()?.ErrorMessage ?? "";
+    var fileType = fu.GetFileType(System.IO.Path.GetExtension(Model));
+}
+
+<dl>
+    <dd class="container">
+        <label class="row d-flex align-items-center justify-content-center" for="@imageFormContainerId" id="@imageFormId" onmouseover="changeCursorToHand('@imageFormId')">
+            @if (Model == "" || Model.ElementAt(Model.Length - 1) == '/')
+            {
+                <div class="container m-2 p-4  rounded" style="background-color: rgb(235, 235, 235); border-radius: 1rem !important;">
+                    <div class="row d-flex my-2 justify-content-center align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-card-image" viewBox="0 0 16 16">
+                            <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                            <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54A.505.505 0 0 1 1 12.5v-9a.5.5 0 0 1 .5-.5h13z"/>
+                        </svg>
+                    </div>
+                    <div class="row d-flex justify-content-center align-items-center text-center mt-1 mb-3">
+                        Klik untuk tambah file
+                    </div>
+                </div>
+            } else
+            {
+                switch (fileType)
+                {
+                    case "image":
+                        @Html.DisplayFor(model => Model, "SmallImage");
+                        break;
+                    case "pdf":
+                        @Html.DisplayFor(model => Model, "PdfPreview");
+                        break;
+                    case "excel":
+                        @Html.DisplayFor(model => Model, "ExcelPreview");
+                        break;
+                    default:
+                        @Html.DisplayFor(model => Model, "UnsupportedFile");
+                        break;
+                }
+            }
+        </label>
+        <input id="@imageFormContainerId" type="file" name="formFile" class="d-none" onchange="changeShownImage('@imageFormContainerId', '@imageFormId')"
+            onmouseover="changeCursorToHand('@imageFormContainerId')"/>
+        <span class="row d-flex align-items-center justify-content-center text-danger @cfgShowError">@errorMessage</span>
+    </dd>
+</dl>
