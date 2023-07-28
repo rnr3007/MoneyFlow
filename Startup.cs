@@ -39,6 +39,8 @@ namespace MoneyFlow
 
             services.AddScoped<ExpenseService>();
 
+            services.AddScoped<FileService>();
+
             services.AddTransient<UserContext>();
 
             services.AddControllersWithViews();

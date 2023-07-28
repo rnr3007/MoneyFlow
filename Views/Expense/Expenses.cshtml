@@ -10,7 +10,7 @@
 
 <h4 class="text-center my-3"><b>@ViewData["Title"]</b></h4>
 
-<div class="d-flex align-items-center my-2">
+<div class="d-flex align-items-center mt-2 mb-1">
     <div>Cari pengeluaran:</div>
     <div class="col d-flex flex-grow-1">
         <form action="/expenses" method="get" class="d-flex flex-grow-1 mb-0">
@@ -91,11 +91,17 @@
     @await Html.PartialAsync("~/Views/Shared/Components/EmptyDataView.cshtml");
 } else
 {
+    @await Html.PartialAsync("~/Views/Shared/Components/PaginationView.cshtml", Model.PaginationView)
+
+    <div class="d-flex justify-content-center align-items-center row row-cols-2 my-3">
+        <a class="btn btn-primary" href="@baseUrl/file/generate-excel/expense" download>
+            <i class="bi bi-download"></i>
+            Tabel Excel
+        </a>
+    </div>
     for (int i = 0; i < modalDetailList.Count; i++)
     {
         @await Html.PartialAsync("~/Views/Shared/Components/Modal/DeleteConfirmationModalView.cshtml", modalDeleteList[i]);
         @await Html.PartialAsync("~/Views/Expense/DetailExpenseModal.cshtml", modalDetailList[i]);
     }
 }
-
-@await Html.PartialAsync("~/Views/Shared/Components/PaginationView.cshtml", Model.PaginationView)

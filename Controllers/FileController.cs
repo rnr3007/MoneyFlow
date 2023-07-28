@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging;
 using MoneyFlow.Constants;
 using fu = MoneyFlow.Utils.FileUtilites;
 using MoneyFlow.Models.ViewModels;
+using OfficeOpenXml;
+using MoneyFlow.Services;
 
 namespace MoneyFlow.Controllers
 {
@@ -19,8 +21,11 @@ namespace MoneyFlow.Controllers
 
         private readonly static string baseUrl = Startup.StaticConfiguration.GetSection("BASE_URL").Value;
 
-        public FileController(ILogger<FileController> logger)
+        private readonly FileService _fileService;
+
+        public FileController(ILogger<FileController> logger, FileService fileService)
         {
+            _fileService = fileService;
             _logger = logger;
         }
 
@@ -63,6 +68,23 @@ namespace MoneyFlow.Controllers
         public IActionResult PdfView()
         {
             return View();
+        }
+
+        [HttpGet(UriPath.EXCEL_DOWNLOAD)]
+        public async Task<IActionResult> DownloadExcel(string purpose)
+        {
+            byte[] file = new byte[0];
+            try 
+            {
+                file = await _fileService.RetrieveExcel(
+                    Request.Headers["userId"],
+                    "expense"
+                );
+                return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            } catch (Exception)
+            {
+                return File(file, "text/plain");
+            }
         }
     }
 }

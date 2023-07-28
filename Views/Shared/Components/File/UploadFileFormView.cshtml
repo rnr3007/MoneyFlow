@@ -2,8 +2,8 @@
 @using fu = MoneyFlow.Utils.FileUtilites
 
 @{
-    var imageFormId = "imageFormId";
-    var imageFormContainerId = "imageFormContainerId";
+    var fileFormId = "imageFormId";
+    var fileFormContainerId = "imageFormContainerId";
     var formFileState = ViewData.ModelState["FormFile"];
     string cfgShowError = formFileState == null ? "hidden" : "";
     string errorMessage = formFileState?.Errors?.FirstOrDefault()?.ErrorMessage ?? "";
@@ -12,7 +12,7 @@
 
 <dl>
     <dd class="container">
-        <label class="row d-flex align-items-center justify-content-center" for="@imageFormContainerId" id="@imageFormId" onmouseover="changeCursorToHand('@imageFormId')">
+        <label class="row d-flex align-items-center justify-content-center" for="@fileFormContainerId" id="@fileFormId" onmouseover="changeCursorToHand('@fileFormId')">
             @if (Model == "" || Model.ElementAt(Model.Length - 1) == '/')
             {
                 <div class="container m-2 p-4  rounded" style="background-color: rgb(235, 235, 235); border-radius: 1rem !important;">
@@ -45,8 +45,8 @@
                 }
             }
         </label>
-        <input id="@imageFormContainerId" type="file" name="formFile" class="d-none" onchange="changeShownImage('@imageFormContainerId', '@imageFormId')"
-            onmouseover="changeCursorToHand('@imageFormContainerId')"/>
+        <input id="@fileFormContainerId" type="file" name="formFile" class="d-none" onchange="changeFilePreview('@fileFormContainerId', '@fileFormId')"
+            onmouseover="changeCursorToHand('@fileFormContainerId')"/>
         <span class="row d-flex align-items-center justify-content-center text-danger @cfgShowError">@errorMessage</span>
     </dd>
 </dl>
