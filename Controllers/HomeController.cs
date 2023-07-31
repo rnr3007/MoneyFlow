@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using MoneyFlow.Constants;
 using MoneyFlow.Models;
 using MoneyFlow.Models.ViewModels;
+using MoneyFlow.Services;
 
 namespace MoneyFlow.Controllers
 {
@@ -15,15 +16,31 @@ namespace MoneyFlow.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ExpenseService _expenseService;
+
+        public HomeController(ILogger<HomeController> logger, ExpenseService expenseService)
         {
             _logger = logger;
+            _expenseService = expenseService;
         }
 
         [HttpGet("/")]
         public IActionResult Index()
         {
+            if (!string.IsNullOrWhiteSpace(Request.Cookies["TokenBearer"]))
+            {
+                return Redirect(UriPath.DASHBOARD);
+            }
             return View();
+        }
+
+        [HttpGet(UriPath.DASHBOARD)]
+        public async Task<IActionResult> Dashboard()
+        {
+            SummaryViewModel summaryViewModel = new SummaryViewModel();
+            string userId = Request.Headers["userId"];
+            summaryViewModel.TotalCostByDate = await _expenseService.GetCostByDate(userId);
+            return View(summaryViewModel);
         }
 
         [HttpGet("/privacy")]

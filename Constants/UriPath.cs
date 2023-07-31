@@ -14,6 +14,7 @@ namespace MoneyFlow.Constants
         public const string EXCEL_DOWNLOAD = "generate-excel/{purpose}";
         public const string INSERT_FROM_EXCEL = "insert-excel/{purpose}";
 
+        public const string DASHBOARD = "/dashboard";
         public const string ERROR = "/error";
         public const string NOT_FOUND = "/not-found";
     }

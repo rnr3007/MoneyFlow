@@ -121,5 +121,19 @@ namespace MoneyFlow.Services
                 }
             }
         }
+
+        public async Task<List<PlotDataModel<DateTime, long>>> GetCostByDate(string userId)
+        {
+            var costs = await _dbContext.TExpense
+                .Where(x => x.UserId == userId)
+                .GroupBy(x => x.CreatedAt.Date)
+                .Select(x => new PlotDataModel<DateTime, long>(
+                    x.Key,
+                    x.Sum(y => y.Cost)
+                ))
+                .ToListAsync();
+
+            return costs;
+        }
     }
 }

@@ -4,8 +4,8 @@ namespace MoneyFlow.Models.ViewModels
 {
     public class SummaryViewModel
     {
-        public List<long> TotalCostByDate { get; set; }
+        public IEnumerable<dynamic> TotalCostByDate { get; set; }
 
-        public List<long> TotalCostByType { get; set; }
+        public IEnumerable<dynamic> TotalCostByType { get; set; }
     }
 }

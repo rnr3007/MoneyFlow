@@ -1,2 +1,34 @@
-@model MoneyFlow.Models.ViewModels.SummaryViewModel
+@model MoneyFlow.Models.ViewModels.SummaryViewModel;
+@using System;
+@using Newtonsoft.Json;
 
+@{
+    var totalCostByDateJson = JsonConvert.SerializeObject(Model.TotalCostByDate);
+}
+
+<div class="text-center">
+    <h4>MoneyFlow</h4>
+</div>
+
+<div class="container">
+    <div>
+        <div class="row d-flex justify-content-center my-2">
+            Pengeluaran 7 hari terakhir
+        </div>
+        <div class="row d-flex justify-content-center my-2">
+            <canvas id="lastWeekExpensesChartId"></canvas>
+        </div>
+    </div>
+    <div class="row d-flex justify-content-center my-2">
+        Test
+    </div>
+    <div class="row d-flex justify-content-center my-2">
+        Test2
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', loadChart(
+        @Html.Raw(totalCostByDateJson)
+    ));
+</script>

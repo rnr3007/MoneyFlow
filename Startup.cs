@@ -65,7 +65,7 @@ namespace MoneyFlow
             
             List<string> protectedBranch = new List<string> 
             {
-                "/user", "/file", "/expense", "/expenses"
+                "/user", "/file", "/expense", "/expenses", "/dashboard"
             };
             
             List<string> unprotectedBranch = new List<string> 
