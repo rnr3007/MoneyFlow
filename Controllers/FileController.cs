@@ -11,6 +11,7 @@ using fu = MoneyFlow.Utils.FileUtilites;
 using MoneyFlow.Models.ViewModels;
 using OfficeOpenXml;
 using MoneyFlow.Services;
+using iv = MoneyFlow.Utils.Validator.InputValidator;
 
 namespace MoneyFlow.Controllers
 {
@@ -23,8 +24,11 @@ namespace MoneyFlow.Controllers
 
         private readonly FileService _fileService;
 
-        public FileController(ILogger<FileController> logger, FileService fileService)
+        private readonly ExpenseService _expenseService;
+
+        public FileController(ILogger<FileController> logger, FileService fileService, ExpenseService expenseService)
         {
+            _expenseService = expenseService;
             _fileService = fileService;
             _logger = logger;
         }
@@ -85,6 +89,34 @@ namespace MoneyFlow.Controllers
             {
                 return File(file, "text/plain");
             }
+        }
+
+        [HttpPost(UriPath.INSERT_FROM_EXCEL)]
+        public async Task<IActionResult> InsertFromExcel(IFormFile formFile, string purpose)
+        {
+            try
+            {
+                if (formFile == null || formFile.Length == 0 || !iv.IsFileValid(formFile, new string[]{"excel"}))
+                {
+                    throw new Exception(ErrorMessage.FIELD_EMPTY);
+                }
+
+                if (purpose == GeneralConstants.PURPOSE_EXPENSE)
+                {
+                    await _expenseService.InsertFromExcel(
+                        Request.Headers["userId"],
+                        formFile
+                    );
+                    return Redirect(UriPath.EXPENSE_LIST);
+                }
+                return Redirect(UriPath.NOT_FOUND);
+            } catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Type eType = e.GetType();
+                return Redirect(UriPath.ERROR);
+            }
+            
         }
     }
 }

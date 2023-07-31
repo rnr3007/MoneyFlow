@@ -1,0 +1,13 @@
+@model string
+@{
+    var insertFromExcelFormId = "insertFromExcelForm";
+    var insertFromExcelButtonId = "insertFromExcelForm";
+    var insertFromExcelInputId = "insertFromExcelInput";
+}
+
+<form id="@insertFromExcelFormId" method="post" action="/file/insert-excel/@Model" enctype="multipart/form-data">
+    <div class="flex-grow-1">
+        <p id="@insertFromExcelButtonId" onmouseover="changeCursorToHand('@insertFromExcelButtonId')" onclick="inputExcel('@insertFromExcelFormId', '@insertFromExcelInputId')" class="btn btn-success mb-0 w-100">Tambah data dari Excel</p>
+    </div>
+    <div id="@insertFromExcelInputId" class="form-group d-none"></div>
+</form>

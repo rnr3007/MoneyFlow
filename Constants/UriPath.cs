@@ -12,7 +12,9 @@ namespace MoneyFlow.Constants
         public const string GET_FILE = "{fileType}/{purpose}/{fileName}";
         public const string PDF_VIEW = "/file/pdf-view";
         public const string EXCEL_DOWNLOAD = "generate-excel/{purpose}";
+        public const string INSERT_FROM_EXCEL = "insert-excel/{purpose}";
 
         public const string ERROR = "/error";
+        public const string NOT_FOUND = "/not-found";
     }
 }

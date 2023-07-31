@@ -2,7 +2,32 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">MoneyFlow</h1>
-    <img src="~/assets/MoneyFlow-logo.svg" height="500px">
-</div>
+@if (Layout == "_Layout")
+{
+    <div class="text-center">
+        <h1 class="display-4">MoneyFlow</h1>
+        <img src="~/assets/MoneyFlow-logo.svg" height="500px">
+    </div>
+} else if (Layout == "_LoggedInLayout")
+{
+    <div class="text-center">
+        <h4>MoneyFlow</h4>
+    </div>
+
+    <div class="container">
+        <div>
+            <div class="row d-flex justify-content-center my-2">
+                Test
+            </div>    
+        </div>
+        <div class="row d-flex justify-content-center my-2">
+            Test
+        </div>
+        <div class="row d-flex justify-content-center my-2">
+            Test2
+        </div>
+    </div>
+}
+
+<script></script>
+

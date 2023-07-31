@@ -4,4 +4,9 @@ namespace MoneyFlow.Constants
     {
         public const string X_HEADER_USER_ID = "userId";
     }
+
+    public class GeneralConstants
+    {
+        public const string PURPOSE_EXPENSE = "expense";
+    }
 }

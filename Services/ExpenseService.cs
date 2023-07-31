@@ -10,6 +10,10 @@ using System.Data;
 using MoneyFlow.Constants;
 using Microsoft.AspNetCore.Http;
 using fu = MoneyFlow.Utils.FileUtilites;
+using System.IO;
+using OfficeOpenXml;
+using System.Globalization;
+using MoneyFlow.Constants.Enum;
 
 namespace MoneyFlow.Services
 {
@@ -80,6 +84,42 @@ namespace MoneyFlow.Services
             }
             _dbContext.TExpense.Add(expense);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task InsertFromExcel(string userId, IFormFile formFile)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await formFile.CopyToAsync(memoryStream);
+                using (var excelPackage = new ExcelPackage(memoryStream))
+                {
+                    var worksheet = excelPackage.Workbook.Worksheets[0];
+
+                    int i = 2;
+                    
+                    while (!string.IsNullOrWhiteSpace((string)worksheet.Cells[i, 1].Value))
+                    {
+                        if (DateTime.TryParseExact(
+                            worksheet.Cells[i, 1].Value.ToString(),
+                            "dd/MM/yyyy HH:mm:ss",
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.None,
+                            out DateTime creationDate
+                        )) {
+                            Expense expense = new Expense();
+                            expense.UserId = userId;
+                            expense.CreatedAt = creationDate;
+                            expense.UpdatedAt = creationDate;
+                            expense.Name = worksheet.Cells[i, 2].Value.ToString();
+                            expense.Cost = long.Parse(worksheet.Cells[i, 3].Value.ToString());
+                            expense.CostType = CostTypeEnum.MISC;
+                            _dbContext.TExpense.Add(expense);
+                        }
+                        i++;
+                    }
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
         }
     }
 }

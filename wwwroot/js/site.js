@@ -70,3 +70,23 @@ function openNewTab(url) {
         '_blank'
     );
 }
+
+function inputExcel(inputFormId, inputContainerId) {
+    var inputContainer = document.getElementById(inputContainerId);
+
+    var inputElement = document.createElement('input');
+    inputContainer.appendChild(inputElement);
+    
+    inputElement.name = 'formFile';
+    inputElement.type = 'file';
+    inputElement.className = 'form-control d-none';
+    inputElement.required = true;
+
+    inputElement.onchange = function(event) {
+        var formData = new FormData();
+        formData.append('formFile', event.target.files[0]);
+        document.getElementById(inputFormId).submit();
+    };
+    
+    inputElement.click();
+}
