@@ -7,9 +7,6 @@ namespace MoneyFlow.Constants
         public const string PASSWORD_EMPTY = "Password belum diisi";
         public const string EMAIL_EMPTY = "Email belum diisi";
         public const string FULLNAME_EMPTY = "Nama lengkap belum diisi";
-        public const string PRODUCT_NAME_EMPTY = "Nama produk belum diisi";
-        public const string PRODUCT_TYPE_EMPTY = "Tipe produk belum diisi";
-        public const string PRODUCT_COST_EMPTY = "Harga produk belum diisi";
         public const string EXPENSE_NAME_EMPTY = "Nama pengeluaran belum diisi";
         public const string EXPENSE_COST_EMPTY = "Biaya pengeluaran belum diisi";
         public const string EXPENSE_TYPE_EMPTY = "Tipe pengeluaran belum diisi";
@@ -19,7 +16,6 @@ namespace MoneyFlow.Constants
         public const string USERNAME_FORMAT_INVALID = "Format username tidak sesuai";
         public const string PASSWORD_FORMAT_INVALID = "Format password tidak sesuai";
         public const string EMAIL_FORMAT_INVALID = "Format email tidak sesuai";
-        public const string PRODUCT_COST_INVALID = "Harga produk harus lebih dari 0";
         public const string EXPENSE_COST_INVALID = "Nilai pengeluaran harus lebih dari 0";
         public const string EXPENSE_NAME_INVALID = "Maksimal nama pengeluaran 70 karakter";
         public const string EXPENSE_RECEIPT_INVALID = "Maksimal nama file 255 karakter";
@@ -28,6 +24,7 @@ namespace MoneyFlow.Constants
 
         public const string USER_NOT_FOUND = "User tidak ditemukan";
         public const string EXPENSE_NOT_FOUND = "Data pengeluaran tidak ditemukan";
+        public const string INCOME_NOT_FOUND = "Data pendapatan tidak ditemukan";
         public const string WRONG_PASSWORD = "Password salah";
         public const string FIELD_EMPTY = "Data kosong";
         public const string SERVER_ERROR = "Kesalahan server";

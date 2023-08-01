@@ -1,0 +1,41 @@
+@model MoneyFlow.Models.Income
+@using MoneyFlow.Constants.Enum
+@using MoneyFlow.Constants
+@using de = MoneyFlow.Utils.DataExtractor
+
+@{
+    var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
+    var costType = de.GetEnumDataList<IncomeTypeEnum>();
+}
+
+<h4 class="text-center">Ubah Pendapatan</h4>
+<hr />
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <form method="post" action="/incomes/update/@Model.Id">
+            <div class="form-group">
+                <label asp-for="IncomeType" class="control-label">Tipe Pengeluaran</label>
+                <select asp-for="IncomeType" class="form-control">
+                    @foreach (string enumData in costType)
+                    {
+                        <option value="@enumData">@enumData</option>
+                    }
+                </select>
+                <span asp-validation-for="IncomeType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IncomeMoney" class="control-label">Pendapatan</label>
+                <input asp-for="IncomeMoney" class="form-control" placeholder="Biaya yang dikeluarkan"/>
+                <span asp-validation-for="IncomeMoney" class="text-danger"></span>
+            </div>
+            <div class="form-group flex-grow-1">
+                <input type="submit" value="Ubah pendapatan" class="btn btn-primary w-100" />
+            </div>
+        </form>
+        <form method="get" action="@UriPath.INCOMES">
+            <div class="form-group flex-grow-1">
+                <input type="submit" value="Kembali" class="btn btn-primary w-100" />
+            </div>
+        </form>
+    </div>
+</div>

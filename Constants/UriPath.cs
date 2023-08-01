@@ -8,6 +8,11 @@ namespace MoneyFlow.Constants
         public const string EXPENSE_UPDATE = "update/{expenseId}";
         public const string EXPENSE_DELETE = "delete/{expenseId}";
 
+        public const string INCOMES = "/incomes";
+        public const string INCOMES_CREATE = "/incomes/create";
+        public const string INCOMES_UPDATE = "/incomes/update/{incomeId}";
+        public const string INCOMES_DELETE = "/incomes/delete/{incomeId}";
+
         public const string FILE = "/file";
         public const string GET_FILE = "{fileType}/{purpose}/{fileName}";
         public const string PDF_VIEW = "/file/pdf-view";

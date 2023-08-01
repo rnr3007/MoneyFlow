@@ -8,5 +8,6 @@ namespace MoneyFlow.Constants
     public class GeneralConstants
     {
         public const string PURPOSE_EXPENSE = "expense";
+        public const string PURPOSE_INCOMES = "incomes";
     }
 }

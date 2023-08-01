@@ -12,23 +12,25 @@
 
 <div class="container">
     <div>
-        <div class="row d-flex justify-content-center my-2">
-            Pengeluaran 7 hari terakhir
-        </div>
-        <div class="row d-flex justify-content-center my-2">
+        <div class="row d-flex justify-content-center my-2" style="max-height: 360px;">
             <canvas id="lastWeekExpensesChartId"></canvas>
         </div>
     </div>
-    <div class="row d-flex justify-content-center my-2">
-        Test
+    <div class="text-center">
+        Tujuan
     </div>
-    <div class="row d-flex justify-content-center my-2">
-        Test2
+    <div class="my-4">
+        <div class="balloon">
+            <div class="balloon-image" style="background-image: url('http://localhost:5000/file/image/expense/7427bda0-f2f3-416f-b18a-857b977a3830.png');"></div>
+        </div>
+        <div class="progress" role="progressbar">
+            <div class="progress-bar" style="width: 30%;"></div>
+        </div>
     </div>
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', loadChart(
+    loadChart(
         @Html.Raw(totalCostByDateJson)
-    ));
+    );
 </script>
