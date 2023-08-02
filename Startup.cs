@@ -43,6 +43,8 @@ namespace MoneyFlow
 
             services.AddScoped<IncomeService>();
 
+            services.AddScoped<MotivationService>();
+
             services.AddTransient<UserContext>();
 
             services.AddControllersWithViews();
@@ -67,7 +69,7 @@ namespace MoneyFlow
             
             List<string> protectedBranch = new List<string> 
             {
-                "/user", "/file", "/expense", "/expenses", "/dashboard", "/incomes"
+                "/user", "/file", "/expense", "/expenses", "/dashboard", "/incomes", "/motivations"
             };
             
             List<string> unprotectedBranch = new List<string> 

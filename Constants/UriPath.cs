@@ -13,6 +13,11 @@ namespace MoneyFlow.Constants
         public const string INCOMES_UPDATE = "/incomes/update/{incomeId}";
         public const string INCOMES_DELETE = "/incomes/delete/{incomeId}";
 
+        public const string MOTIVATIONS = "/motivations";
+        public const string MOTIVATIONS_CREATE = "/motivations/create";
+        public const string MOTIVATIONS_UPDATE = "/motivations/update/{motivationId}";
+        public const string MOTIVATIONS_DELETE = "/motivations/delete/{motivationId}";
+
         public const string FILE = "/file";
         public const string GET_FILE = "{fileType}/{purpose}/{fileName}";
         public const string PDF_VIEW = "/file/pdf-view";

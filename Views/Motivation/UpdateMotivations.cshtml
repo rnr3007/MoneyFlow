@@ -1,0 +1,38 @@
+@model MoneyFlow.Models.Motivation
+@using MoneyFlow.Constants
+@using de = MoneyFlow.Utils.DataExtractor
+
+@{
+    var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
+    string receiptFileUrl = $"image/motivations/{Model.TargetImage}";
+}
+
+<h4 class="text-center">@ViewData["Title"]</h4>
+<hr />
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <form method="post" action="/motivations/update/@Model.Id" enctype="multipart/form-data">
+            <div class="form-group">
+                @await Html.PartialAsync("~/Views/Shared/Components/File/UploadFileFormView.cshtml", "")
+            </div>
+            <div class="form-group">
+                <label asp-for="TargetName" class="control-label">Nama barang impian</label>
+                <input asp-for="TargetName" class="form-control" placeholder="Nama barang impian"/>
+                <span asp-validation-for="TargetName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TargetPrice" class="control-label">Harga barang impian</label>
+                <input asp-for="TargetPrice" class="form-control" placeholder="Harga barang"/>
+                <span asp-validation-for="TargetPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group flex-grow-1">
+                <input type="submit" value="Buat impian" class="btn btn-primary w-100" />
+            </div>
+        </form>
+        <form method="get" action="@UriPath.MOTIVATIONS">
+            <div class="form-group flex-grow-1">
+                <input type="submit" value="Kembali" class="btn btn-primary w-100" />
+            </div>
+        </form>
+    </div>
+</div>

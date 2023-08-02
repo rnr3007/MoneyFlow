@@ -35,7 +35,7 @@ namespace MoneyFlow.Middleware
                 _context.Response.Cookies.Append("TokenBearer", jwt, new CookieOptions
                 {
                     HttpOnly = true,
-                    Secure = true,
+                    Secure = false,
                     SameSite = SameSiteMode.None,
                     Expires = DateTime.UtcNow.AddDays(1)
                 });

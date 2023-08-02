@@ -18,10 +18,13 @@ namespace MoneyFlow.Controllers
 
         private readonly ExpenseService _expenseService;
 
-        public HomeController(ILogger<HomeController> logger, ExpenseService expenseService)
+        private readonly MotivationService _motivationService;
+
+        public HomeController(ILogger<HomeController> logger, ExpenseService expenseService, MotivationService motivationService)
         {
             _logger = logger;
             _expenseService = expenseService;
+            _motivationService = motivationService;
         }
 
         [HttpGet("/")]
@@ -37,10 +40,24 @@ namespace MoneyFlow.Controllers
         [HttpGet(UriPath.DASHBOARD)]
         public async Task<IActionResult> Dashboard()
         {
-            SummaryViewModel summaryViewModel = new SummaryViewModel();
-            string userId = Request.Headers["userId"];
-            summaryViewModel.TotalCostByDate = await _expenseService.GetCostByDate(userId);
-            return View(summaryViewModel);
+            try
+            {
+                SummaryViewModel summaryViewModel = new SummaryViewModel();
+                string userId = Request.Headers["userId"];
+                summaryViewModel.TotalCostByDate = await _expenseService.GetCostByDate(userId);
+                summaryViewModel.MotivationList = (await _motivationService.GetMotivations(
+                    Request.Headers["userId"],
+                    1,
+                    10,
+                    ""
+                )).Data;
+                
+                return View(summaryViewModel);
+            } catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return Redirect(UriPath.ERROR);
+            }
         }
 
         [HttpGet("/privacy")]

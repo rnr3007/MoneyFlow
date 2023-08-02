@@ -11,6 +11,7 @@ namespace MoneyFlow.Context
         public DbSet<User> TUser => Set<User>();
         public DbSet<Expense> TExpense => Set<Expense>();
         public DbSet<Income> TIncome => Set<Income>();
+        public DbSet<Motivation> TMotivation => Set<Motivation>();
 
         protected override void OnModelCreating (ModelBuilder model)
         {

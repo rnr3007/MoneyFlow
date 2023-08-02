@@ -1,0 +1,54 @@
+@model MoneyFlow.Models.ViewModels.ModalViewModel<Motivation>
+@using MoneyFlow.Models
+@using MoneyFlow.Models.ViewModels
+@using MoneyFlow.Constants
+@using fu = MoneyFlow.Utils.FileUtilites
+
+@{
+    
+    var ariaLabelTitle = $"modalLabel{Model.ModalId}";
+    Motivation motivations = Model.Data;
+    var fileType = fu.GetFileType(System.IO.Path.GetExtension(Model.Data.TargetImage));
+    var imageUrl = $"{fileType}/{GeneralConstants.PURPOSE_MOTIVATIONS}/{motivations.TargetImage}";
+}
+
+<div class="modal fade" id="@Model.ModalId" tabindex="-1" aria-labelledby="@ariaLabelTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div id="@ariaLabelTitle" class="modal-title fs-5"><strong>@Html.DisplayFor(model => motivations.TargetName)</strong></div>
+                <i class="bi bi-x-circle" onmouseover="changeCursorToHand('detailCloseButton')" id="detailCloseButton" onclick="closeModal('@Model.ModalId')"></i>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="container px-0 my-4">
+                            @switch (fileType)
+                            {
+                                case "image":
+                                    @Html.DisplayFor(model => imageUrl, "SmallImage");
+                                    break;
+                                default:
+                                    @Html.DisplayFor(model => imageUrl, "UnsupportedFile");
+                                    break;
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="container px-0">
+                            <strong>Harga</strong>
+                            <p>@Html.DisplayFor(model => motivations.TargetPrice, "Money")</p>
+                        </div>
+                    </div>        
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <div class="row d-flex align-items-center">
+                        <button class="btn btn-primary w-100" onclick="closeModal('@Model.ModalId')">Kembali</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
