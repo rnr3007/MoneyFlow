@@ -43,9 +43,4 @@ function setBalloonPos(balloons, itemPrices, maxPrice) {
         const position = ((itemPrices[i] / maxPrice) * progressWidth) - 50;
         balloon.style.setProperty("--balloon-position", `${position}px`);
     }
-
-    console.log(balloons);
-    console.log(itemPrices);
-    console.log(maxPrice);
-
 }
