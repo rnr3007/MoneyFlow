@@ -45,6 +45,8 @@ namespace MoneyFlow
 
             services.AddScoped<MotivationService>();
 
+            services.AddScoped<SavingsService>();
+
             services.AddTransient<UserContext>();
 
             services.AddControllersWithViews();

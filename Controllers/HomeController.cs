@@ -20,11 +20,14 @@ namespace MoneyFlow.Controllers
 
         private readonly MotivationService _motivationService;
 
-        public HomeController(ILogger<HomeController> logger, ExpenseService expenseService, MotivationService motivationService)
+        private readonly SavingsService _savingsService;
+
+        public HomeController(ILogger<HomeController> logger, ExpenseService expenseService, MotivationService motivationService, SavingsService savingsService)
         {
             _logger = logger;
             _expenseService = expenseService;
             _motivationService = motivationService;
+            _savingsService = savingsService;
         }
 
         [HttpGet("/")]
@@ -42,6 +45,7 @@ namespace MoneyFlow.Controllers
         {
             try
             {
+                ViewData["Title"] = "Dashboard";
                 SummaryViewModel summaryViewModel = new SummaryViewModel();
                 string userId = Request.Headers["userId"];
                 summaryViewModel.TotalCostByDate = await _expenseService.GetCostByDate(userId);
@@ -51,7 +55,9 @@ namespace MoneyFlow.Controllers
                     10,
                     ""
                 )).Data;
-                
+                summaryViewModel.Savings = await _savingsService.GetSaving(
+                    Request.Headers["userId"]
+                );
                 return View(summaryViewModel);
             } catch (Exception e)
             {

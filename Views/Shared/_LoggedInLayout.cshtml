@@ -44,6 +44,8 @@
         </main>
     </div>
 
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
     <footer class="border-top footer text-muted">
         <div class="container px-2">
             &copy; 2023 - MoneyFlow - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

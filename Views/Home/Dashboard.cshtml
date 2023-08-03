@@ -1,10 +1,22 @@
 @model MoneyFlow.Models.ViewModels.SummaryViewModel;
+@using MoneyFlow.Models;
+@using MoneyFlow.Constants;
+@using System.Collections.Generic;
 @using System;
 @using Newtonsoft.Json;
 
 @{
+    var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
     var totalCostByDateJson = JsonConvert.SerializeObject(Model.TotalCostByDate);
-    var motivationImg = "http://localhost:5000/file/image/expense/7427bda0-f2f3-416f-b18a-857b977a3830.png";
+    int zIndex = 0;
+    long maxTarget = 0;
+    if (Model.MotivationList.Count() != 0)
+    {
+        maxTarget = Model.MotivationList.Max(x => x.TargetPrice);
+    }
+    float savingPosition = maxTarget == 0 ? 100 : ((float)Model.Savings / maxTarget) * (float)100;
+    List<string> ballons = new List<string>();
+    List<long> itemPrices = new List<long>();
 }
 
 <div class="text-center">
@@ -17,19 +29,32 @@
             <canvas id="lastWeekExpensesChartId"></canvas>
         </div>
     </div>
-    <div class="text-center">
-        Tujuan
-    </div>
     <div class="my-4">
-        <div id='balloonBarId' class="balloon">
-            <div class="balloon-image" style="background-image: url('http://localhost:5000/file/image/expense/7427bda0-f2f3-416f-b18a-857b977a3830.png');">
-                <svg class="pointer-warning" width="100" height="125">
-                    <path d="M0 50 L50 125 L100 50 Z"/>
-                </svg>
-            </div>
+        <div class="text-center">
+            <h4>Barang Impian</h4>
         </div>
-        <div class="progress" role="progressbar">
-            <div class="progress-bar" style="width: 30%;"></div>
+        <div style="height: 125px; position: relative;">
+            @foreach (Motivation motivation in Model.MotivationList)
+            {
+                zIndex += 1;
+                var ballonId = $"balloonBarId{motivation.Id}";
+                var imgUrl = $"{baseUrl}/file/image/{GeneralConstants.PURPOSE_MOTIVATIONS}/{motivation.TargetImage}";
+                var pointerType = Model.Savings <= motivation.TargetPrice ? "pointer-warning" : "pointer-success";
+                ballons.Add(ballonId);
+                itemPrices.Add(motivation.TargetPrice);
+
+                <div id='@ballonId' class="balloon" style="z-index: @zIndex;">
+                    <div class="balloon-image" style="background-image: url('@imgUrl');">
+                        <svg class="@pointerType" width="100" height="125">
+                            <path d="M0 50 L50 125 L100 50 Z"/>
+                        </svg>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <div class="progress" role="progressbar" id="progressBarId">
+            <div class="progress-bar" style="width: @savingPosition%;"></div>
         </div>
     </div>
 </div>
@@ -38,4 +63,9 @@
     loadChart(
         @Html.Raw(totalCostByDateJson)
     );
+    setBalloonPos(
+        @Html.Raw(JsonConvert.SerializeObject(ballons)),
+        @Html.Raw(JsonConvert.SerializeObject(itemPrices)),
+        @maxTarget
+    )
 </script>

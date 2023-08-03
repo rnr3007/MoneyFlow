@@ -1,8 +1,4 @@
 function loadChart(totalCostByDate) {
-    loadCostByDateChart(totalCostByDate);
-}
-
-function loadCostByDateChart(totalCostByDate) {
     const months = ['none', 'Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul', 'Aug', 'Sep', 'Nov', 'Okt', 'Des'];
     const labels = [];
     const myData = [];
@@ -37,4 +33,17 @@ function loadCostByDateChart(totalCostByDate) {
             ]
         }
     })
+}
+
+function setBalloonPos(balloons, itemPrices, maxPrice) {
+    var progressBar = document.getElementById('progressBarId');
+    balloons.forEach(x => {
+        const balloon = document.getElementById(x);
+        balloon.ge
+    });
+
+    console.log(balloons);
+    console.log(itemPrices);
+    console.log(maxPrice);
+
 }
