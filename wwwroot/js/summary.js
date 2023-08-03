@@ -37,10 +37,12 @@ function loadChart(totalCostByDate) {
 
 function setBalloonPos(balloons, itemPrices, maxPrice) {
     var progressBar = document.getElementById('progressBarId');
-    balloons.forEach(x => {
-        const balloon = document.getElementById(x);
-        balloon.ge
-    });
+    var progressWidth = progressBar.offsetWidth;
+    for (let i = 0; i < balloons.length; i++) {
+        const balloon = document.getElementById(balloons[i]);
+        const position = ((itemPrices[i] / maxPrice) * progressWidth) - 50;
+        balloon.style.setProperty("--balloon-position", `${position}px`);
+    }
 
     console.log(balloons);
     console.log(itemPrices);
