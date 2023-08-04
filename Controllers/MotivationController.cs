@@ -98,6 +98,7 @@ namespace MoneyFlow.Controllers
         {
             try
             {
+                ViewData["Title"] = "Ubah barang impian";
                 Motivation motivation = await _motivationService.GetMotivation(
                     Request.Headers["userId"],
                     motivationId
@@ -125,6 +126,7 @@ namespace MoneyFlow.Controllers
                     throw new InvalidDataException(ErrorMessage.TARGET_IMAGE_EMPTY);
                 } 
 
+                ModelState.Remove("UserId");
                 if (ModelState.IsValid)
                 {
                     await _motivationService.UpdateMotivation(
@@ -139,6 +141,7 @@ namespace MoneyFlow.Controllers
                 
             } catch (Exception e)
             {
+                Console.WriteLine(e);
                 Type eType = e.GetType();
                 if (eType == typeof(DataException))
                 {

@@ -4,7 +4,7 @@
 
 @{
     var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
-    string receiptFileUrl = $"image/motivations/{Model.TargetImage}";
+    string targetImageUrl = $"image/motivations/{Model.TargetImage}";
 }
 
 <h4 class="text-center">@ViewData["Title"]</h4>
@@ -13,7 +13,7 @@
     <div class="col-md-4">
         <form method="post" action="/motivations/update/@Model.Id" enctype="multipart/form-data">
             <div class="form-group">
-                @await Html.PartialAsync("~/Views/Shared/Components/File/UploadFileFormView.cshtml", "")
+                @await Html.PartialAsync("~/Views/Shared/Components/File/UploadFileFormView.cshtml", @targetImageUrl)
             </div>
             <div class="form-group">
                 <label asp-for="TargetName" class="control-label">Nama barang impian</label>
@@ -24,6 +24,11 @@
                 <label asp-for="TargetPrice" class="control-label">Harga barang impian</label>
                 <input asp-for="TargetPrice" class="form-control" placeholder="Harga barang"/>
                 <span asp-validation-for="TargetPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Deskripsi</label>
+                <textarea type="text" asp-for="Description" class="form-control" placeholder="Deskripsi barang"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group flex-grow-1">
                 <input type="submit" value="Buat impian" class="btn btn-primary w-100" />

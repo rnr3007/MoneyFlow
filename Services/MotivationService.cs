@@ -72,6 +72,7 @@ namespace MoneyFlow.Services
 
             motivationResult.TargetName = motivation.TargetName;
             motivationResult.TargetPrice = motivation.TargetPrice;
+            motivationResult.Description = motivation.Description;
 
             await fu.UpdateFile(
                 GeneralConstants.PURPOSE_MOTIVATIONS,
