@@ -26,7 +26,11 @@ namespace MoneyFlow.Services
         public async Task<TableViewModel<Motivation>> GetMotivations(string userId, int page, int limit, string keyword)
         {
             int totalData = _dbContext.TMotivation
-                .Where(x => x.UserId == userId && x.TargetName.Contains(keyword))
+                .Where(x => x.UserId == userId && (
+                    x.TargetName.Contains(keyword)
+                    || x.TargetPrice.ToString().Contains(keyword)
+                    || x.Description.Contains(keyword)
+                ))
                 .Count();
 
             PaginationViewModel paginationView = new PaginationViewModel(
@@ -38,7 +42,11 @@ namespace MoneyFlow.Services
             );
 
             List<Motivation> motivations = await _dbContext.TMotivation
-                .Where(x => x.UserId == userId && x.TargetName.Contains(keyword))
+                .Where(x => x.UserId == userId && (
+                    x.TargetName.Contains(keyword)
+                    || x.TargetPrice.ToString().Contains(keyword)
+                    || x.Description.Contains(keyword)
+                ))
                 .ToListAsync();
 
             return new TableViewModel<Motivation>(
