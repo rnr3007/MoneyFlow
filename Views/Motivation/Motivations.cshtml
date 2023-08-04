@@ -27,7 +27,7 @@
 </div>
 
 <div class="container">
-    <div class="row">
+    <div class="row justify-content-center align-middle">
         @foreach (Motivation motivation in Model.Data) 
         {
             string modalDeleteId = $"modalDelete{motivation.Id}";
@@ -39,43 +39,34 @@
             modalDetailList.Add(new ModalViewModel<Motivation>(
                 modalDetailId, data: motivation
             ));
-            <div class="card col-sm-4 px-1">
-                <img class="card-img-top my-1" src="@targetImageUrl" style="height: 15rem;">
+            <div class="card col-sm-3 m-2" style="border-radius: 25px; border-color: black;">
+                <img class="card-img-top my-1" src="@targetImageUrl" style="height: 15rem; border-radius: 25px;">
+                <div class="card-body" style="height: 11rem;">
+                    <h5 class="card-title wrapped-title mt-2"><strong>@motivation.TargetName</strong></h5>
+                    <div class="card-text mb-2"><strong>@Html.DisplayFor(modelItem => motivation.TargetPrice, "Money")</strong></div>
+                    <div class="wrapped-content">
+                        @motivation.Description
+                    </div>
+                </div>
                 <div class="card-body">
-                    <h5 class="card-title wrapped-title">@motivation.TargetName</h5>
-                    <p class="card-text">@Html.DisplayFor(modelItem => motivation.TargetPrice, "Money")</p>
-                    <p class="card-text">@motivation.Description</p>
+                    <div class="container">
+                        <div class="row align-middle justify-content-center">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <button type="button" onclick="openModal('@modalDetailId')" class="btn btn-success">Detail</button>
+                                <button type="button" onclick="openModal('@modalDeleteId')" class="btn btn-danger mx-2">Hapus</button>
+                                <form action="/motivations/update/@motivation.Id" method="get" class="mb-0">
+                                    <div class="form-group flex-grow-1 my-0">
+                                        <input type="submit" value="Ubah" class="btn btn-primary" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         }
     </div>
 </div>  
-            @* @foreach (Motivation motivation in Model.Data) 
-            {
-                <tr>
-                    <td class="align-middle" style="max-width: 20rem;">
-                        @Html.DisplayFor(modelItem => motivation.TargetName)
-                    </td>
-                    <td class="align-middle">
-                        @Html.DisplayFor(modelItem => motivation.TargetPrice, "Money")
-                    </td>
-                    <td class="align-middle">
-                        <div class="container">
-                            <div class="row align-items-center justify-content-center">
-                                <button type="button" onclick="openModal('@modalDetailId')" class="btn btn-success">Detail</button>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="row justify-content-center align-middle">
-                        <button type="button" onclick="openModal('@modalDeleteId')" class="btn btn-danger">Hapus</button>
-                        <form action="/motivations/update/@motivation.Id" method="get" class="mb-0">
-                            <div class="form-group flex-grow-1 ml-1 my-0">
-                                <input type="submit" value="Ubah" class="btn btn-primary" />
-                            </div>
-                        </form>
-                    </td>
-                </tr>
-            } *@
 @if (Model.Data.Count == 0)
 {
     @await Html.PartialAsync("~/Views/Shared/Components/EmptyDataView.cshtml");
