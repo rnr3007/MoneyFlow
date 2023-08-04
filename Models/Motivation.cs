@@ -23,5 +23,8 @@ namespace MoneyFlow.Models
 
         [Required(ErrorMessage = ErrorMessage.TARGET_IMAGE_EMPTY, AllowEmptyStrings = true)]
         public string TargetImage { get; set; } = "";
+
+        [StringLength(512, ErrorMessage = ErrorMessage.TARGET_DESCRIPTION_INVALID)]
+        public string Description { get; set; }
     }
 }

@@ -53,7 +53,7 @@ namespace MoneyFlow.Controllers
         [HttpGet(UriPath.MOTIVATIONS_CREATE)]
         public IActionResult CreateMotivations()
         {
-            ViewData["Title"] = "Buar barang impian";
+            ViewData["Title"] = "Buat barang impian";
             return View();
         }
 

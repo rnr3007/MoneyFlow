@@ -26,6 +26,7 @@ namespace MoneyFlow.Constants
         public const string FILE_TYPE_INVALID = "Tipe file tidak diperbolehkan";
         public const string TARGET_NAME_INVALID = "Nama barang impian terlalu panjang";
         public const string TARGET_PRICE_INVALID = "Harga barang impian tidak boleh kurang dari Rp1";
+        public const string TARGET_DESCRIPTION_INVALID = "Deskripsi impian tidak boleh lebih dari 512 karakter";
 
         public const string USER_NOT_FOUND = "User tidak ditemukan";
         public const string EXPENSE_NOT_FOUND = "Data pengeluaran tidak ditemukan";

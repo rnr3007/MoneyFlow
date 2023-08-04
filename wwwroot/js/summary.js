@@ -29,8 +29,16 @@ function loadChart(totalCostByDate) {
                     data: myData,
                     borderColor: '#BC202C',
                     backgroundColor: '#BC202C',
+
                 }
             ]
+        },
+        options: {
+            scales: {
+                y: {
+                    min: 0
+                }
+            }
         }
     })
 }
