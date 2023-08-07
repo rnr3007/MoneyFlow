@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
-using MoneyFlow.Context;
+using MoneyFlow.Data;
 using MoneyFlow.Models;
-using MoneyFlow.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections.Generic;
@@ -14,11 +13,11 @@ namespace MoneyFlow.Services
 {
     public class MotivationService
     {
-        private readonly UserContext _dbContext;
+        private readonly DatabaseContext _dbContext;
 
         private readonly static string baseUrl = Startup.StaticConfiguration.GetSection("BASE_URL").Value;
 
-        public MotivationService(UserContext dbContext)
+        public MotivationService(DatabaseContext dbContext)
         {
             _dbContext = dbContext;
         }

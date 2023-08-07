@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace MoneyFlow.Models
+namespace MoneyFlow.Data
 {
     public class Entity
     {

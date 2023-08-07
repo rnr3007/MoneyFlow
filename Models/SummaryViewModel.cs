@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using MoneyFlow.Data;
 
-namespace MoneyFlow.Models.ViewModels
+namespace MoneyFlow.Models
 {
     public class SummaryViewModel
     {

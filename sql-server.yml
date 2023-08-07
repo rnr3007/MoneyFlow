@@ -5,8 +5,8 @@ services:
     ports:
       - "1433:1433"
     volumes:
-      - ./Database/mssql:/var/opt/mssql
-      - ./Database/init:/docker-entrypoint-initdb.d/init
+      - ./Data/mssql:/var/opt/mssql
+      - ./Data/init:/docker-entrypoint-initdb.d/init
     environment:
       MSSQL_SA_PASSWORD: RootPass1!
       ACCEPT_EULA: Y

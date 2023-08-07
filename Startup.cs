@@ -4,12 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
-using MoneyFlow.Context;
+using MoneyFlow.Data;
 using MoneyFlow.Services;
 using System.Collections.Generic;
-using MoneyFlow.Middleware;
-using System;
+using MoneyFlow.Services.Middleware;
 using MoneyFlow.Utils;
 
 namespace MoneyFlow
@@ -29,7 +27,7 @@ namespace MoneyFlow
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<UserContext>(options =>
+            services.AddDbContext<DatabaseContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DbConn"))
             );
             
@@ -47,7 +45,7 @@ namespace MoneyFlow
 
             services.AddScoped<SavingsService>();
 
-            services.AddTransient<UserContext>();
+            services.AddTransient<DatabaseContext>();
 
             services.AddControllersWithViews();
         }

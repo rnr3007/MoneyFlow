@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace MoneyFlow.Models.ViewModels
+namespace MoneyFlow.Models
 {
     public class UploadFileFormViewModel
     {

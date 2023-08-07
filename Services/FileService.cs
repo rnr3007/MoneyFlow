@@ -5,19 +5,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using MoneyFlow.Context;
-using MoneyFlow.Models;
+using MoneyFlow.Data;
 using OfficeOpenXml;
 
 namespace MoneyFlow.Services
 {
     public class FileService
     {
-        private readonly UserContext _dbContext;
+        private readonly DatabaseContext _dbContext;
 
         private static IWebHostEnvironment _environment;
 
-        public FileService(UserContext dbContext, IWebHostEnvironment environment)
+        public FileService(DatabaseContext dbContext, IWebHostEnvironment environment)
         {
             _environment = environment;
             _dbContext = dbContext;

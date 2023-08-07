@@ -1,6 +1,4 @@
-using System;
-
-namespace MoneyFlow.Models.ViewModels
+namespace MoneyFlow.Models
 {
     public class ErrorViewModel
     {

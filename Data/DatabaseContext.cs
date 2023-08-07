@@ -1,11 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using MoneyFlow.Models;
 
-namespace MoneyFlow.Context
+namespace MoneyFlow.Data
 {
-    public class UserContext : DbContext
+    public class DatabaseContext : DbContext
     {
-        public UserContext (DbContextOptions<UserContext> options) : base(options)
+        public DatabaseContext (DbContextOptions<DatabaseContext> options) : base(options)
         {}
 
         public DbSet<User> TUser => Set<User>();

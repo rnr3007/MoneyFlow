@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace MoneyFlow.Models.ViewModels
+namespace MoneyFlow.Models
 {
     public class TableViewModel<T>
     {

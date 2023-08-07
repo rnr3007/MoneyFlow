@@ -1,15 +1,15 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using MoneyFlow.Context;
+using MoneyFlow.Data;
 
 namespace MoneyFlow.Services
 {
     public class SavingsService
     {
-        private readonly UserContext _dbContext;
+        private readonly DatabaseContext _dbContext;
 
-        public SavingsService(UserContext dbContext)
+        public SavingsService(DatabaseContext dbContext)
         {
             _dbContext = dbContext;
         }

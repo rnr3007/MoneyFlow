@@ -1,4 +1,4 @@
-namespace MoneyFlow.Models.ViewModels
+namespace MoneyFlow.Models
 {
     public class PdfViewModel
     {

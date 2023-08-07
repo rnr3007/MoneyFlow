@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MoneyFlow.Constants;
+using MoneyFlow.Data;
 using MoneyFlow.Models;
-using MoneyFlow.Models.ViewModels;
 using MoneyFlow.Services;
 using iv = MoneyFlow.Utils.Validator.InputValidator;
 

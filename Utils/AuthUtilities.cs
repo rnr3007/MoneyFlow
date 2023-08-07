@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using MoneyFlow.Constants;
-using MoneyFlow.Models;
+using MoneyFlow.Data;
 
 namespace MoneyFlow.Utils
 {

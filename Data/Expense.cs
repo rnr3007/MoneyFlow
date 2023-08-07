@@ -4,7 +4,7 @@ using MoneyFlow.Constants;
 using MoneyFlow.Constants.Enum;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MoneyFlow.Models
+namespace MoneyFlow.Data
 {
     public class Expense : Entity
     {

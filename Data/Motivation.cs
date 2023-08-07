@@ -3,7 +3,7 @@ using MoneyFlow.Utils.Validator;
 using MoneyFlow.Constants;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MoneyFlow.Models
+namespace MoneyFlow.Data
 {
     public class Motivation : Entity
     {

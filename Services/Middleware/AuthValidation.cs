@@ -3,14 +3,12 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MoneyFlow.Constants;
-using MoneyFlow.Context;
-using MoneyFlow.Models;
+using MoneyFlow.Data;
 using MoneyFlow.Utils;
 
-namespace MoneyFlow.Middleware
+namespace MoneyFlow.Services.Middleware
 {
     public class AuthValidation
     {
@@ -21,7 +19,7 @@ namespace MoneyFlow.Middleware
             _next = next;
         }
 
-        public Task Invoke(HttpContext _context, UserContext _dbContext)
+        public Task Invoke(HttpContext _context, DatabaseContext _dbContext)
         {
             string requestPath = _context.Request.Path;
             string loginPath = "/user/login";

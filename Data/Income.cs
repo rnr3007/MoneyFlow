@@ -5,7 +5,7 @@ using MoneyFlow.Constants.Enum;
 using MoneyFlow.Utils.Validator;
 using Newtonsoft.Json;
 
-namespace MoneyFlow.Models
+namespace MoneyFlow.Data
 {
     public class Income : Entity
     {

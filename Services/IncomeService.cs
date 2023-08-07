@@ -2,9 +2,8 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MoneyFlow.Context;
+using MoneyFlow.Data;
 using MoneyFlow.Models;
-using MoneyFlow.Models.ViewModels;
 using System;
 using MoneyFlow.Constants;
 using System.Data;
@@ -13,11 +12,11 @@ namespace MoneyFlow.Services
 {
     public class IncomeService
     {
-        private readonly UserContext _dbContext;
+        private readonly DatabaseContext _dbContext;
 
         private readonly static string baseUrl = Startup.StaticConfiguration.GetSection("BASE_URL").Value;
 
-        public IncomeService(UserContext dbContext)
+        public IncomeService(DatabaseContext dbContext)
         {
             _dbContext = dbContext;
         }

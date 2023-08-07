@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using MoneyFlow.Constants;
 using MoneyFlow.Utils.Validator;
 
-namespace MoneyFlow.Models
+namespace MoneyFlow.Data
 {
     public class User : Entity
     {

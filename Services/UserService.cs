@@ -5,21 +5,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using MoneyFlow.Constants;
-using MoneyFlow.Context;
-using MoneyFlow.Models;
+using MoneyFlow.Data;
 using MoneyFlow.Utils;
 
 namespace MoneyFlow.Services
 {
     public class UserService
     {
-        private readonly UserContext _dbContext;
+        private readonly DatabaseContext _dbContext;
 
         private readonly IHttpContextAccessor _httpContext;
 
         private HttpContext HttpContext => _httpContext.HttpContext;
 
-        public UserService(UserContext context, IHttpContextAccessor httpContext)
+        public UserService(DatabaseContext context, IHttpContextAccessor httpContext)
         {
             _dbContext = context;
             _httpContext = httpContext;
