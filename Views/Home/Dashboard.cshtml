@@ -8,10 +8,10 @@
     var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
     var totalCostByDateJson = JsonConvert.SerializeObject(Model.TotalCostByDate);
     int zIndex = 0;
-    long maxTarget = 0;
-    if (Model.MotivationList.Count() != 0)
+    long maxTarget = Model.Savings;
+    if (Model.MotivationList.Count() != 0 && maxTarget < Model.MotivationList.Max(x => x.TargetPrice))
     {
-        maxTarget = Model.MotivationList.Max(x => x.TargetPrice);
+        maxTarget = Model.MotivationList.Max(x => x.TargetPrice);        
     }
     float savingPosition = maxTarget == 0 ? 100 : ((float)Model.Savings / maxTarget) * (float)100;
     List<string> ballons = new List<string>();
