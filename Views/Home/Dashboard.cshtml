@@ -2,7 +2,6 @@
 @using MoneyFlow.Data;
 @using MoneyFlow.Constants;
 @using System.Collections.Generic;
-@using System;
 @using Newtonsoft.Json;
 
 @{
@@ -42,9 +41,9 @@
                 var pointerType = Model.Savings <= motivation.TargetPrice ? "pointer-warning" : "pointer-success";
                 ballons.Add(ballonId);
                 itemPrices.Add(motivation.TargetPrice);
-
-                <div id='@ballonId' class="balloon" style="z-index: @zIndex;">
-                    <div class="balloon-image" style="background-image: url('@imgUrl');">
+                <div id='@ballonId' class="balloon" >
+                    <div class="balloon-image" style="background-image: url('@imgUrl');" 
+                        data-container="body" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="@motivation.TargetName">
                         <svg class="@pointerType" width="96" height="125">
                             <path d="M2 50 L48 125 L94 50 Z"/>
                         </svg>
@@ -54,7 +53,7 @@
         </div>
         
         <div class="progress" role="progressbar" id="progressBarId">
-            <div class="progress-bar" style="width: @savingPosition%;"></div>
+            <div class="progress-bar" style="width: @savingPosition%;">@Html.DisplayFor(modelItem => Model.Savings, "Money")</div>
         </div>
     </div>
 </div>
@@ -68,4 +67,5 @@
         @Html.Raw(JsonConvert.SerializeObject(itemPrices)),
         @maxTarget
     )
+    setupPopover()
 </script>

@@ -52,3 +52,7 @@ function setBalloonPos(balloons, itemPrices, maxPrice) {
         balloon.style.setProperty("--balloon-position", `${position}px`);
     }
 }
+
+function setupPopover() {
+    $('[data-toggle="popover"]').popover();
+}

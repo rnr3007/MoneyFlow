@@ -63,12 +63,6 @@ namespace MoneyFlow.Controllers
             }
         }
 
-        [HttpGet("/privacy")]
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         [HttpGet(UriPath.ERROR)]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

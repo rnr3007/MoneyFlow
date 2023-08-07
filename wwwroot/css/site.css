@@ -96,6 +96,10 @@ body {
     background-position: center center;
 }
 
+.balloon:hover {
+    z-index: 100;
+}
+
 .pointer-warning {
     fill: #FFD131;
     stroke: #DE9E36;
