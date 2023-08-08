@@ -31,6 +31,8 @@ namespace MoneyFlow.Controllers
         {
             try
             {
+                ViewData["Title"] = "Pengeluaran";
+
                 TableViewModel<Expense> userExpenses = await _expenseService.GetExpenseList(
                     Request.Headers["userId"],
                     iv.GetValidIntegerFromString(page, 1),
