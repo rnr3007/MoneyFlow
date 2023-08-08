@@ -33,7 +33,7 @@ namespace MoneyFlow.Services.Middleware
                 _context.Response.Cookies.Append("TokenBearer", jwt, new CookieOptions
                 {
                     HttpOnly = true,
-                    Secure = false,
+                    Secure = true,
                     SameSite = SameSiteMode.None,
                     Expires = DateTime.UtcNow.AddDays(1)
                 });

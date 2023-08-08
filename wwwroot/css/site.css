@@ -131,3 +131,9 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+@media (max-width: 576px) {
+    .hide-component {
+        display: none;
+    }
+}

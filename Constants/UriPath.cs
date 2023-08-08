@@ -2,6 +2,8 @@ namespace MoneyFlow.Constants
 {
     public class UriPath
     {
+        public const string USER_LOGIN = "/user/login";
+
         public const string EXPENSE = "/expense";
         public const string EXPENSE_CREATE = "create";
         public const string EXPENSE_LIST = "/expenses";

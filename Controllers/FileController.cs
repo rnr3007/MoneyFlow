@@ -15,9 +15,7 @@ namespace MoneyFlow.Controllers
     public class FileController : Controller
     {
         private readonly ILogger<FileController> _logger;
-
-        private readonly static string baseUrl = Startup.StaticConfiguration.GetSection("BASE_URL").Value;
-
+        
         private readonly FileService _fileService;
 
         private readonly ExpenseService _expenseService;

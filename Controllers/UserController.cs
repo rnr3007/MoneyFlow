@@ -16,8 +16,6 @@ namespace MoneyFlow.Controllers
 
         private readonly ILogger<UserController> _logger;
 
-        private readonly static string baseUrl = Startup.StaticConfiguration.GetSection("BASE_URL").Value;
-
         public UserController(UserService userService, ILogger<UserController> logger)
         {
             _userService = userService;
@@ -38,7 +36,7 @@ namespace MoneyFlow.Controllers
                 if (ModelState.IsValid) 
                 {
                     await _userService.Register(user);    
-                    return Redirect($"{baseUrl}/user/login");
+                    return Redirect(UriPath.USER_LOGIN);
                 }
                 return View(user);
             } catch (Exception e)
@@ -62,7 +60,7 @@ namespace MoneyFlow.Controllers
                 if (!string.IsNullOrWhiteSpace(user.Password) && !string.IsNullOrWhiteSpace(user.Username)) 
                 {
                     await _userService.Login(user);
-                    return Redirect($"{baseUrl}/expenses");
+                    return Redirect(UriPath.EXPENSE_LIST);
                 }
                 return View(user);
             } catch(DataException e) 
@@ -88,12 +86,12 @@ namespace MoneyFlow.Controllers
             try
             {
                 Response.Cookies.Delete("TokenBearer");
-                return Redirect($"{baseUrl}/user/login");
+                return Redirect(UriPath.USER_LOGIN);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return Redirect($"{baseUrl}/");
+                return Redirect("/");
             }
         }
     }
