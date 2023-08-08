@@ -5,7 +5,7 @@ namespace MoneyFlow.Constants
         public const string USER_LOGIN = "/user/login";
 
         public const string EXPENSE = "/expense";
-        public const string EXPENSE_CREATE = "create";
+        public const string EXPENSE_CREATE = "/expense/create";
         public const string EXPENSE_LIST = "/expenses";
         public const string EXPENSE_UPDATE = "update/{expenseId}";
         public const string EXPENSE_DELETE = "delete/{expenseId}";
