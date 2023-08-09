@@ -31,6 +31,9 @@
                     Pemasukan
                 </th>
                 <th class="text-center">
+                    Tanggal
+                </th>
+                <th class="text-center">
                     Tipe pemasukan
                 </th>
                 <th class="text-center">Aksi</th>
@@ -49,6 +52,9 @@
                     <tr>
                         <td class="align-middle text-center">
                             @Html.DisplayFor(modelItem => Income.IncomeMoney, "Money")
+                        </td>
+                        <td class="align-middle text-center">
+                            @Html.DisplayFor(modelItem => Income.CreatedAt, "DateTime")
                         </td>
                         <td class="align-middle text-center">
                             @Html.DisplayFor(modelItem => Income.IncomeType)
@@ -86,3 +92,7 @@
         @await Html.PartialAsync("~/Views/Shared/Components/Modal/DeleteConfirmationModalView.cshtml", modalDeleteList[i]);
     }
 }
+
+<script>
+    setupPopover()
+</script>

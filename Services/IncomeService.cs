@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MoneyFlow.Data;
 using MoneyFlow.Models;
 using System;
+using du = MoneyFlow.Utils.DataExtractor;
 using MoneyFlow.Constants;
 using System.Data;
 
@@ -33,7 +34,10 @@ namespace MoneyFlow.Services
         public async Task<TableViewModel<Income>> GetIncomes(string userId, int page, int limit, string keyword)
         {
             int totalData = _dbContext.TIncome
-                .Where(x => x.UserId == userId && x.IncomeMoney.ToString().Contains(keyword))
+                .Where(x => x.UserId == userId && (
+                    x.IncomeMoney.ToString().Contains(keyword)
+                    || du.GetLocaleDateTimeString(x.CreatedAt).Contains(keyword)
+                ))
                 .Count();
 
             PaginationViewModel paginationView = new PaginationViewModel(
@@ -46,6 +50,9 @@ namespace MoneyFlow.Services
 
             List<Income> incomes = await _dbContext.TIncome
                 .Where(x => x.UserId == userId && x.IncomeMoney.ToString().Contains(keyword))
+                .OrderByDescending(x => x.CreatedAt)
+                .Skip(paginationView.LimitData * (paginationView.ChoosenPage - 1))
+                .Take(paginationView.LimitData)
                 .ToListAsync();
 
             TableViewModel<Income> tableView = new TableViewModel<Income>(

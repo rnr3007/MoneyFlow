@@ -9,6 +9,7 @@ using System.Data;
 using MoneyFlow.Constants;
 using Microsoft.AspNetCore.Http;
 using fu = MoneyFlow.Utils.FileUtilites;
+using du = MoneyFlow.Utils.DataExtractor;
 using System.IO;
 using OfficeOpenXml;
 using System.Globalization;
@@ -37,7 +38,9 @@ namespace MoneyFlow.Services
         public async Task<TableViewModel<Expense>> GetExpenseList(string userId, int page, int limit, string keyword)
         {
             int totalData = _dbContext.TExpense
-                .Where(x => x.UserId == userId && x.Name.Contains(keyword))
+                .Where(x => x.UserId == userId && (
+                    x.Name.Contains(keyword)
+                ))
                 .Count();
 
             PaginationViewModel paginationView = new PaginationViewModel(
@@ -48,7 +51,10 @@ namespace MoneyFlow.Services
                 $"{baseUrl}/expense");
 
             List<Expense> userExpenses = await _dbContext.TExpense
-                .Where(x => x.UserId == userId && x.Name.Contains(keyword))
+                .Where(x => x.UserId == userId && (
+                    x.Name.Contains(keyword)
+                ))
+                .OrderByDescending(x => x.CreatedAt)
                 .Skip(paginationView.LimitData * (paginationView.ChoosenPage - 1))
                 .Take(paginationView.LimitData)
                 .ToListAsync();

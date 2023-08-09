@@ -45,8 +45,10 @@ namespace MoneyFlow.Controllers
                 ViewData["limit"] = userExpenses.PaginationView.LimitData;
 
                 return View(userExpenses);
-            } catch (Exception)
+            } catch (Exception e)
             {
+                _logger.LogError(e.Message, e);
+                Console.WriteLine(e);
                 return Redirect(UriPath.ERROR);
             }
         }
