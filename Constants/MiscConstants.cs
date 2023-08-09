@@ -11,4 +11,10 @@ namespace MoneyFlow.Constants
         public const string PURPOSE_INCOMES = "incomes";
         public const string PURPOSE_MOTIVATIONS = "motivations";
     }
+
+    public class OrderConstants
+    {
+        public const string ORDER_BY_DATE_ASC = "orderDateAsc";
+        public const string ORDER_BY_DATE_DESC = "orderDateDesc";
+    }
 }

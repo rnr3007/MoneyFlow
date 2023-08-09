@@ -35,13 +35,13 @@ namespace MoneyFlow.Services
                 ?? throw new DataException(ErrorMessage.EXPENSE_NOT_FOUND);
         }
 
-        public async Task<TableViewModel<Expense>> GetExpenseList(string userId, int page, int limit, string keyword)
+        public async Task<TableViewModel<Expense>> GetExpenseList(string userId, int page, int limit, string keyword, string order)
         {
-            int totalData = _dbContext.TExpense
+            IQueryable<Expense> query = _dbContext.TExpense.AsQueryable()
                 .Where(x => x.UserId == userId && (
                     x.Name.Contains(keyword)
-                ))
-                .Count();
+                ));
+            int totalData = query.Count();
 
             PaginationViewModel paginationView = new PaginationViewModel(
                 page, 
@@ -49,12 +49,14 @@ namespace MoneyFlow.Services
                 totalData, 
                 keyword, 
                 $"{baseUrl}/expense");
+            paginationView.Order = order;
 
-            List<Expense> userExpenses = await _dbContext.TExpense
-                .Where(x => x.UserId == userId && (
-                    x.Name.Contains(keyword)
-                ))
-                .OrderByDescending(x => x.CreatedAt)
+            query = order switch
+            {
+                OrderConstants.ORDER_BY_DATE_ASC => query.OrderBy(x => x.CreatedAt),
+                _ => query.OrderByDescending(x => x.CreatedAt),
+            };
+            List<Expense> userExpenses = await query
                 .Skip(paginationView.LimitData * (paginationView.ChoosenPage - 1))
                 .Take(paginationView.LimitData)
                 .ToListAsync();

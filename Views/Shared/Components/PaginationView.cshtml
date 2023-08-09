@@ -1,29 +1,35 @@
 @model MoneyFlow.Models.PaginationViewModel
 
 @{
-    var previousBtnConf = (int)ViewData["page"] == 1 ? "disabled" : "";
-    var nextBtnConf = (int)ViewData["page"] == Model.EndPage || Model.TotalData == 0 ? "disabled" : "";
-    var previousPage = (int)ViewData["page"] - 1;
-    var nextPage = (int)ViewData["page"] + 1;    
+    string actionUrl = Model.ActionUrl;
+    int pageData = Model.ChoosenPage;
+    string keywordData = Model.SearchKeyword;
+    int limitData = Model.LimitData;
+    string orderData = Model.Order; 
+
+    var previousBtnConf = pageData == 1 ? "disabled" : "";
+    var nextBtnConf = pageData == Model.EndPage || Model.TotalData == 0 ? "disabled" : "";
+    var previousPage = pageData - 1;
+    var nextPage = pageData + 1;   
 }
 
 <nav>
     <ul class="pagination justify-content-center">
         <li class="page-item @previousBtnConf">
-            <a class="page-link" href="@Model.ActionUrl?page=@previousPage&limit=@Model.LimitData&keyword=@Model.SearchKeyword">Sebelumnya</a>
+            <a class="page-link" href="@actionUrl?page=@previousPage&limit=@limitData&keyword=@keywordData&order=@orderData">Sebelumnya</a>
         </li>
         @foreach (string pageNum in Model.PageList)
         {
             if (pageNum != Model.ChoosenPage.ToString())
             {
-                <li class="page-item"><a class="page-link" href="@Model.ActionUrl?page=@pageNum&limit=@Model.LimitData&keyword=@Model.SearchKeyword">@pageNum</a></li>
+                <li class="page-item"><a class="page-link" href="@actionUrl?page=@pageNum&limit=@limitData&keyword=@keywordData&order=@orderData">@pageNum</a></li>
             } else
             {
                 <li class="page-item"><a class="page-link" href="#">@pageNum<span class="sr-only">(current)</span></a></li>
             }            
         }
         <li class="page-item @nextBtnConf">
-            <a class="page-link" href="@Model.ActionUrl?page=@nextPage&limit=@Model.LimitData&keyword=@Model.SearchKeyword">Selanjutnya</a>
+            <a class="page-link" href="@actionUrl?page=@nextPage&limit=@limitData&keyword=@keywordData&order=@orderData">Selanjutnya</a>
         </li>
     </ul>
 </nav>

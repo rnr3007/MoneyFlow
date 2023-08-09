@@ -36,7 +36,6 @@ namespace MoneyFlow.Services
             int totalData = _dbContext.TIncome
                 .Where(x => x.UserId == userId && (
                     x.IncomeMoney.ToString().Contains(keyword)
-                    || du.GetLocaleDateTimeString(x.CreatedAt).Contains(keyword)
                 ))
                 .Count();
 

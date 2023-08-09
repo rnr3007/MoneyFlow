@@ -7,18 +7,30 @@
     var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
     List<ModalViewModel<string>> modalDeleteList = new List<ModalViewModel<string>>();
     List<ModalViewModel<Expense>> modalDetailList = new List<ModalViewModel<Expense>>();
+    int pageData = Model.PaginationView.ChoosenPage;
+    string keywordData = Model.PaginationView.SearchKeyword;
+    int limitData = Model.PaginationView.LimitData;
+    string orderData = Model.PaginationView.Order;
+    string toggleOrder = orderData == OrderConstants.ORDER_BY_DATE_ASC
+        ? OrderConstants.ORDER_BY_DATE_DESC 
+        : OrderConstants.ORDER_BY_DATE_ASC;
 }
 
 <h4 class="text-center my-3"><b>@ViewData["Title"]</b></h4>
 
-<div class="container p-0 m-0">
+<div class="container p-0 mx-0 my-3">
     <div class="d-flex align-items-center mt-2 mb-1">
         <div class="hide-component">Cari barang:</div>
         <div class="col d-flex flex-grow-1 mx-0">
             <form action="@UriPath.EXPENSE_LIST" method="get" class="d-flex flex-grow-1 mb-0">
-                <input type="text" name="keyword" value="@ViewData["keyword"]" placeholder="Cari..." class="m-0 flex-grow-1">
-                <button type="submit" class="btn btn-primary my-0 mx-2"><i class="bi bi-search mr-1"></i>Cari</button>
-                <a href="@baseUrl@UriPath.EXPENSE_CREATE" class="btn btn-success m-0"><i class="bi bi-plus-lg mr-1"></i>Buat baru</a>
+                <input type="text" name="keyword" value="@keywordData" placeholder="Cari..." class="m-0 flex-grow-1">
+                <button type="submit" class="btn btn-primary my-0 ml-2 mr-0 d-flex align-items-center justify-content-center"><i class="bi bi-search"></i><span class="hide-component ml-1">Cari</span></button>
+                <a href="@baseUrl@UriPath.EXPENSE_LIST?page=@pageData&limit=@limitData&keyword=@keywordData&order=@toggleOrder" class="d-flex btn btn-primary my-0 mx-2 align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-filter" viewBox="0 0 16 16">
+                    <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
+                    </svg>
+                </a>
+                <a href="@baseUrl@UriPath.EXPENSE_CREATE" class="btn btn-success m-0 row d-flex align-items-center justify-content-center"><i class="bi bi-plus-lg"></i><span class="hide-component ml-1">Buat baru</span></a>
             </form>
         </div>
     </div>

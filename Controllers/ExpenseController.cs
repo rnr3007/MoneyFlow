@@ -27,7 +27,7 @@ namespace MoneyFlow.Controllers
         }
 
         [HttpGet(UriPath.EXPENSE_LIST)]
-        public async Task<IActionResult> Expenses(string page, string limit, string keyword)
+        public async Task<IActionResult> Expenses(string page, string limit, string keyword, string order)
         {
             try
             {
@@ -37,18 +37,14 @@ namespace MoneyFlow.Controllers
                     Request.Headers["userId"],
                     iv.GetValidIntegerFromString(page, 1),
                     iv.GetValidIntegerFromString(limit, 10),
-                    keyword ?? ""
+                    keyword ?? "",
+                    order ?? ""
                 );
-
-                ViewData["page"] = userExpenses.PaginationView.ChoosenPage;
-                ViewData["keyword"] = userExpenses.PaginationView.SearchKeyword;
-                ViewData["limit"] = userExpenses.PaginationView.LimitData;
 
                 return View(userExpenses);
             } catch (Exception e)
             {
                 _logger.LogError(e.Message, e);
-                Console.WriteLine(e);
                 return Redirect(UriPath.ERROR);
             }
         }

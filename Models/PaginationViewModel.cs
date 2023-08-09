@@ -20,6 +20,8 @@ namespace MoneyFlow.Models
 
         public List<string> PageList { get; set; } = new List<string>{"1"};
 
+        public  string Order { get; set; } = "";
+
         public PaginationViewModel(int choosenPage, int limitData, int totalData, string keyword, string actionUrl)
         {
             SearchKeyword = keyword;
