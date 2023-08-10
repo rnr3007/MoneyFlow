@@ -12,7 +12,7 @@
 
 <dl>
     <dd class="container">
-        <label class="row d-flex align-items-center justify-content-center" for="@fileFormContainerId" id="@fileFormId" onmouseover="changeCursorToHand('@fileFormId')">
+        <label class="clickable row d-flex align-items-center justify-content-center" for="@fileFormContainerId" id="@fileFormId">
             @if (Model == "" || Model.ElementAt(Model.Length - 1) == '/')
             {
                 <div class="container m-2 p-4  rounded" style="background-color: rgb(235, 235, 235); border-radius: 1rem !important;">
@@ -45,8 +45,7 @@
                 }
             }
         </label>
-        <input id="@fileFormContainerId" type="file" name="formFile" class="d-none" onchange="changeFilePreview('@fileFormContainerId', '@fileFormId')"
-            onmouseover="changeCursorToHand('@fileFormContainerId')"/>
+        <input id="@fileFormContainerId" type="file" name="formFile" class="clickable d-none" onchange="changeFilePreview('@fileFormContainerId', '@fileFormId')"/>
         <span class="row d-flex align-items-center justify-content-center text-danger @cfgShowError">@errorMessage</span>
     </dd>
 </dl>

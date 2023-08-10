@@ -25,25 +25,24 @@ namespace MoneyFlow.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> Incomes(string page, string limit, string keyword)
+        public async Task<IActionResult> Incomes(string page, string limit, string keyword, string order)
         {
             try
             {
                 ViewData["Title"] = "Pendapatan";
+
                 TableViewModel<Income> userIncomes = await _incomeService.GetIncomes(
                     Request.Headers["userId"],
                     iv.GetValidIntegerFromString(page, 1),
                     iv.GetValidIntegerFromString(limit, 10),
-                    keyword ?? ""
+                    keyword ?? "",
+                    order ?? ""
                 );
 
-                ViewData["page"] = userIncomes.PaginationView.ChoosenPage;
-                ViewData["keyword"] = userIncomes.PaginationView.SearchKeyword;
-                ViewData["limit"] = userIncomes.PaginationView.LimitData;
-
                 return View(userIncomes);
-            } catch (Exception)
+            } catch (Exception e)
             {
+                _logger.LogError(e.Message, e);
                 return Redirect(UriPath.ERROR);
             }
         }

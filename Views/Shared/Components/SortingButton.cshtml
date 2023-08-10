@@ -1,0 +1,12 @@
+@model MoneyFlow.Models.Sorting;
+@using MoneyFlow.Constants;
+
+@{
+    string sortingDesc = $"{Model.SortingId}|{OrderConstants.DESC}";
+    string sortingAsc = $"{Model.SortingId}|{OrderConstants.ASC}";
+    string disableDesc = Model.ChoosenSorting == sortingDesc ? "d-none" : "";
+    string disableAsc = Model.ChoosenSorting == sortingAsc ? "d-none" : "";
+}
+
+<a href="@Model.ActionUrl&order=@sortingAsc" style="color: black;"><i id="@sortingAsc" class="@disableAsc clickable bi bi-caret-down-fill"></i></a>
+<a href="@Model.ActionUrl&order=@sortingDesc" style="color: black;"><i id="@sortingDesc" class="@disableDesc clickable bi bi-caret-up-fill"></i></a>

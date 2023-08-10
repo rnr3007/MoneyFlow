@@ -10,16 +10,6 @@ function closeModal(modalId) {
     $(`#${modalId}`).modal('hide');
 }
 
-function changeCursorToHand(elementId) {
-    const element = document.getElementById(elementId);
-    element.style.cursor = 'pointer';
-}
-
-function changeCursorToPointer(elementId) {
-    const element = document.getElementById(elementId);
-    element.style.cursor = 'auto';
-}
-
 function changeFilePreview(inputFileId, targetId) {
     const inputFile = document.getElementById(inputFileId).files;
 

@@ -1,0 +1,14 @@
+@model MoneyFlow.Models.SearchBarWithAddData;
+
+<div class="container p-0 mx-0 my-3">
+    <div class="d-flex align-items-center mt-2 mb-1">
+        <div class="hide-component">Cari barang:</div>
+        <div class="col d-flex flex-grow-1 mx-0">
+            <form action="@Model.DataEndpoint" method="get" class="d-flex flex-grow-1 mb-0">
+                <input type="text" name="keyword" value="@Model.Keyword" placeholder="Cari..." class="m-0 flex-grow-1">
+                <button type="submit" class="btn btn-primary my-0 mx-2 d-flex align-items-center justify-content-center"><i class="bi bi-search"></i><span class="hide-component ml-1">Cari</span></button>
+                <a href="@Model.CreateDataUrl" class="btn btn-success m-0 row d-flex align-items-center justify-content-center"><i class="bi bi-plus-lg"></i><span class="hide-component ml-1">Buat baru</span></a>
+            </form>
+        </div>
+    </div>
+</div>

@@ -132,6 +132,10 @@ body {
     text-overflow: ellipsis;
 }
 
+.clickable:hover {
+    cursor: pointer;
+}
+
 @media (max-width: 576px) {
     .hide-component {
         display: none;

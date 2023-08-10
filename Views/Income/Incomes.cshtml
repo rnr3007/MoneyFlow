@@ -6,32 +6,44 @@
 @{
     var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
     List<ModalViewModel<string>> modalDeleteList = new List<ModalViewModel<string>>();
+    int pageData = Model.PaginationView.ChoosenPage;
+    string keywordData = Model.PaginationView.SearchKeyword;
+    int limitData = Model.PaginationView.LimitData;
+    string orderData = Model.PaginationView.Order;
+    string actionUrl = $"{baseUrl}{UriPath.INCOMES}";
 }
 
 <h4 class="text-center my-3"><b>@ViewData["Title"]</b></h4>
 
-<div class="container p-0 m-0">
-    <div class="d-flex align-items-center mt-2 mb-1">
-        <div class="hide-component">Cari barang:</div>
-        <div class="col d-flex flex-grow-1 mx-0">
-            <form action="@UriPath.INCOMES" method="get" class="d-flex flex-grow-1 mb-0">
-                <input type="text" name="keyword" value="@ViewData["keyword"]" placeholder="Cari..." class="m-0 flex-grow-1">
-                <button type="submit" class="btn btn-primary my-0 mx-2"><i class="bi bi-search mr-1"></i>Cari</button>
-                <a href="@baseUrl@UriPath.INCOMES_CREATE" class="btn btn-success m-0"><i class="bi bi-plus-lg mr-1"></i>Buat baru</a>
-            </form>
-        </div>
-    </div>
-</div>
+@await Html.PartialAsync(
+    "~/Views/Shared/Components/PageComponents/SearchBarWithAddData.cshtml", 
+    new SearchBarWithAddData(
+        UriPath.INCOMES,
+        keywordData,
+        $"{actionUrl}/create"
+    )
+)
 
 <div class="table-responsive">
     <table class="table">
         <thead>
             <tr>
-                <th class="text-center">
-                    Pemasukan
+                <th class="align-middle">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <span class="mr-1">Tanggal</span>
+                        @await Html.PartialAsync("~/Views/Shared/Components/SortingButton.cshtml",
+                            new Sorting($"{actionUrl}?page={pageData}&limit={limitData}&keyword={keywordData}", OrderConstants.ORDER_BY_DATE, orderData)
+                        )
+                    </div>
                 </th>
-                <th class="text-center">
-                    Tanggal
+                <th class="align-middle">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <span class="mr-1">Jumlah Pemasukan</span>
+                        @await Html.PartialAsync("~/Views/Shared/Components/SortingButton.cshtml",
+                            new Sorting($"{actionUrl}?page={pageData}&limit={limitData}&keyword={keywordData}", OrderConstants.ORDER_BY_MONEY, orderData)
+                        )
+                    </div>
+                    
                 </th>
                 <th class="text-center">
                     Tipe pemasukan
@@ -51,10 +63,10 @@
                     ));
                     <tr>
                         <td class="align-middle text-center">
-                            @Html.DisplayFor(modelItem => Income.IncomeMoney, "Money")
+                            @Html.DisplayFor(modelItem => Income.CreatedAt, "DateTime")
                         </td>
                         <td class="align-middle text-center">
-                            @Html.DisplayFor(modelItem => Income.CreatedAt, "DateTime")
+                            @Html.DisplayFor(modelItem => Income.IncomeMoney, "Money")
                         </td>
                         <td class="align-middle text-center">
                             @Html.DisplayFor(modelItem => Income.IncomeType)
@@ -76,10 +88,10 @@
 
 @if (Model.Data.Count == 0)
 {
-    @await Html.PartialAsync("~/Views/Shared/Components/EmptyDataView.cshtml");
+    @await Html.PartialAsync("~/Views/Shared/Components/PageComponents/EmptyDataView.cshtml");
 } else
 {
-    @await Html.PartialAsync("~/Views/Shared/Components/PaginationView.cshtml", Model.PaginationView)
+    @await Html.PartialAsync("~/Views/Shared/Components/PageComponents/PaginationView.cshtml", Model.PaginationView)
 
     <div class="d-flex justify-content-center align-items-center row row-cols-2 my-3">
         <a class="btn btn-primary" href="@baseUrl/file/generate-excel/incomes" download>

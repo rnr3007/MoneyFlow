@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using MoneyFlow.Data;
 using MoneyFlow.Models;
 using System;
-using du = MoneyFlow.Utils.DataExtractor;
+using od = MoneyFlow.Constants.OrderConstants;
 using MoneyFlow.Constants;
 using System.Data;
 
@@ -31,13 +31,14 @@ namespace MoneyFlow.Services
             return income;
         }
 
-        public async Task<TableViewModel<Income>> GetIncomes(string userId, int page, int limit, string keyword)
+        public async Task<TableViewModel<Income>> GetIncomes(string userId, int page, int limit, string keyword, string order)
         {
-            int totalData = _dbContext.TIncome
+            IQueryable<Income> query = _dbContext.TIncome.AsQueryable()
                 .Where(x => x.UserId == userId && (
                     x.IncomeMoney.ToString().Contains(keyword)
-                ))
-                .Count();
+                ));
+                
+            int totalData = query.Count();
 
             PaginationViewModel paginationView = new PaginationViewModel(
                 page,
@@ -46,10 +47,17 @@ namespace MoneyFlow.Services
                 keyword,
                 $"{baseUrl}/expenses"
             );
+            paginationView.Order = order;
 
-            List<Income> incomes = await _dbContext.TIncome
-                .Where(x => x.UserId == userId && x.IncomeMoney.ToString().Contains(keyword))
-                .OrderByDescending(x => x.CreatedAt)
+            string[] orders = order.Split("|");
+            query = orders[0] switch
+            {
+                od.ORDER_BY_MONEY => od.ASC == orders[1] ? query.OrderBy(x => x.IncomeMoney) : query.OrderByDescending(x => x.IncomeMoney),
+                od.ORDER_BY_DATE => od.ASC == orders[1] ? query.OrderBy(x => x.CreatedAt) : query.OrderByDescending(x => x.CreatedAt),
+                _ => query.OrderByDescending(x => x.CreatedAt),
+            };
+
+            List<Income> incomes = await query
                 .Skip(paginationView.LimitData * (paginationView.ChoosenPage - 1))
                 .Take(paginationView.LimitData)
                 .ToListAsync();

@@ -9,7 +9,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div id="@ariaLabelTitle" class="modal-title fs-5">@Model.ConfirmationMessage.ToUpper()</div>
-                <i class="bi bi-x-circle" onmouseover="changeCursorToHand('deleteCloseButton')" id="deleteCloseButton" onclick="closeModal('@Model.ModalId')"></i>
+                <i class="clickable bi bi-x-circle" onclick="closeModal('@Model.ModalId')"></i>
             </div>
             <div class="modal-body">
                 <div class="container">

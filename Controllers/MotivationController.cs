@@ -38,9 +38,6 @@ namespace MoneyFlow.Controllers
                     iv.GetValidIntegerFromString(limit, 10),
                     keyword ?? ""
                 );
-                ViewData["page"] = tableView.PaginationView.ChoosenPage;
-                ViewData["limit"] = tableView.PaginationView.LimitData;
-                ViewData["keyword"] = tableView.PaginationView.SearchKeyword;
 
                 return View(tableView);
             } catch (Exception e)

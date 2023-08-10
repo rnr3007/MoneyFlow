@@ -11,51 +11,56 @@
     string keywordData = Model.PaginationView.SearchKeyword;
     int limitData = Model.PaginationView.LimitData;
     string orderData = Model.PaginationView.Order;
-    string toggleOrder = orderData == OrderConstants.ORDER_BY_DATE_ASC
-        ? OrderConstants.ORDER_BY_DATE_DESC 
-        : OrderConstants.ORDER_BY_DATE_ASC;
+    string actionUrl = $"{baseUrl}{UriPath.EXPENSE_LIST}";
 }
 
 <h4 class="text-center my-3"><b>@ViewData["Title"]</b></h4>
 
-<div class="container p-0 mx-0 my-3">
-    <div class="d-flex align-items-center mt-2 mb-1">
-        <div class="hide-component">Cari barang:</div>
-        <div class="col d-flex flex-grow-1 mx-0">
-            <form action="@UriPath.EXPENSE_LIST" method="get" class="d-flex flex-grow-1 mb-0">
-                <input type="text" name="keyword" value="@keywordData" placeholder="Cari..." class="m-0 flex-grow-1">
-                <button type="submit" class="btn btn-primary my-0 ml-2 mr-0 d-flex align-items-center justify-content-center"><i class="bi bi-search"></i><span class="hide-component ml-1">Cari</span></button>
-                <a href="@baseUrl@UriPath.EXPENSE_LIST?page=@pageData&limit=@limitData&keyword=@keywordData&order=@toggleOrder" class="d-flex btn btn-primary my-0 mx-2 align-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-filter" viewBox="0 0 16 16">
-                    <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
-                    </svg>
-                </a>
-                <a href="@baseUrl@UriPath.EXPENSE_CREATE" class="btn btn-success m-0 row d-flex align-items-center justify-content-center"><i class="bi bi-plus-lg"></i><span class="hide-component ml-1">Buat baru</span></a>
-            </form>
-        </div>
-    </div>
-</div>
+@await Html.PartialAsync(
+    "~/Views/Shared/Components/PageComponents/SearchBarWithAddData.cshtml", 
+    new SearchBarWithAddData(
+        UriPath.EXPENSE_LIST,
+        keywordData,
+        $"{baseUrl}{UriPath.EXPENSE_CREATE}"
+    )
+)
 
 <div class="table-responsive">
     <table class="table">
         <thead>
             <tr>
-                <th class="text-center">
-                    Nama pengeluaran
+                <th class="align-middle">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <span class="mr-1">Tanggal</span>
+                        @await Html.PartialAsync("~/Views/Shared/Components/SortingButton.cshtml",
+                            new Sorting($"{actionUrl}?page={pageData}&limit={limitData}&keyword={keywordData}", OrderConstants.ORDER_BY_DATE, orderData)
+                        )
+                    </div>
                 </th>
-                <th class="text-center">
-                    Tanggal
+                <th class="align-middle">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <span class="mr-1">Nama pengeluaran</span>
+                        @await Html.PartialAsync("~/Views/Shared/Components/SortingButton.cshtml",
+                            new Sorting($"{actionUrl}?page={pageData}&limit={limitData}&keyword={keywordData}", OrderConstants.ORDER_BY_NAME, orderData)
+                        )
+                    </div>
+                    
                 </th>
-                <th class="text-center">
+                <th class="align-middle">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <span class="mr-1">Biaya</span>
+                        @await Html.PartialAsync("~/Views/Shared/Components/SortingButton.cshtml",
+                            new Sorting($"{actionUrl}?page={pageData}&limit={limitData}&keyword={keywordData}", OrderConstants.ORDER_BY_MONEY, orderData)
+                        )
+                    </div>
+                </th>
+                <th class="text-center align-middle">
                     Tipe
                 </th>
-                <th class="text-center">
-                    Biaya
-                </th>
-                <th class="text-center">
+                <th class="text-center align-middle">
                     Detail
                 </th>
-                <th class="text-center">Aksi</th>
+                <th class="text-center align-middle">Aksi</th>
             </tr>
         </thead>
         @if (Model.Data.Count != 0) 
@@ -72,17 +77,17 @@
                         modalDetailId, data: Expense
                     ));
                     <tr>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => Expense.Name)
-                        </td>
                         <td class="align-middle text-center">
                             @Html.DisplayFor(modelItem => Expense.CreatedAt, "DateTime")
                         </td>
                         <td class="align-middle">
-                            @Html.DisplayFor(modelItem => Expense.CostType)
+                            @Html.DisplayFor(modelItem => Expense.Name)
                         </td>
                         <td class="align-middle">
                             @Html.DisplayFor(modelItem => Expense.Cost, "Money")
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => Expense.CostType)
                         </td>
                         <td class="align-middle">
                             <div class="container">
@@ -108,10 +113,10 @@
 
 @if (Model.Data.Count == 0)
 {
-    @await Html.PartialAsync("~/Views/Shared/Components/EmptyDataView.cshtml");
+    @await Html.PartialAsync("~/Views/Shared/Components/PageComponents/EmptyDataView.cshtml");
 } else
 {
-    @await Html.PartialAsync("~/Views/Shared/Components/PaginationView.cshtml", Model.PaginationView)
+    @await Html.PartialAsync("~/Views/Shared/Components/PageComponents/PaginationView.cshtml", Model.PaginationView)
 
     <div class="d-flex justify-content-center align-items-center row row-cols-2 my-3">
         <a class="btn btn-primary" href="@baseUrl/file/generate-excel/expense" download>

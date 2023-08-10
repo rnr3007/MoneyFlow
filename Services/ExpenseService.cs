@@ -9,7 +9,7 @@ using System.Data;
 using MoneyFlow.Constants;
 using Microsoft.AspNetCore.Http;
 using fu = MoneyFlow.Utils.FileUtilites;
-using du = MoneyFlow.Utils.DataExtractor;
+using od = MoneyFlow.Constants.OrderConstants;
 using System.IO;
 using OfficeOpenXml;
 using System.Globalization;
@@ -40,6 +40,7 @@ namespace MoneyFlow.Services
             IQueryable<Expense> query = _dbContext.TExpense.AsQueryable()
                 .Where(x => x.UserId == userId && (
                     x.Name.Contains(keyword)
+                    || x.Cost.ToString().Contains(keyword)
                 ));
             int totalData = query.Count();
 
@@ -51,11 +52,15 @@ namespace MoneyFlow.Services
                 $"{baseUrl}/expense");
             paginationView.Order = order;
 
-            query = order switch
+            string[] orders = order.Split("|");
+            query = orders[0] switch
             {
-                OrderConstants.ORDER_BY_DATE_ASC => query.OrderBy(x => x.CreatedAt),
+                od.ORDER_BY_NAME => od.ASC == orders[1] ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name),
+                od.ORDER_BY_MONEY => od.ASC == orders[1] ? query.OrderBy(x => x.Cost) : query.OrderByDescending(x => x.Cost),
+                od.ORDER_BY_DATE => od.ASC == orders[1] ? query.OrderBy(x => x.CreatedAt) : query.OrderByDescending(x => x.CreatedAt),
                 _ => query.OrderByDescending(x => x.CreatedAt),
             };
+
             List<Expense> userExpenses = await query
                 .Skip(paginationView.LimitData * (paginationView.ChoosenPage - 1))
                 .Take(paginationView.LimitData)
