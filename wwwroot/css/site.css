@@ -1,6 +1,10 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+:root {
+    --progress-width: 05;
+}
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;
@@ -140,4 +144,14 @@ body {
     .hide-component {
         display: none;
     }
+}
+
+@keyframes progress-transition-animation {
+    0% {width: 0px; background-color: white;}
+    100% {width: 100%; background-color: #007bff;}
+}
+
+.progress-transition {
+    animation-name: progress-transition-animation;
+    animation-duration: 2s;
 }

@@ -53,7 +53,9 @@
         </div>
         
         <div class="progress" role="progressbar" id="progressBarId">
-            <div class="progress-bar" style="width: @savingPosition%;">@Html.DisplayFor(modelItem => Model.Savings, "Money")</div>
+            <div style="width: @savingPosition%;">
+                <div class="progress-bar progress-transition">@Html.DisplayFor(modelItem => Model.Savings, "Money")</div>
+            </div>
         </div>
     </div>
 </div>
