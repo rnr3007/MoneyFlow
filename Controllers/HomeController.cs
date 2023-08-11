@@ -42,6 +42,7 @@ namespace MoneyFlow.Controllers
         {
             try
             {
+                string baseUrl = $"{Request.Scheme}://{Request.Host}";
                 ViewData["Title"] = "Dashboard";
                 SummaryViewModel summaryViewModel = new SummaryViewModel();
                 string userId = Request.Headers["userId"];
@@ -50,7 +51,8 @@ namespace MoneyFlow.Controllers
                     Request.Headers["userId"],
                     1,
                     10,
-                    ""
+                    "",
+                    baseUrl
                 )).Data;
                 summaryViewModel.Savings = await _savingsService.GetSaving(
                     Request.Headers["userId"]

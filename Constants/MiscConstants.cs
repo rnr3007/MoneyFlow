@@ -19,7 +19,5 @@ namespace MoneyFlow.Constants
         public const string ORDER_BY_DATE = "OrderDate";
         public const string ORDER_BY_NAME = "OrderName";
         public const string ORDER_BY_MONEY = "OrderMoney";
-        public const string ORDER_BY_DATE_ASC = "orderDateAsc";
-        public const string ORDER_BY_DATE_DESC = "orderDateDesc";
     }
 }

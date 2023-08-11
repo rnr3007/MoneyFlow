@@ -15,14 +15,12 @@ namespace MoneyFlow.Services
     {
         private readonly DatabaseContext _dbContext;
 
-        private readonly static string baseUrl = Startup.StaticConfiguration.GetSection("BASE_URL").Value;
-
         public MotivationService(DatabaseContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<TableViewModel<Motivation>> GetMotivations(string userId, int page, int limit, string keyword)
+        public async Task<TableViewModel<Motivation>> GetMotivations(string userId, int page, int limit, string keyword, string baseUrl)
         {
             int totalData = _dbContext.TMotivation
                 .Where(x => x.UserId == userId && (
@@ -37,7 +35,7 @@ namespace MoneyFlow.Services
                 limit,
                 totalData,
                 keyword,
-                $"{baseUrl}/motivations"
+                $"{baseUrl}{UriPath.MOTIVATIONS}"
             );
 
             List<Motivation> motivations = await _dbContext.TMotivation

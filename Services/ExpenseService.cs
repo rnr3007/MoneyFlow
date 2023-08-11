@@ -22,8 +22,6 @@ namespace MoneyFlow.Services
 
         private readonly DatabaseContext _dbContext;
 
-        private readonly static string baseUrl = Startup.StaticConfiguration.GetSection("BASE_URL").Value;
-
         public ExpenseService(DatabaseContext dbContext)
         {
             _dbContext = dbContext;
@@ -35,7 +33,7 @@ namespace MoneyFlow.Services
                 ?? throw new DataException(ErrorMessage.EXPENSE_NOT_FOUND);
         }
 
-        public async Task<TableViewModel<Expense>> GetExpenseList(string userId, int page, int limit, string keyword, string order)
+        public async Task<TableViewModel<Expense>> GetExpenseList(string userId, int page, int limit, string keyword, string order, string baseUrl)
         {
             IQueryable<Expense> query = _dbContext.TExpense.AsQueryable()
                 .Where(x => x.UserId == userId && (
@@ -49,7 +47,7 @@ namespace MoneyFlow.Services
                 limit, 
                 totalData, 
                 keyword, 
-                $"{baseUrl}/expense");
+                $"{baseUrl}{UriPath.EXPENSE_LIST}");
             paginationView.Order = order;
 
             string[] orders = order.Split("|");

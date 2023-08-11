@@ -15,8 +15,6 @@ namespace MoneyFlow.Services
     {
         private readonly DatabaseContext _dbContext;
 
-        private readonly static string baseUrl = Startup.StaticConfiguration.GetSection("BASE_URL").Value;
-
         public IncomeService(DatabaseContext dbContext)
         {
             _dbContext = dbContext;
@@ -31,7 +29,7 @@ namespace MoneyFlow.Services
             return income;
         }
 
-        public async Task<TableViewModel<Income>> GetIncomes(string userId, int page, int limit, string keyword, string order)
+        public async Task<TableViewModel<Income>> GetIncomes(string userId, int page, int limit, string keyword, string order, string baseUrl)
         {
             IQueryable<Income> query = _dbContext.TIncome.AsQueryable()
                 .Where(x => x.UserId == userId && (
@@ -45,7 +43,7 @@ namespace MoneyFlow.Services
                 limit,
                 totalData,
                 keyword,
-                $"{baseUrl}/expenses"
+                $"{baseUrl}{UriPath.INCOMES}"
             );
             paginationView.Order = order;
 
