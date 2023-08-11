@@ -31,37 +31,52 @@ namespace MoneyFlow.Models
             EndPage = (int)Math.Ceiling((double)totalData / limitData );
             ChoosenPage = choosenPage < 1 || choosenPage > EndPage ? 1 : choosenPage;
 
-            int pageRange = 2;
+            int pageRange = 1;
             int leftPageRange = choosenPage - pageRange;
             int rightPageRange = choosenPage + pageRange;
             
             List<int> pageList = new List<int>();
             List<string> formattedPageList = new List<string>();
-
             for (int i = 1; i <= EndPage; i++)
             {
-                if (i == 1 || 1 == EndPage || (i >= leftPageRange && i <= rightPageRange))
+                if (i == 1 || i == EndPage || (i >= leftPageRange && i <= rightPageRange))
                 {
                     pageList.Add(i);
                 }
             }
 
-            int pageToBeInserted = 0;
-            foreach (int page in pageList)
+            int pageTotal = pageList.Count;
+            if (pageTotal == 1)
             {
-                if (pageToBeInserted > 0)
+                formattedPageList.Add("1");
+            } else if (pageTotal > 1)
+            {
+                for (int i = 0; i < pageTotal - 1; i++)
                 {
-                    int pageDelta = page - pageToBeInserted;
-                    if (pageDelta == 2)
+                    int pageToBeInserted = pageList[i];
+                    int nextPage = pageList[i + 1];
+                    int pageDelta = nextPage - pageToBeInserted;
+                    
+                    if (pageDelta == 1)
                     {
                         formattedPageList.Add(pageToBeInserted.ToString());
-                    } else if (pageDelta != 1)
+                    } else
                     {
+                        if (i == 0)
+                        {
+                            formattedPageList.Add(pageToBeInserted.ToString());
+                        } else if (i == pageTotal - 2)
+                        {
+                            formattedPageList.Add(pageList[i].ToString());
+                        }
                         formattedPageList.Add("...");
+                    }                    
+
+                    if (i == pageTotal - 2)
+                    {
+                        formattedPageList.Add(pageList[i + 1].ToString());
                     }
                 }
-                pageToBeInserted = page;
-                formattedPageList.Add(pageToBeInserted.ToString());
             }
             PageList = formattedPageList;
         }

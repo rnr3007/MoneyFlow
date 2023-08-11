@@ -20,7 +20,10 @@
         </li>
         @foreach (string pageNum in Model.PageList)
         {
-            if (pageNum != Model.ChoosenPage.ToString())
+            if (pageNum == "...")
+            {
+                <li class="disabled page-item"><a class="page-link" href="#">@pageNum<span class="sr-only">(current)</span></a></li>
+            } else if (pageNum != Model.ChoosenPage.ToString())
             {
                 <li class="page-item"><a class="page-link" href="@actionUrl?page=@pageNum&limit=@limitData&keyword=@keywordData&order=@orderData">@pageNum</a></li>
             } else
