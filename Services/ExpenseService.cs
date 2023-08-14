@@ -14,6 +14,7 @@ using System.IO;
 using OfficeOpenXml;
 using System.Globalization;
 using MoneyFlow.Constants.Enum;
+using MoneyFlow.Models.DetailComponents;
 
 namespace MoneyFlow.Services
 {
@@ -33,7 +34,7 @@ namespace MoneyFlow.Services
                 ?? throw new DataException(ErrorMessage.EXPENSE_NOT_FOUND);
         }
 
-        public async Task<TableView<Expense>> GetExpenseList(string userId, int page, int limit, string keyword, string order, string baseUrl)
+        public async Task<TableView<Expense>> GetExpenses(string userId, int page, int limit, string keyword, string order, List<string> filters)
         {
             IQueryable<Expense> query = _dbContext.TExpense.AsQueryable()
                 .Where(x => x.UserId == userId && (
@@ -45,9 +46,8 @@ namespace MoneyFlow.Services
             Pagination paginationView = new Pagination(
                 page, 
                 limit, 
-                totalData, 
-                keyword, 
-                $"{baseUrl}{UriPath.EXPENSE_LIST}");
+                totalData
+            );
             paginationView.Order = order;
 
             string[] orders = order.Split("|");
@@ -64,10 +64,20 @@ namespace MoneyFlow.Services
                 .Take(paginationView.LimitData)
                 .ToListAsync();
 
-            return new TableView<Expense>(
+            TableView<Expense> tableView = new TableView<Expense>(
                 userExpenses,
                 paginationView
             );
+
+            tableView.SearchBarView = new SearchBar(
+                keyword,
+                new ButtonFilter(
+                    new List<string>{""},
+                    filters
+                )
+            );
+
+            return tableView;
         }
 
         public async Task UpdateExpense(string userId, string expenseId, Expense newExpense, IFormFile formFile)

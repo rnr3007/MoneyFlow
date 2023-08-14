@@ -10,6 +10,8 @@ using MoneyFlow.Models;
 using MoneyFlow.Data;
 using MoneyFlow.Services;
 using iv = MoneyFlow.Utils.Validator.InputValidator;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace MoneyFlow.Controllers
 {
@@ -27,19 +29,18 @@ namespace MoneyFlow.Controllers
         }
 
         [HttpGet(UriPath.EXPENSE_LIST)]
-        public async Task<IActionResult> Expenses(string page, string limit, string keyword, string order)
+        public async Task<IActionResult> Expenses(string page, string limit, string keyword, string order, string filters = "")
         {
             try
             {
                 ViewData["Title"] = "Pengeluaran";
-                string baseUrl = $"{Request.Scheme}://{Request.Host}";
-                TableView<Expense> userExpenses = await _expenseService.GetExpenseList(
+                TableView<Expense> userExpenses = await _expenseService.GetExpenses(
                     Request.Headers["userId"],
                     iv.GetValidIntegerFromString(page, 1),
                     iv.GetValidIntegerFromString(limit, 10),
                     keyword ?? "",
                     order ?? "",
-                    baseUrl
+                    JsonConvert.DeserializeObject<List<string>>(filters)
                 );
 
                 return View(userExpenses);

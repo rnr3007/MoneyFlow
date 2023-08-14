@@ -30,14 +30,12 @@ namespace MoneyFlow.Controllers
             try
             {
                 ViewData["Title"] = "Pendapatan";
-                string baseUrl = $"{Request.Scheme}://{Request.Host}";
                 TableView<Income> userIncomes = await _incomeService.GetIncomes(
                     Request.Headers["userId"],
                     iv.GetValidIntegerFromString(page, 1),
                     iv.GetValidIntegerFromString(limit, 10),
                     keyword ?? "",
-                    order ?? "",
-                    baseUrl
+                    order ?? ""
                 );
 
                 return View(userIncomes);

@@ -71,6 +71,7 @@ function inputExcel(inputFormId, inputContainerId) {
     inputElement.type = 'file';
     inputElement.className = 'form-control d-none';
     inputElement.required = true;
+    inputElement.accept = '.xls, .xlsx, .csv';
 
     inputElement.onchange = function(event) {
         var formData = new FormData();

@@ -36,16 +36,14 @@
                     case "pdf":
                         @Html.DisplayFor(model => Model, "PdfPreview");
                         break;
-                    case "excel":
-                        @Html.DisplayFor(model => Model, "ExcelPreview");
-                        break;
                     default:
                         @Html.DisplayFor(model => Model, "UnsupportedFile");
                         break;
                 }
             }
         </label>
-        <input id="@fileFormContainerId" type="file" name="formFile" class="clickable d-none" onchange="changeFilePreview('@fileFormContainerId', '@fileFormId')"/>
+        <input id="@fileFormContainerId" type="file" name="formFile" class="clickable d-none" onchange="changeFilePreview('@fileFormContainerId', '@fileFormId')"
+            accept=".png, .jpg, .jpeg, .pdf, .pdfa, .pdfx, .pdfe, .pdfua"/>
         <span class="row d-flex align-items-center justify-content-center text-danger @cfgShowError">@errorMessage</span>
     </dd>
 </dl>

@@ -140,6 +140,16 @@ body {
     cursor: pointer;
 }
 
+.page-index {
+    color: #007bff !important;
+    background-color: transparent;
+}
+
+.page-index:hover {
+    color: #0056b3 !important;
+    cursor: pointer;
+}
+
 @media (max-width: 576px) {
     .hide-component {
         display: none;

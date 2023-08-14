@@ -5,25 +5,18 @@
 @using MoneyFlow.Constants;
 
 @{
-    var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
+    string baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
     List<ModalView<string>> modalDeleteList = new List<ModalView<string>>();
     List<ModalView<Motivation>> modalDetailList = new List<ModalView<Motivation>>();
-    int pageData = Model.PaginationView.ChoosenPage;
-    string keywordData = Model.PaginationView.SearchKeyword;
-    int limitData = Model.PaginationView.LimitData;
-    string orderData = Model.PaginationView.Order;
-    string actionUrl = $"{baseUrl}{UriPath.INCOMES}";
+    SearchBar searchBar = new SearchBar(Model.SearchBarView.Keyword);
+    searchBar.CreateDataUrl = $"{baseUrl}{UriPath.MOTIVATIONS_CREATE}";
 }
 
 <h4 class="text-center my-3"><b>@ViewData["Title"]</b></h4>
 
 @await Html.PartialAsync(
     "~/Views/Shared/Components/PageComponents/SearchBar.cshtml", 
-    new SearchBar(
-        UriPath.MOTIVATIONS,
-        keywordData,
-        $"{baseUrl}{UriPath.MOTIVATIONS_CREATE}"
-    )
+    searchBar
 )
 
 <div class="container">

@@ -8,7 +8,7 @@
     var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
     List<ModalView<string>> modalDeleteList = new List<ModalView<string>>();
     int pageData = Model.PaginationView.ChoosenPage;
-    string keywordData = Model.PaginationView.SearchKeyword;
+    string keywordData = Model.SearchBarView.Keyword;
     int limitData = Model.PaginationView.LimitData;
     string orderData = Model.PaginationView.Order;
     string actionUrl = $"{baseUrl}{UriPath.INCOMES}";
@@ -19,9 +19,7 @@
 @await Html.PartialAsync(
     "~/Views/Shared/Components/PageComponents/SearchBar.cshtml", 
     new SearchBar(
-        UriPath.INCOMES,
-        keywordData,
-        $"{actionUrl}/create"
+        keywordData
     )
 )
 
@@ -33,7 +31,7 @@
                     <div class="d-flex justify-content-center align-items-center">
                         <span class="mr-1">Tanggal</span>
                         @await Html.PartialAsync("~/Views/Shared/Components/PageComponents/ButtonSorting.cshtml",
-                            new ButtonSorting($"{actionUrl}?page={pageData}&limit={limitData}&keyword={keywordData}", OrderConstants.ORDER_BY_DATE, orderData)
+                            new ButtonSorting(OrderConstants.ORDER_BY_DATE, orderData)
                         )
                     </div>
                 </th>
@@ -41,7 +39,7 @@
                     <div class="d-flex justify-content-center align-items-center">
                         <span class="mr-1">Jumlah Pemasukan</span>
                         @await Html.PartialAsync("~/Views/Shared/Components/PageComponents/ButtonSorting.cshtml",
-                            new ButtonSorting($"{actionUrl}?page={pageData}&limit={limitData}&keyword={keywordData}", OrderConstants.ORDER_BY_MONEY, orderData)
+                            new ButtonSorting(OrderConstants.ORDER_BY_MONEY, orderData)
                         )
                     </div>
                     

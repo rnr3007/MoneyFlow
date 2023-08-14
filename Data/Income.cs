@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using MoneyFlow.Constants;
 using MoneyFlow.Constants.Enum;
 using MoneyFlow.Utils.Validator;
-using Newtonsoft.Json;
 
 namespace MoneyFlow.Data
 {

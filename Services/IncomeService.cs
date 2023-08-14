@@ -8,6 +8,7 @@ using System;
 using od = MoneyFlow.Constants.OrderConstants;
 using MoneyFlow.Constants;
 using System.Data;
+using MoneyFlow.Models.DetailComponents;
 
 namespace MoneyFlow.Services
 {
@@ -29,7 +30,7 @@ namespace MoneyFlow.Services
             return income;
         }
 
-        public async Task<TableView<Income>> GetIncomes(string userId, int page, int limit, string keyword, string order, string baseUrl)
+        public async Task<TableView<Income>> GetIncomes(string userId, int page, int limit, string keyword, string order)
         {
             IQueryable<Income> query = _dbContext.TIncome.AsQueryable()
                 .Where(x => x.UserId == userId && (
@@ -41,9 +42,7 @@ namespace MoneyFlow.Services
             Pagination paginationView = new Pagination(
                 page,
                 limit,
-                totalData,
-                keyword,
-                $"{baseUrl}{UriPath.INCOMES}"
+                totalData
             );
             paginationView.Order = order;
 
@@ -63,6 +62,10 @@ namespace MoneyFlow.Services
             TableView<Income> tableView = new TableView<Income>(
                 incomes,
                 paginationView
+            );
+
+            tableView.SearchBarView = new SearchBar(
+                keyword
             );
 
             return tableView;
