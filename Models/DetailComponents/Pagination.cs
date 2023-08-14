@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace MoneyFlow.Models
 {
-    public class PaginationViewModel
+    public class Pagination
     {
         public int ChoosenPage { get; set; } = 1;
 
@@ -22,7 +22,7 @@ namespace MoneyFlow.Models
 
         public  string Order { get; set; } = "";
 
-        public PaginationViewModel(int choosenPage, int limitData, int totalData, string keyword, string actionUrl)
+        public Pagination(int choosenPage, int limitData, int totalData, string keyword, string actionUrl)
         {
             SearchKeyword = keyword;
             LimitData = limitData < 0 ? 10 : limitData;                                                                                                                   

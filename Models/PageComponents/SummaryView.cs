@@ -3,7 +3,7 @@ using MoneyFlow.Data;
 
 namespace MoneyFlow.Models
 {
-    public class SummaryViewModel
+    public class SummaryView
     {
         public IEnumerable<dynamic> TotalCostByDate { get; set; }
 

@@ -1,8 +1,8 @@
-using System.Collections.Generic;
+using MoneyFlow.Models.DetailComponents;
 
-namespace MoneyFlow.Models
+namespace MoneyFlow.Models.DetailComponents
 {
-    public class SearchBarWithAddData
+    public class SearchBar
     {
         public string DataEndpoint { get; set; }
 
@@ -10,24 +10,24 @@ namespace MoneyFlow.Models
         
         public string CreateDataUrl { get; set; }
 
+        public ButtonFilter FilterButton { get; set; }
+
         public bool IsFilterable { get; set; } = false;
 
-        public List<string> FilterList { get; set; }
-
-        public SearchBarWithAddData(string dataUrl, string keyword, string createDataUrl)
+        public SearchBar(string dataUrl, string keyword, string createDataUrl)
         {
             DataEndpoint = dataUrl;
             Keyword = keyword;
             CreateDataUrl = createDataUrl;
         }
 
-        public SearchBarWithAddData(string dataUrl, string keyword, string createDataUrl, List<string> filterList)
+        public SearchBar(string dataUrl, string keyword, string createDataUrl, ButtonFilter filterButton)
         {
             DataEndpoint = dataUrl;
             Keyword = keyword;
             CreateDataUrl = createDataUrl;
             IsFilterable = true;
-            FilterList = filterList;
+            FilterButton = filterButton;
         }
     }
 }

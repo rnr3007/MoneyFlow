@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace MoneyFlow.Models
 {
-    public class UploadFileFormViewModel
+    public class UploadFileForm
     {
         public IFormFile FormFile { get; set; }
 

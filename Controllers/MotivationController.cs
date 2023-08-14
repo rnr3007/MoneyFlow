@@ -33,7 +33,7 @@ namespace MoneyFlow.Controllers
             {
                 ViewData["Title"] = "Target Barang";
                 string baseUrl = $"{Request.Scheme}://{Request.Host}";
-                TableViewModel<Motivation> tableView = await _motivationService.GetMotivations(
+                TableView<Motivation> tableView = await _motivationService.GetMotivations(
                     Request.Headers["userId"],
                     iv.GetValidIntegerFromString(page, 1),
                     iv.GetValidIntegerFromString(limit, 10),

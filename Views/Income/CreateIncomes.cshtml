@@ -6,14 +6,12 @@
 @{
     var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
     var incomeType = de.GetEnumDataList<IncomeTypeEnum>();
-    var purpose = GeneralConstants.PURPOSE_INCOMES;
 }
 
 <h4 class="text-center">Buat Pendapatan</h4>
 <hr />
 <div class="row justify-content-center">
     <div class="col-md-4">
-        @await Html.PartialAsync("~/Views/Shared/Components/File/UploadFromExcelView.cshtml", purpose)
         <form method="post" action="@UriPath.INCOMES_CREATE">
             <div class="form-group">
                 <label asp-for="IncomeType" class="control-label">Tipe Pendapatan</label>

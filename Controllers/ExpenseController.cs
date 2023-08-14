@@ -33,7 +33,7 @@ namespace MoneyFlow.Controllers
             {
                 ViewData["Title"] = "Pengeluaran";
                 string baseUrl = $"{Request.Scheme}://{Request.Host}";
-                TableViewModel<Expense> userExpenses = await _expenseService.GetExpenseList(
+                TableView<Expense> userExpenses = await _expenseService.GetExpenseList(
                     Request.Headers["userId"],
                     iv.GetValidIntegerFromString(page, 1),
                     iv.GetValidIntegerFromString(limit, 10),

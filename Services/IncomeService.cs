@@ -29,7 +29,7 @@ namespace MoneyFlow.Services
             return income;
         }
 
-        public async Task<TableViewModel<Income>> GetIncomes(string userId, int page, int limit, string keyword, string order, string baseUrl)
+        public async Task<TableView<Income>> GetIncomes(string userId, int page, int limit, string keyword, string order, string baseUrl)
         {
             IQueryable<Income> query = _dbContext.TIncome.AsQueryable()
                 .Where(x => x.UserId == userId && (
@@ -38,7 +38,7 @@ namespace MoneyFlow.Services
                 
             int totalData = query.Count();
 
-            PaginationViewModel paginationView = new PaginationViewModel(
+            Pagination paginationView = new Pagination(
                 page,
                 limit,
                 totalData,
@@ -60,7 +60,7 @@ namespace MoneyFlow.Services
                 .Take(paginationView.LimitData)
                 .ToListAsync();
 
-            TableViewModel<Income> tableView = new TableViewModel<Income>(
+            TableView<Income> tableView = new TableView<Income>(
                 incomes,
                 paginationView
             );

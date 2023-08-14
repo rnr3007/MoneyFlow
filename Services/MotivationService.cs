@@ -20,7 +20,7 @@ namespace MoneyFlow.Services
             _dbContext = dbContext;
         }
 
-        public async Task<TableViewModel<Motivation>> GetMotivations(string userId, int page, int limit, string keyword, string baseUrl)
+        public async Task<TableView<Motivation>> GetMotivations(string userId, int page, int limit, string keyword, string baseUrl)
         {
             int totalData = _dbContext.TMotivation
                 .Where(x => x.UserId == userId && (
@@ -30,7 +30,7 @@ namespace MoneyFlow.Services
                 ))
                 .Count();
 
-            PaginationViewModel paginationView = new PaginationViewModel(
+            Pagination paginationView = new Pagination(
                 page,
                 limit,
                 totalData,
@@ -46,7 +46,7 @@ namespace MoneyFlow.Services
                 ))
                 .ToListAsync();
 
-            return new TableViewModel<Motivation>(
+            return new TableView<Motivation>(
                 motivations,
                 paginationView
             );

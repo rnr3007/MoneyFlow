@@ -1,15 +1,15 @@
 namespace MoneyFlow.Models
 {
-    public class PdfViewModel
+    public class PdfView
     {
         public string PageTitle { get; set; }
 
         public byte[] PdfFile { get; set; }
 
-        public PdfViewModel()
+        public PdfView()
         {}
 
-        public PdfViewModel(string pageTitle, byte[] pdfFile)
+        public PdfView(string pageTitle, byte[] pdfFile)
         {
             PageTitle = pageTitle;
             PdfFile = pdfFile;

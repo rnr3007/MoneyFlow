@@ -33,7 +33,7 @@ namespace MoneyFlow.Services
                 ?? throw new DataException(ErrorMessage.EXPENSE_NOT_FOUND);
         }
 
-        public async Task<TableViewModel<Expense>> GetExpenseList(string userId, int page, int limit, string keyword, string order, string baseUrl)
+        public async Task<TableView<Expense>> GetExpenseList(string userId, int page, int limit, string keyword, string order, string baseUrl)
         {
             IQueryable<Expense> query = _dbContext.TExpense.AsQueryable()
                 .Where(x => x.UserId == userId && (
@@ -42,7 +42,7 @@ namespace MoneyFlow.Services
                 ));
             int totalData = query.Count();
 
-            PaginationViewModel paginationView = new PaginationViewModel(
+            Pagination paginationView = new Pagination(
                 page, 
                 limit, 
                 totalData, 
@@ -64,7 +64,7 @@ namespace MoneyFlow.Services
                 .Take(paginationView.LimitData)
                 .ToListAsync();
 
-            return new TableViewModel<Expense>(
+            return new TableView<Expense>(
                 userExpenses,
                 paginationView
             );
@@ -132,12 +132,12 @@ namespace MoneyFlow.Services
             }
         }
 
-        public async Task<List<PlotDataModel<DateTime, long>>> GetCostByDate(string userId)
+        public async Task<List<ChartPlot<DateTime, long>>> GetCostByDate(string userId)
         {
             var costs = await _dbContext.TExpense
                 .Where(x => x.UserId == userId)
                 .GroupBy(x => x.CreatedAt.Date)
-                .Select(x => new PlotDataModel<DateTime, long>(
+                .Select(x => new ChartPlot<DateTime, long>(
                     x.Key,
                     x.Sum(y => y.Cost)
                 ))

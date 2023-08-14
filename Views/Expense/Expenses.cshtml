@@ -1,12 +1,13 @@
-@model MoneyFlow.Models.TableViewModel<Expense>;
+@model MoneyFlow.Models.TableView<Expense>;
+@using MoneyFlow.Models.DetailComponents;
 @using MoneyFlow.Models;
 @using MoneyFlow.Data;
 @using MoneyFlow.Constants;
 
 @{
     var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
-    List<ModalViewModel<string>> modalDeleteList = new List<ModalViewModel<string>>();
-    List<ModalViewModel<Expense>> modalDetailList = new List<ModalViewModel<Expense>>();
+    List<ModalView<string>> modalDeleteList = new List<ModalView<string>>();
+    List<ModalView<Expense>> modalDetailList = new List<ModalView<Expense>>();
     List<string> filterList = new List<string>{""};
     int pageData = Model.PaginationView.ChoosenPage;
     string keywordData = Model.PaginationView.SearchKeyword;
@@ -18,12 +19,11 @@
 <h4 class="text-center my-3"><b>@ViewData["Title"]</b></h4>
 
 @await Html.PartialAsync(
-    "~/Views/Shared/Components/PageComponents/SearchBarWithAddData.cshtml", 
-    new SearchBarWithAddData(
+    "~/Views/Shared/Components/PageComponents/SearchBar.cshtml", 
+    new SearchBar(
         UriPath.EXPENSE_LIST,
         keywordData,
-        $"{baseUrl}{UriPath.EXPENSE_CREATE}",
-        filterList
+        $"{baseUrl}{UriPath.EXPENSE_CREATE}"
     )
 )
 
@@ -34,16 +34,16 @@
                 <th class="align-middle">
                     <div class="d-flex justify-content-center align-items-center">
                         <span class="mr-1">Tanggal</span>
-                        @await Html.PartialAsync("~/Views/Shared/Components/SortingButton.cshtml",
-                            new Sorting($"{actionUrl}?page={pageData}&limit={limitData}&keyword={keywordData}", OrderConstants.ORDER_BY_DATE, orderData)
+                        @await Html.PartialAsync("~/Views/Shared/Components/PageComponents/ButtonSorting.cshtml",
+                            new ButtonSorting($"{actionUrl}?page={pageData}&limit={limitData}&keyword={keywordData}", OrderConstants.ORDER_BY_DATE, orderData)
                         )
                     </div>
                 </th>
                 <th class="align-middle">
                     <div class="d-flex justify-content-center align-items-center">
                         <span class="mr-1">Nama pengeluaran</span>
-                        @await Html.PartialAsync("~/Views/Shared/Components/SortingButton.cshtml",
-                            new Sorting($"{actionUrl}?page={pageData}&limit={limitData}&keyword={keywordData}", OrderConstants.ORDER_BY_NAME, orderData)
+                        @await Html.PartialAsync("~/Views/Shared/Components/PageComponents/ButtonSorting.cshtml",
+                            new ButtonSorting($"{actionUrl}?page={pageData}&limit={limitData}&keyword={keywordData}", OrderConstants.ORDER_BY_NAME, orderData)
                         )
                     </div>
                     
@@ -51,8 +51,8 @@
                 <th class="align-middle">
                     <div class="d-flex justify-content-center align-items-center">
                         <span class="mr-1">Biaya</span>
-                        @await Html.PartialAsync("~/Views/Shared/Components/SortingButton.cshtml",
-                            new Sorting($"{actionUrl}?page={pageData}&limit={limitData}&keyword={keywordData}", OrderConstants.ORDER_BY_MONEY, orderData)
+                        @await Html.PartialAsync("~/Views/Shared/Components/PageComponents/ButtonSorting.cshtml",
+                            new ButtonSorting($"{actionUrl}?page={pageData}&limit={limitData}&keyword={keywordData}", OrderConstants.ORDER_BY_MONEY, orderData)
                         )
                     </div>
                 </th>
@@ -72,10 +72,10 @@
                 {;
                     string modalDeleteId = $"modalDelete{Expense.Id}";
                     string modalDetailId = $"modalDetail{Expense.Id}";
-                    modalDeleteList.Add(new ModalViewModel<string>(
+                    modalDeleteList.Add(new ModalView<string>(
                         modalDeleteId, $"/expense/delete/{Expense.Id}", "hapus pengeluaran"
                     )); 
-                    modalDetailList.Add(new ModalViewModel<Expense>(
+                    modalDetailList.Add(new ModalView<Expense>(
                         modalDetailId, data: Expense
                     ));
                     <tr>
