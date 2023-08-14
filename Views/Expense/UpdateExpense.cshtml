@@ -14,7 +14,7 @@
     <div class="col-md-4">
         <form method="post" action="/expense/update/@Model.Id" enctype="multipart/form-data">
             <div class="form-group">
-                @await Html.PartialAsync("~/Views/Shared/Components/File/UploadFileFormView.cshtml", receiptFileUrl)
+                @await Html.PartialAsync("~/Views/Shared/Components/File/UploadFileForm.cshtml", receiptFileUrl)
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label">Nama pengeluaran</label>

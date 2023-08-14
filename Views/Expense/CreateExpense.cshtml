@@ -16,7 +16,7 @@
         @await Html.PartialAsync("~/Views/Shared/Components/File/UploadFromExcelView.cshtml", purpose)
         <form method="post" action="/expense/create" enctype="multipart/form-data">
             <div class="form-group">
-                @await Html.PartialAsync("~/Views/Shared/Components/File/UploadFileFormView.cshtml", "")
+                @await Html.PartialAsync("~/Views/Shared/Components/File/UploadFileForm.cshtml", "")
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label">Nama pengeluaran</label>
