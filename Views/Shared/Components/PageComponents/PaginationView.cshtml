@@ -10,24 +10,24 @@
 
 <nav>
     <ul class="pagination justify-content-center">
-        <li class="page-item @previousBtnConf">
-            <a class="page-link page-index" onclick="changePage(this, '@previousPage')">&laquo;</a>
+        <li class="@previousBtnConf page-item page-index">
+            <a class="page-link" onclick="changePage(this, '@previousPage')">&laquo;</a>
         </li>
         @foreach (string pageNum in Model.PageList)
         {
             if (pageNum == "...")
             {
-                <li class="disabled page-item"><a class="page-link">@pageNum<span class="sr-only">(current)</span></a></li>
+                <li class="disabled page-item page-index"><a class="page-link">@pageNum<span class="sr-only">(current)</span></a></li>
             } else if (pageNum != Model.ChoosenPage.ToString())
             {
-                <li class="clickable page-item"><a class="page-link page-index" onclick="changePage(this, '@pageNum')">@pageNum</a></li>
+                <li class="clickable page-item page-index"><a class="page-link" onclick="changePage(this, '@pageNum')">@pageNum</a></li>
             } else
             {
-                <li class="page-item active"><a class="page-link">@pageNum<span class="sr-only">(current)</span></a></li>
+                <li class="page-item active page-index"><a class="page-link">@pageNum<span class="sr-only">(current)</span></a></li>
             }            
         }
-        <li class="page-item @nextBtnConf">
-            <a class="page-link page-index" onclick="changePage(this, '@nextPage')">&raquo;</a>
+        <li class="@nextBtnConf page-item page-index">
+            <a class="page-link" onclick="changePage(this, '@nextPage')">&raquo;</a>
         </li>
     </ul>
 </nav>

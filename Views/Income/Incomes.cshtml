@@ -7,20 +7,16 @@
 @{
     var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
     List<ModalView<string>> modalDeleteList = new List<ModalView<string>>();
-    int pageData = Model.PaginationView.ChoosenPage;
     string keywordData = Model.SearchBarView.Keyword;
-    int limitData = Model.PaginationView.LimitData;
     string orderData = Model.PaginationView.Order;
-    string actionUrl = $"{baseUrl}{UriPath.INCOMES}";
+    Model.SearchBarView.CreateDataUrl = $"{baseUrl}{UriPath.INCOMES_CREATE}";
 }
 
 <h4 class="text-center my-3"><b>@ViewData["Title"]</b></h4>
 
 @await Html.PartialAsync(
     "~/Views/Shared/Components/PageComponents/SearchBar.cshtml", 
-    new SearchBar(
-        keywordData
-    )
+    Model.SearchBarView
 )
 
 <div class="table-responsive">
