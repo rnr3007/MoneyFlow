@@ -81,3 +81,18 @@ function inputExcel(inputFormId, inputContainerId) {
     
     inputElement.click();
 }
+
+function setupPopover() {
+    $('[data-toggle="popover"]').popover();
+}
+
+function setupHtmlPopover() {
+    $('[data-toggle="popover"]').popover({
+        html: true,
+        trigger: 'focus',
+    });
+
+    $('.popover-dismiss').popover({
+        trigger: 'focus'
+    })
+}
