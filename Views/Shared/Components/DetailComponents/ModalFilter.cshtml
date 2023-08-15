@@ -1,5 +1,6 @@
 @model MoneyFlow.Models.DetailComponents.ButtonFilter;
 @using MoneyFlow.Constants.Enum;
+@using MoneyFlow.Constants;
 
 @{
     string modalFilterId = "modalFilterId";
@@ -19,7 +20,13 @@
                         {
                             string filterId = $"filterId{filter}";
                             <div class="col-sm-4">
-                                <label for="@filterId">@CostType.GetCostTypeValue(filter)</label>
+                                @if (Context.Request.Path.Equals(UriPath.EXPENSE_LIST))
+                                {
+                                    <label for="@filterId">@CostType.GetCostTypeValue(filter)</label>
+                                } else if (Context.Request.Path.Equals(UriPath.INCOMES))
+                                {
+                                    <label for="@filterId">@IncomeType.GetIncomeTypeValue(filter)</label>
+                                }                                
                                 @if (!Model.ChosenFilters.Contains(filter))
                                 {
                                     <input id="@filterId" type="checkbox" onchange="changeFilter(this, @filter)">

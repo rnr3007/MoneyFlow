@@ -9,6 +9,7 @@ using od = MoneyFlow.Constants.OrderConstants;
 using MoneyFlow.Constants;
 using System.Data;
 using MoneyFlow.Models.DetailComponents;
+using MoneyFlow.Constants.Enum;
 
 namespace MoneyFlow.Services
 {
@@ -30,12 +31,16 @@ namespace MoneyFlow.Services
             return income;
         }
 
-        public async Task<TableView<Income>> GetIncomes(string userId, int page, int limit, string keyword, string order)
+        public async Task<TableView<Income>> GetIncomes(string userId, int page, int limit, string keyword, string order, List<int> filters)
         {
+            if (filters == null || filters.Count == 0) 
+            {
+                filters = new List<int>{1, 2, 3};
+            }
             IQueryable<Income> query = _dbContext.TIncome.AsQueryable()
                 .Where(x => x.UserId == userId && (
                     x.IncomeMoney.ToString().Contains(keyword)
-                ));
+                ) && filters.Contains((int)x.IncomeType));
                 
             int totalData = query.Count();
 
@@ -65,7 +70,11 @@ namespace MoneyFlow.Services
             );
 
             tableView.SearchBarView = new SearchBar(
-                keyword
+                keyword,
+                new ButtonFilter(
+                    new List<int>{(int)IncomeTypeEnum.SALARY, (int)IncomeTypeEnum.INVESTMENT, (int)IncomeTypeEnum.BUSINESS},
+                    filters
+                )
             );
 
             return tableView;
