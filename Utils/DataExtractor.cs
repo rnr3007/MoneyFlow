@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace MoneyFlow.Utils
 {
@@ -27,6 +28,19 @@ namespace MoneyFlow.Utils
             int hour = dateTime.ToLocalTime().TimeOfDay.Hours;
             int minute = dateTime.ToLocalTime().TimeOfDay.Minutes;
             return $"{days[day]}, {date} {months[month]} {year}, {hour}:{minute}";
+        }
+
+        public static bool TryDeserializeList(string inObject, out List<int> outObject)
+        {
+            try
+            {
+                outObject = JsonConvert.DeserializeObject<List<int>>(inObject);
+                return true;
+            } catch (Exception)
+            {
+                outObject = new List<int>();
+                return false;
+            }
         }
     }
 }

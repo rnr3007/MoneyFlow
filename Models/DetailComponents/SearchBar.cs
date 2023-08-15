@@ -1,5 +1,3 @@
-using MoneyFlow.Models.DetailComponents;
-
 namespace MoneyFlow.Models.DetailComponents
 {
     public class SearchBar

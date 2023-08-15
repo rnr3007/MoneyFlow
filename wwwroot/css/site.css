@@ -173,3 +173,7 @@ body {
     animation-name: progress-transition-animation;
     animation-duration: 2s;
 }
+
+.testing {
+    font-weight: 700;
+}

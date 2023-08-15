@@ -85,14 +85,3 @@ function inputExcel(inputFormId, inputContainerId) {
 function setupPopover() {
     $('[data-toggle="popover"]').popover();
 }
-
-function setupHtmlPopover() {
-    $('[data-toggle="popover"]').popover({
-        html: true,
-        trigger: 'focus',
-    });
-
-    $('.popover-dismiss').popover({
-        trigger: 'focus'
-    })
-}

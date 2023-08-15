@@ -4,11 +4,11 @@ namespace MoneyFlow.Models.DetailComponents
 {
     public class ButtonFilter
     {
-        public List<string> FilterList { get; set; }
+        public List<int> FilterList { get; set; }
 
-        public List<string> ChosenFilters { get; set; }
+        public List<int> ChosenFilters { get; set; }
 
-        public ButtonFilter(List<string> filterList, List<string> chosenFilters)
+        public ButtonFilter(List<int> filterList, List<int> chosenFilters)
         {
             FilterList = filterList;
             ChosenFilters = chosenFilters;

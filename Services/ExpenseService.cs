@@ -34,13 +34,17 @@ namespace MoneyFlow.Services
                 ?? throw new DataException(ErrorMessage.EXPENSE_NOT_FOUND);
         }
 
-        public async Task<TableView<Expense>> GetExpenses(string userId, int page, int limit, string keyword, string order, List<string> filters)
+        public async Task<TableView<Expense>> GetExpenses(string userId, int page, int limit, string keyword, string order, List<int> filters)
         {
+            if (filters == null || filters.Count == 0) 
+            {
+                filters = new List<int>{1, 2, 3, 4, 5, 6, 7};
+            }
             IQueryable<Expense> query = _dbContext.TExpense.AsQueryable()
                 .Where(x => x.UserId == userId && (
                     x.Name.Contains(keyword)
                     || x.Cost.ToString().Contains(keyword)
-                ));
+                ) && filters.Contains((int) x.CostType));
             int totalData = query.Count();
 
             Pagination paginationView = new Pagination(
@@ -72,7 +76,7 @@ namespace MoneyFlow.Services
             tableView.SearchBarView = new SearchBar(
                 keyword,
                 new ButtonFilter(
-                    new List<string>{""},
+                    new List<int>{(int) CostTypeEnum.FOOD, (int) CostTypeEnum.PERSONAL_CARE_PRODUCT, (int) CostTypeEnum.TRANSPORT, (int) CostTypeEnum.ENTERTAINMENT, (int) CostTypeEnum.UTILITY, (int) CostTypeEnum.MISC},
                     filters
                 )
             );
@@ -88,7 +92,6 @@ namespace MoneyFlow.Services
             oldExpense.Cost = newExpense.Cost;
             await _dbContext.SaveChangesAsync();
         }
-
 
         public async Task DeleteExpense(string userId, string expenseId)
         {
