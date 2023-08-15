@@ -47,7 +47,7 @@ namespace MoneyFlow.Controllers
                         mimeType = "image/jpeg";
                         break;
                     case "pdf":
-                        return View("PdfView", new PdfViewModel(
+                        return View("PdfView", new PdfView(
                             purpose,
                             file
                         ));

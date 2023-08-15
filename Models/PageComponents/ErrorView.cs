@@ -1,6 +1,6 @@
 namespace MoneyFlow.Models
 {
-    public class ErrorViewModel
+    public class ErrorView
     {
         public string RequestId { get; set; }
 

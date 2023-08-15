@@ -1,0 +1,44 @@
+@model MoneyFlow.Models.DetailComponents.ButtonFilter;
+@using MoneyFlow.Constants.Enum;
+@using MoneyFlow.Constants;
+
+@{
+    string modalFilterId = "modalFilterId";
+}
+
+<div class="modal fade" id="@modalFilterId" tabindex="-1" aria-labelledby="modalFilterContent" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div id="modalFilterContent" class="modal-title fs-5">Filter Pencarian</div>
+                <i class="clickable bi bi-x-circle" onclick="closeModal('@modalFilterId')"></i>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        @foreach(int filter in Model.FilterList)
+                        {
+                            string filterId = $"filterId{filter}";
+                            <div class="col-sm-4">
+                                @if (Context.Request.Path.Equals(UriPath.EXPENSE_LIST))
+                                {
+                                    <label for="@filterId">@CostType.GetCostTypeValue(filter)</label>
+                                } else if (Context.Request.Path.Equals(UriPath.INCOMES))
+                                {
+                                    <label for="@filterId">@IncomeType.GetIncomeTypeValue(filter)</label>
+                                }                                
+                                @if (!Model.ChosenFilters.Contains(filter))
+                                {
+                                    <input id="@filterId" type="checkbox" onchange="changeFilter(this, @filter)">
+                                } else
+                                {
+                                    <input id="@filterId" type="checkbox" checked onchange="changeFilter(this, @filter)">
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

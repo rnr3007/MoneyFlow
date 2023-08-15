@@ -14,6 +14,7 @@ using System.IO;
 using OfficeOpenXml;
 using System.Globalization;
 using MoneyFlow.Constants.Enum;
+using MoneyFlow.Models.DetailComponents;
 
 namespace MoneyFlow.Services
 {
@@ -33,21 +34,24 @@ namespace MoneyFlow.Services
                 ?? throw new DataException(ErrorMessage.EXPENSE_NOT_FOUND);
         }
 
-        public async Task<TableViewModel<Expense>> GetExpenseList(string userId, int page, int limit, string keyword, string order, string baseUrl)
+        public async Task<TableView<Expense>> GetExpenses(string userId, int page, int limit, string keyword, string order, List<int> filters)
         {
+            if (filters == null || filters.Count == 0) 
+            {
+                filters = new List<int>{1, 2, 3, 4, 5, 6, 7};
+            }
             IQueryable<Expense> query = _dbContext.TExpense.AsQueryable()
                 .Where(x => x.UserId == userId && (
                     x.Name.Contains(keyword)
                     || x.Cost.ToString().Contains(keyword)
-                ));
+                ) && filters.Contains((int) x.CostType));
             int totalData = query.Count();
 
-            PaginationViewModel paginationView = new PaginationViewModel(
+            Pagination paginationView = new Pagination(
                 page, 
                 limit, 
-                totalData, 
-                keyword, 
-                $"{baseUrl}{UriPath.EXPENSE_LIST}");
+                totalData
+            );
             paginationView.Order = order;
 
             string[] orders = order.Split("|");
@@ -64,10 +68,20 @@ namespace MoneyFlow.Services
                 .Take(paginationView.LimitData)
                 .ToListAsync();
 
-            return new TableViewModel<Expense>(
+            TableView<Expense> tableView = new TableView<Expense>(
                 userExpenses,
                 paginationView
             );
+
+            tableView.SearchBarView = new SearchBar(
+                keyword,
+                new ButtonFilter(
+                    new List<int>{(int) CostTypeEnum.FOOD, (int) CostTypeEnum.PERSONAL_CARE_PRODUCT, (int) CostTypeEnum.TRANSPORT, (int) CostTypeEnum.ENTERTAINMENT, (int) CostTypeEnum.UTILITY, (int) CostTypeEnum.MISC},
+                    filters
+                )
+            );
+
+            return tableView;
         }
 
         public async Task UpdateExpense(string userId, string expenseId, Expense newExpense, IFormFile formFile)
@@ -78,7 +92,6 @@ namespace MoneyFlow.Services
             oldExpense.Cost = newExpense.Cost;
             await _dbContext.SaveChangesAsync();
         }
-
 
         public async Task DeleteExpense(string userId, string expenseId)
         {
@@ -132,12 +145,12 @@ namespace MoneyFlow.Services
             }
         }
 
-        public async Task<List<PlotDataModel<DateTime, long>>> GetCostByDate(string userId)
+        public async Task<List<ChartPlot<DateTime, long>>> GetCostByDate(string userId)
         {
             var costs = await _dbContext.TExpense
                 .Where(x => x.UserId == userId)
                 .GroupBy(x => x.CreatedAt.Date)
-                .Select(x => new PlotDataModel<DateTime, long>(
+                .Select(x => new ChartPlot<DateTime, long>(
                     x.Key,
                     x.Sum(y => y.Cost)
                 ))

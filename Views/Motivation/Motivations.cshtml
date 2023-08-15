@@ -1,28 +1,22 @@
-@model MoneyFlow.Models.TableViewModel<Motivation>;
+@model MoneyFlow.Models.TableView<Motivation>;
 @using MoneyFlow.Data;
+@using MoneyFlow.Models.DetailComponents;
 @using MoneyFlow.Models;
 @using MoneyFlow.Constants;
 
 @{
-    var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
-    List<ModalViewModel<string>> modalDeleteList = new List<ModalViewModel<string>>();
-    List<ModalViewModel<Motivation>> modalDetailList = new List<ModalViewModel<Motivation>>();
-    int pageData = Model.PaginationView.ChoosenPage;
-    string keywordData = Model.PaginationView.SearchKeyword;
-    int limitData = Model.PaginationView.LimitData;
-    string orderData = Model.PaginationView.Order;
-    string actionUrl = $"{baseUrl}{UriPath.INCOMES}";
+    string baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
+    List<ModalView<string>> modalDeleteList = new List<ModalView<string>>();
+    List<ModalView<Motivation>> modalDetailList = new List<ModalView<Motivation>>();
+    SearchBar searchBar = new SearchBar(Model.SearchBarView.Keyword);
+    searchBar.CreateDataUrl = $"{baseUrl}{UriPath.MOTIVATIONS_CREATE}";
 }
 
 <h4 class="text-center my-3"><b>@ViewData["Title"]</b></h4>
 
 @await Html.PartialAsync(
-    "~/Views/Shared/Components/PageComponents/SearchBarWithAddData.cshtml", 
-    new SearchBarWithAddData(
-        UriPath.MOTIVATIONS,
-        keywordData,
-        $"{baseUrl}{UriPath.MOTIVATIONS_CREATE}"
-    )
+    "~/Views/Shared/Components/PageComponents/SearchBar.cshtml", 
+    searchBar
 )
 
 <div class="container">
@@ -32,10 +26,10 @@
             string modalDeleteId = $"modalDelete{motivation.Id}";
             string modalDetailId = $"modalDetail{motivation.Id}";
             string targetImageUrl = $"{baseUrl}/file/image/{GeneralConstants.PURPOSE_MOTIVATIONS}/{motivation.TargetImage}";
-            modalDeleteList.Add(new ModalViewModel<string>(
+            modalDeleteList.Add(new ModalView<string>(
                 modalDeleteId, $"/motivations/delete/{motivation.Id}", "hapus pengeluaran"
             )); 
-            modalDetailList.Add(new ModalViewModel<Motivation>(
+            modalDetailList.Add(new ModalView<Motivation>(
                 modalDetailId, data: motivation
             ));
             <div class="card col-sm-3 m-2" style="border-radius: 25px; border-color: black; min-width: 17.5rem;">

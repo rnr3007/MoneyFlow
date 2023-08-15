@@ -8,6 +8,8 @@ using System;
 using od = MoneyFlow.Constants.OrderConstants;
 using MoneyFlow.Constants;
 using System.Data;
+using MoneyFlow.Models.DetailComponents;
+using MoneyFlow.Constants.Enum;
 
 namespace MoneyFlow.Services
 {
@@ -29,21 +31,23 @@ namespace MoneyFlow.Services
             return income;
         }
 
-        public async Task<TableViewModel<Income>> GetIncomes(string userId, int page, int limit, string keyword, string order, string baseUrl)
+        public async Task<TableView<Income>> GetIncomes(string userId, int page, int limit, string keyword, string order, List<int> filters)
         {
+            if (filters == null || filters.Count == 0) 
+            {
+                filters = new List<int>{1, 2, 3};
+            }
             IQueryable<Income> query = _dbContext.TIncome.AsQueryable()
                 .Where(x => x.UserId == userId && (
                     x.IncomeMoney.ToString().Contains(keyword)
-                ));
+                ) && filters.Contains((int)x.IncomeType));
                 
             int totalData = query.Count();
 
-            PaginationViewModel paginationView = new PaginationViewModel(
+            Pagination paginationView = new Pagination(
                 page,
                 limit,
-                totalData,
-                keyword,
-                $"{baseUrl}{UriPath.INCOMES}"
+                totalData
             );
             paginationView.Order = order;
 
@@ -60,9 +64,17 @@ namespace MoneyFlow.Services
                 .Take(paginationView.LimitData)
                 .ToListAsync();
 
-            TableViewModel<Income> tableView = new TableViewModel<Income>(
+            TableView<Income> tableView = new TableView<Income>(
                 incomes,
                 paginationView
+            );
+
+            tableView.SearchBarView = new SearchBar(
+                keyword,
+                new ButtonFilter(
+                    new List<int>{(int)IncomeTypeEnum.SALARY, (int)IncomeTypeEnum.INVESTMENT, (int)IncomeTypeEnum.BUSINESS},
+                    filters
+                )
             );
 
             return tableView;

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using fu = MoneyFlow.Utils.FileUtilites;
 using MoneyFlow.Constants;
 using System.Data;
+using MoneyFlow.Models.DetailComponents;
 
 namespace MoneyFlow.Services
 {
@@ -20,36 +21,37 @@ namespace MoneyFlow.Services
             _dbContext = dbContext;
         }
 
-        public async Task<TableViewModel<Motivation>> GetMotivations(string userId, int page, int limit, string keyword, string baseUrl)
+        public async Task<TableView<Motivation>> GetMotivations(string userId, int page, int limit, string keyword)
         {
-            int totalData = _dbContext.TMotivation
+            IQueryable<Motivation> query = _dbContext.TMotivation
                 .Where(x => x.UserId == userId && (
                     x.TargetName.Contains(keyword)
                     || x.TargetPrice.ToString().Contains(keyword)
                     || x.Description.Contains(keyword)
-                ))
-                .Count();
+                ));
+            int totalData = query.Count();
 
-            PaginationViewModel paginationView = new PaginationViewModel(
+            Pagination paginationView = new Pagination(
                 page,
                 limit,
-                totalData,
-                keyword,
-                $"{baseUrl}{UriPath.MOTIVATIONS}"
+                totalData
             );
 
-            List<Motivation> motivations = await _dbContext.TMotivation
-                .Where(x => x.UserId == userId && (
-                    x.TargetName.Contains(keyword)
-                    || x.TargetPrice.ToString().Contains(keyword)
-                    || x.Description.Contains(keyword)
-                ))
+            List<Motivation> motivations = await query
+                .Skip(paginationView.LimitData * (paginationView.ChoosenPage - 1))
+                .Take(paginationView.LimitData)
                 .ToListAsync();
 
-            return new TableViewModel<Motivation>(
+            TableView<Motivation> tableView = new TableView<Motivation>(
                 motivations,
                 paginationView
             );
+
+            tableView.SearchBarView = new SearchBar(
+                keyword
+            );
+
+            return tableView;
         }
     
         public async Task CreateMotivations(string userId, Motivation motivation, IFormFile formFile)

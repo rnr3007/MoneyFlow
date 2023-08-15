@@ -1,0 +1,8 @@
+@model MoneyFlow.Constants.Enum.CostTypeEnum;
+@using MoneyFlow.Constants.Enum;
+
+@{
+    string costTypeValue = CostType.GetCostTypeValue((int)Model);
+}
+
+<span>@costTypeValue</span>

@@ -42,17 +42,15 @@ namespace MoneyFlow.Controllers
         {
             try
             {
-                string baseUrl = $"{Request.Scheme}://{Request.Host}";
                 ViewData["Title"] = "Dashboard";
-                SummaryViewModel summaryViewModel = new SummaryViewModel();
+                SummaryView summaryViewModel = new SummaryView();
                 string userId = Request.Headers["userId"];
                 summaryViewModel.TotalCostByDate = await _expenseService.GetCostByDate(userId);
                 summaryViewModel.MotivationList = (await _motivationService.GetMotivations(
                     Request.Headers["userId"],
                     1,
                     10,
-                    "",
-                    baseUrl
+                    ""
                 )).Data;
                 summaryViewModel.Savings = await _savingsService.GetSaving(
                     Request.Headers["userId"]
@@ -69,7 +67,7 @@ namespace MoneyFlow.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorView { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
         [HttpGet(UriPath.NOT_FOUND)]

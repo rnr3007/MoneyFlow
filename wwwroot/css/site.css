@@ -140,6 +140,24 @@ body {
     cursor: pointer;
 }
 
+.page-index {
+    color: #007bff;
+    background-color: transparent;
+}
+
+.page-index:hover {
+    color: #0056b3;
+    cursor: pointer;
+}
+
+.page-item.active {
+    color: white;
+}
+
+.page-index.disabled{
+    color: #6c757d;
+}
+
 @media (max-width: 576px) {
     .hide-component {
         display: none;
@@ -154,4 +172,8 @@ body {
 .progress-transition {
     animation-name: progress-transition-animation;
     animation-duration: 2s;
+}
+
+.testing {
+    font-weight: 700;
 }

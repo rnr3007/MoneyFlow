@@ -8,6 +8,9 @@ using MoneyFlow.Models;
 using MoneyFlow.Data;
 using MoneyFlow.Services;
 using iv = MoneyFlow.Utils.Validator.InputValidator;
+using de = MoneyFlow.Utils.DataExtractor;
+using System.Web;
+using System.Collections.Generic;
 
 namespace MoneyFlow.Controllers
 {
@@ -25,19 +28,23 @@ namespace MoneyFlow.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> Incomes(string page, string limit, string keyword, string order)
+        public async Task<IActionResult> Incomes(string page, string limit, string keyword, string order, string filters)
         {
             try
             {
                 ViewData["Title"] = "Pendapatan";
-                string baseUrl = $"{Request.Scheme}://{Request.Host}";
-                TableViewModel<Income> userIncomes = await _incomeService.GetIncomes(
+
+                filters = filters == null ?
+                    "" :
+                    HttpUtility.UrlDecode(filters);
+                de.TryDeserializeList(filters, out List<int> filterList);
+                TableView<Income> userIncomes = await _incomeService.GetIncomes(
                     Request.Headers["userId"],
                     iv.GetValidIntegerFromString(page, 1),
                     iv.GetValidIntegerFromString(limit, 10),
                     keyword ?? "",
                     order ?? "",
-                    baseUrl
+                    filterList
                 );
 
                 return View(userIncomes);

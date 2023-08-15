@@ -1,6 +1,6 @@
 namespace MoneyFlow.Models
 {
-    public class ModalViewModel<T>
+    public class ModalView<T>
     {
         public string ModalId { get; set; }
 
@@ -10,7 +10,7 @@ namespace MoneyFlow.Models
 
         public T Data { get; set; }
 
-        public ModalViewModel(string modalId, string actionUrl = "", string confirmMessage = "", T data = default)
+        public ModalView(string modalId, string actionUrl = "", string confirmMessage = "", T data = default)
         {
             ModalId = modalId;
             ActionUrl = actionUrl;

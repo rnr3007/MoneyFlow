@@ -1,12 +1,7 @@
-@model MoneyFlow.Models.PaginationViewModel
+@model MoneyFlow.Models.Pagination
 
 @{
-    string actionUrl = Model.ActionUrl;
     int pageData = Model.ChoosenPage;
-    string keywordData = Model.SearchKeyword;
-    int limitData = Model.LimitData;
-    string orderData = Model.Order; 
-
     var previousBtnConf = pageData == 1 ? "disabled" : "";
     var nextBtnConf = pageData == Model.EndPage || Model.TotalData == 0 ? "disabled" : "";
     var previousPage = pageData - 1;
@@ -15,24 +10,24 @@
 
 <nav>
     <ul class="pagination justify-content-center">
-        <li class="page-item @previousBtnConf">
-            <a class="page-link" href="@actionUrl?page=@previousPage&limit=@limitData&keyword=@keywordData&order=@orderData">Sebelumnya</a>
+        <li class="@previousBtnConf page-item page-index">
+            <a class="page-link" onclick="changePage(this, '@previousPage')">&laquo;</a>
         </li>
         @foreach (string pageNum in Model.PageList)
         {
             if (pageNum == "...")
             {
-                <li class="disabled page-item"><a class="page-link" href="#">@pageNum<span class="sr-only">(current)</span></a></li>
+                <li class="disabled page-item page-index"><a class="page-link">@pageNum<span class="sr-only">(current)</span></a></li>
             } else if (pageNum != Model.ChoosenPage.ToString())
             {
-                <li class="page-item"><a class="page-link" href="@actionUrl?page=@pageNum&limit=@limitData&keyword=@keywordData&order=@orderData">@pageNum</a></li>
+                <li class="clickable page-item page-index"><a class="page-link" onclick="changePage(this, '@pageNum')">@pageNum</a></li>
             } else
             {
-                <li class="page-item"><a class="page-link" href="#">@pageNum<span class="sr-only">(current)</span></a></li>
+                <li class="page-item active page-index"><a class="page-link">@pageNum<span class="sr-only">(current)</span></a></li>
             }            
         }
-        <li class="page-item @nextBtnConf">
-            <a class="page-link" href="@actionUrl?page=@nextPage&limit=@limitData&keyword=@keywordData&order=@orderData">Selanjutnya</a>
+        <li class="@nextBtnConf page-item page-index">
+            <a class="page-link" onclick="changePage(this, '@nextPage')">&raquo;</a>
         </li>
     </ul>
 </nav>
