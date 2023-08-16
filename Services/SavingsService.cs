@@ -2,6 +2,8 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using MoneyFlow.Data;
+using MoneyFlow.Data.Views;
+using System;
 
 namespace MoneyFlow.Services
 {
@@ -16,13 +18,13 @@ namespace MoneyFlow.Services
 
         public async Task<long> GetSaving(string userId)
         {
-            long totalExpenses = await _dbContext.TExpense
-                .Where(x => x.UserId == userId)
-                .SumAsync(x => x.Cost);
 
-            long totalIncome = await _dbContext.TIncome
+            UserAndMoney userAndMoney = await _dbContext.VUserAndMoney
                 .Where(x => x.UserId == userId)
-                .SumAsync(x => x.IncomeMoney);
+                .FirstOrDefaultAsync();
+
+            long totalExpenses = userAndMoney.TotalExpense;
+            long totalIncome = userAndMoney.TotalIncome;
 
             return totalIncome - totalExpenses;
         }

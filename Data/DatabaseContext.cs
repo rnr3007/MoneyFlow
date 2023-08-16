@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MoneyFlow.Data.Views;
 
 namespace MoneyFlow.Data
 {
@@ -12,6 +13,8 @@ namespace MoneyFlow.Data
         public DbSet<Income> TIncome => Set<Income>();
         public DbSet<Motivation> TMotivation => Set<Motivation>();
 
+        public DbSet<UserAndMoney> VUserAndMoney { get; set; }
+
         protected override void OnModelCreating (ModelBuilder model)
         {
             base.OnModelCreating(model);
@@ -19,6 +22,10 @@ namespace MoneyFlow.Data
             {
                 b.HasIndex(u => new {u.Id, u.Username, u.Email}).IsUnique();
             });
+
+            model.Entity<UserAndMoney>()
+                .ToView("UserAndMoney")
+                .HasNoKey();
         }
     }
 }
