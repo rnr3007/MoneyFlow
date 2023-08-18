@@ -8,12 +8,14 @@ namespace MoneyFlow.Data
     public class Motivation : Entity
     {
         [Required(ErrorMessage = ErrorMessage.USER_NOT_FOUND)]
+        [StringLength(100)]
         public string UserId { get; set; }
 
         [ForeignKey("UserId")]
         public User UserData { get; set; }
 
         [Required(ErrorMessage = ErrorMessage.TARGET_NAME_EMPTY)]
+        [StringLength(255, ErrorMessage = ErrorMessage.TARGET_NAME_INVALID)]
         [TargetNameValidator(ErrorMessage = ErrorMessage.TARGET_NAME_INVALID)]
         public string TargetName { get; set; }
 

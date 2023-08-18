@@ -7,7 +7,7 @@ namespace MoneyFlow.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(File.ReadAllText("./Migrations/SqlScripts/AddViewUserAndMoney.sql"));
+            migrationBuilder.Sql(File.ReadAllText("./Migrations/SqlScripts/20230816042451_AddViewUserAndMoney.sql"));
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

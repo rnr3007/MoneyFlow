@@ -176,5 +176,22 @@ namespace MoneyFlow.Controllers
                 return Redirect(UriPath.ERROR);
             }
         }
+
+        [HttpPost(UriPath.MOTIVATIONS_BUY)]
+        public async Task<IActionResult> BuyMotivations(string motivationId)
+        {
+            try
+            {
+                await _motivationService.BuyMotivation(
+                    User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
+                    motivationId
+                );
+                return Redirect(UriPath.DASHBOARD);
+            } catch (Exception e)
+            {
+                _logger.LogError(e.Message, e);
+                return Redirect(UriPath.ERROR);
+            }
+        }
     }
 }

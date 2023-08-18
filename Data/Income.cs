@@ -9,6 +9,7 @@ namespace MoneyFlow.Data
     public class Income : Entity
     {
         [Required(ErrorMessage = ErrorMessage.USER_NOT_FOUND)]
+        [StringLength(100)]
         public string UserId { get; set; }
 
         [ForeignKey("UserId")]

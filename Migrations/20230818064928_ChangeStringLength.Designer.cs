@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoneyFlow.Data;
 
 namespace MoneyFlow.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class UsercontextModelSnapshot : ModelSnapshot
+    [Migration("20230818064928_ChangeStringLength")]
+    partial class ChangeStringLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,8 +24,7 @@ namespace MoneyFlow.Migrations
             modelBuilder.Entity("MoneyFlow.Data.Expense", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<long>("Cost")
                         .HasColumnType("bigint");
@@ -48,8 +49,7 @@ namespace MoneyFlow.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -61,8 +61,7 @@ namespace MoneyFlow.Migrations
             modelBuilder.Entity("MoneyFlow.Data.Income", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -78,8 +77,7 @@ namespace MoneyFlow.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -91,8 +89,7 @@ namespace MoneyFlow.Migrations
             modelBuilder.Entity("MoneyFlow.Data.Motivation", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -118,8 +115,7 @@ namespace MoneyFlow.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -131,8 +127,7 @@ namespace MoneyFlow.Migrations
             modelBuilder.Entity("MoneyFlow.Data.User", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");

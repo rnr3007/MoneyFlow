@@ -19,6 +19,7 @@ namespace MoneyFlow.Constants
         public const string MOTIVATIONS_CREATE = "/motivations/create";
         public const string MOTIVATIONS_UPDATE = "/motivations/update/{motivationId}";
         public const string MOTIVATIONS_DELETE = "/motivations/delete/{motivationId}";
+        public const string MOTIVATIONS_BUY = "/motivations/buy/{motivationId}";
 
         public const string FILE = "/file";
         public const string GET_FILE = "{fileType}/{purpose}/{fileName}";

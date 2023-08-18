@@ -9,6 +9,7 @@ using fu = MoneyFlow.Utils.FileUtilites;
 using MoneyFlow.Constants;
 using System.Data;
 using MoneyFlow.Models.DetailComponents;
+using Microsoft.Data.SqlClient;
 
 namespace MoneyFlow.Services
 {
@@ -96,6 +97,20 @@ namespace MoneyFlow.Services
             Motivation motivation = await GetMotivation(userId, motivationId);
             _dbContext.TMotivation.Remove(motivation);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task BuyMotivation(string userId, string motivationId)
+        {
+            SqlParameter[] parameters = new[]{
+                new SqlParameter("@MotivationId", motivationId),
+                new SqlParameter("@UserId", userId),
+                new SqlParameter("@ReceiptFile", null)
+            };
+
+            await _dbContext.Database.ExecuteSqlRawAsync(
+                "EXEC BuyDream @MotivationId, @UserId, @ReceiptFile",
+                parameters
+            );
         }
     }
 }

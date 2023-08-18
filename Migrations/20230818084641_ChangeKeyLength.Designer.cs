@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoneyFlow.Data;
 
 namespace MoneyFlow.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class UsercontextModelSnapshot : ModelSnapshot
+    [Migration("20230818084641_ChangeKeyLength")]
+    partial class ChangeKeyLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
