@@ -177,7 +177,7 @@ namespace MoneyFlow.Controllers
             }
         }
 
-        [HttpPost(UriPath.MOTIVATIONS_BUY)]
+        [HttpGet(UriPath.MOTIVATIONS_BUY)]
         public async Task<IActionResult> BuyMotivations(string motivationId)
         {
             try

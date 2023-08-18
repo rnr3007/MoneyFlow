@@ -3,18 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System.IO;
 using Microsoft.EntityFrameworkCore;
 using MoneyFlow.Data;
 using MoneyFlow.Services;
-using System.Collections.Generic;
-using MoneyFlow.Services.Middleware;
 using MoneyFlow.Utils;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System;
 

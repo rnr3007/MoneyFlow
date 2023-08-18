@@ -1,7 +1,7 @@
 CREATE PROCEDURE BuyDream
-    @MotivationId NVACHAR(100),
-    @UserId NVACHAR(100),
-    @ReceiptFile NVACHAR(255) = NULL
+    @MotivationId NVARCHAR(100),
+    @UserId NVARCHAR(100),
+    @ReceiptFile NVARCHAR(255) = NULL
 AS
 IF EXISTS (SELECT 1 FROM dbo.TMotivation WHERE Id = @MotivationId AND UserId = @UserId)
 	BEGIN 

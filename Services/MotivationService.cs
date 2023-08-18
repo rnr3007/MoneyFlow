@@ -104,7 +104,7 @@ namespace MoneyFlow.Services
             SqlParameter[] parameters = new[]{
                 new SqlParameter("@MotivationId", motivationId),
                 new SqlParameter("@UserId", userId),
-                new SqlParameter("@ReceiptFile", null)
+                new SqlParameter("@ReceiptFile", null ?? "")
             };
 
             await _dbContext.Database.ExecuteSqlRawAsync(
