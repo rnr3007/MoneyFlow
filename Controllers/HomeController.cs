@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MoneyFlow.Constants;
@@ -27,16 +28,18 @@ namespace MoneyFlow.Controllers
             _savingsService = savingsService;
         }
 
+        [Authorize()]
         [HttpGet("/")]
         public IActionResult Index()
         {
-            if (!string.IsNullOrWhiteSpace(Request.Cookies["TokenBearer"]))
+            if (User.Identity.IsAuthenticated)
             {
                 return Redirect(UriPath.DASHBOARD);
             }
             return View();
         }
 
+        [Authorize()]
         [HttpGet(UriPath.DASHBOARD)]
         public async Task<IActionResult> Dashboard()
         {
@@ -44,21 +47,22 @@ namespace MoneyFlow.Controllers
             {
                 ViewData["Title"] = "Dashboard";
                 SummaryView summaryViewModel = new SummaryView();
-                string userId = Request.Headers["userId"];
+                string userId = User.FindFirst(MiscConstants.USER_ID_CLAIM).Value;
                 summaryViewModel.TotalCostByDate = await _expenseService.GetCostByDate(userId);
                 summaryViewModel.MotivationList = (await _motivationService.GetMotivations(
-                    Request.Headers["userId"],
+                    userId,
                     1,
                     10,
                     ""
                 )).Data;
                 summaryViewModel.Savings = await _savingsService.GetSaving(
-                    Request.Headers["userId"]
+                    userId
                 );
                 return View(summaryViewModel);
             } catch (Exception e)
             {
                 _logger.LogError(e.Message);
+                Console.WriteLine(e);
                 return Redirect(UriPath.ERROR);
             }
         }

@@ -11,12 +11,13 @@ using MoneyFlow.Data;
 using MoneyFlow.Services;
 using iv = MoneyFlow.Utils.Validator.InputValidator;
 using de = MoneyFlow.Utils.DataExtractor;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Web;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MoneyFlow.Controllers
 {
+    [Authorize]
     [Route(UriPath.EXPENSE)]
     public class ExpenseController : Controller
     {
@@ -43,7 +44,7 @@ namespace MoneyFlow.Controllers
 
                 de.TryDeserializeList(filters, out List<int> listObject);
                 TableView<Expense> userExpenses = await _expenseService.GetExpenses(
-                    Request.Headers["userId"],
+                    User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                     iv.GetValidIntegerFromString(page, 1),
                     iv.GetValidIntegerFromString(limit, 10),
                     keyword ?? "",
@@ -54,7 +55,6 @@ namespace MoneyFlow.Controllers
                 return View(userExpenses);
             } catch (Exception e)
             {
-                Console.WriteLine(e);
                 _logger.LogError(e.Message, e);
                 return Redirect(UriPath.ERROR);
             }
@@ -66,7 +66,7 @@ namespace MoneyFlow.Controllers
             try
             {
                 await _expenseService.DeleteExpense(
-                    Request.Headers["userId"],
+                    User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                     expenseId
                 );
                 return Redirect(UriPath.EXPENSE_LIST);
@@ -95,7 +95,7 @@ namespace MoneyFlow.Controllers
         {
             try
             {
-                userExpense.UserId = Request.Headers["userId"];
+                userExpense.UserId = User.FindFirst(MiscConstants.USER_ID_CLAIM).Value;
                 ModelState.Remove("UserId");
                 if (formFile != null) {
                     iv.IsFileValid(formFile, new string[]{"image", "pdf"});
@@ -103,7 +103,7 @@ namespace MoneyFlow.Controllers
                 if (ModelState.IsValid)
                 {
                     await _expenseService.CreateExpense(
-                        Request.Headers["userId"],
+                        User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                         userExpense,
                         formFile
                     );
@@ -128,7 +128,7 @@ namespace MoneyFlow.Controllers
             try
             {
                 return View(await _expenseService.GetExpense(
-                    Request.Headers["userId"],
+                    User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                     expenseId
                 ));
             } catch (Exception e)
@@ -154,7 +154,7 @@ namespace MoneyFlow.Controllers
                 if (ModelState.IsValid)
                 {
                     await _expenseService.UpdateExpense(
-                        Request.Headers["userId"],
+                        User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                         expenseId,
                         expense,
                         formFile

@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MoneyFlow.Constants;
@@ -49,6 +50,10 @@ namespace MoneyFlow.Controllers
         [HttpGet("login")]
         public IActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return Redirect(UriPath.DASHBOARD);
+            }
             return View();
         }
 
@@ -60,7 +65,7 @@ namespace MoneyFlow.Controllers
                 if (!string.IsNullOrWhiteSpace(user.Password) && !string.IsNullOrWhiteSpace(user.Username)) 
                 {
                     await _userService.Login(user);
-                    return Redirect(UriPath.EXPENSE_LIST);
+                    return Redirect(UriPath.DASHBOARD);
                 }
                 return View(user);
             } catch(DataException e) 
@@ -81,10 +86,11 @@ namespace MoneyFlow.Controllers
         }
 
         [HttpGet("logout")]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
             try
             {
+                await HttpContext.SignOutAsync();
                 Response.Cookies.Delete("TokenBearer");
                 return Redirect(UriPath.USER_LOGIN);
             }

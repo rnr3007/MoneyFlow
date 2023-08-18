@@ -1,8 +1,17 @@
 namespace MoneyFlow.Constants
 {
+    public class RoleConstants
+    {
+        public const string USER = "User";
+        public const string ADMIN = "Admin"        ;
+    }
+
     public class MiscConstants
     {
         public const string X_HEADER_USER_ID = "userId";
+        public const string AUTH_CLAIM = "Authentication";
+        public const string USER_ID_CLAIM = "UserId";
+        public const string TOKEN_BEARER_CLAIM = "TokenBearer";
     }
 
     public class GeneralConstants

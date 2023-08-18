@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,6 +14,7 @@ using iv = MoneyFlow.Utils.Validator.InputValidator;
 
 namespace MoneyFlow.Controllers
 {
+    [Authorize]
     [Route(UriPath.MOTIVATIONS)]
     public class MotivationController : Controller
     {
@@ -33,7 +35,7 @@ namespace MoneyFlow.Controllers
             {
                 ViewData["Title"] = "Target Barang";
                 TableView<Motivation> tableView = await _motivationService.GetMotivations(
-                    Request.Headers["userId"],
+                    User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                     iv.GetValidIntegerFromString(page, 1),
                     iv.GetValidIntegerFromString(limit, 10),
                     keyword ?? ""
@@ -69,7 +71,7 @@ namespace MoneyFlow.Controllers
                 if (ModelState.IsValid)
                 {
                     await _motivationService.CreateMotivations(
-                        Request.Headers["userId"],
+                        User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                         motivation,
                         formFile
                     );
@@ -97,7 +99,7 @@ namespace MoneyFlow.Controllers
             {
                 ViewData["Title"] = "Ubah barang impian";
                 Motivation motivation = await _motivationService.GetMotivation(
-                    Request.Headers["userId"],
+                    User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                     motivationId
                 );
                 return View(motivation);
@@ -127,7 +129,7 @@ namespace MoneyFlow.Controllers
                 if (ModelState.IsValid)
                 {
                     await _motivationService.UpdateMotivation(
-                        Request.Headers["userId"],
+                        User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                         motivationId,
                         motivation,
                         formFile
@@ -159,7 +161,7 @@ namespace MoneyFlow.Controllers
             try
             {
                 await _motivationService.DeleteMotivation(
-                    Request.Headers["userId"],
+                    User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                     motivationId
                 );
                 return Redirect(UriPath.MOTIVATIONS);

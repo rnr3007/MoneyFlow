@@ -8,9 +8,11 @@ using fu = MoneyFlow.Utils.FileUtilites;
 using MoneyFlow.Models;
 using MoneyFlow.Services;
 using iv = MoneyFlow.Utils.Validator.InputValidator;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MoneyFlow.Controllers
 {
+    [Authorize]
     [Route(UriPath.FILE)]
     public class FileController : Controller
     {
@@ -39,7 +41,7 @@ namespace MoneyFlow.Controllers
                     throw new Exception(ErrorMessage.REQUIRED_DATA_EMPTY);
                 }
 
-                file = await fu.GetFileByte($"UserData/{Request.Headers["userId"]}/{purpose}/{fileName}");
+                file = await fu.GetFileByte($"UserData/{User.FindFirst(MiscConstants.USER_ID_CLAIM).Value}/{purpose}/{fileName}");
                 
                 switch (fileType)
                 {
@@ -75,7 +77,7 @@ namespace MoneyFlow.Controllers
             try 
             {
                 file = await _fileService.RetrieveExcel(
-                    Request.Headers["userId"],
+                    User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                     "expense"
                 );
                 return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -98,7 +100,7 @@ namespace MoneyFlow.Controllers
                 if (purpose == GeneralConstants.PURPOSE_EXPENSE)
                 {
                     await _expenseService.InsertFromExcel(
-                        Request.Headers["userId"],
+                        User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                         formFile
                     );
                     return Redirect(UriPath.EXPENSE_LIST);
