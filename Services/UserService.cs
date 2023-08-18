@@ -1,7 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using MoneyFlow.Constants;
@@ -37,13 +42,18 @@ namespace MoneyFlow.Services
                 ?? throw new DataException(ErrorMessage.USER_NOT_FOUND);
             if (!BCrypt.Net.BCrypt.Verify(user.Password, userResult.Password)) { throw new DataException(ErrorMessage.WRONG_PASSWORD);}
             var jwtToken = AuthUtilites.GenerateJwt(userResult) ?? throw new Exception(ErrorMessage.SERVER_ERROR);
-            HttpContext.Response.Cookies.Append("TokenBearer", jwtToken, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.None,
-                Expires = DateTime.UtcNow.AddDays(1)
-            });
+
+            List<Claim> claims = new List<Claim>{
+                new Claim(MiscConstants.TOKEN_BEARER_CLAIM, jwtToken),
+                new Claim(MiscConstants.USER_ID_CLAIM, userResult.Id),
+                new Claim(ClaimTypes.Role, RoleConstants.USER)
+            };
+
+            ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(
+                new ClaimsIdentity(claims, MiscConstants.AUTH_CLAIM)
+            );
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
         }
 
         public async Task<User> GetUser(string userId)

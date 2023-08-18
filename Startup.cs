@@ -11,6 +11,12 @@ using MoneyFlow.Services;
 using System.Collections.Generic;
 using MoneyFlow.Services.Middleware;
 using MoneyFlow.Utils;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System;
 
 namespace MoneyFlow
 {
@@ -51,6 +57,16 @@ namespace MoneyFlow
             services.AddTransient<DatabaseContext>();
 
             services.AddControllersWithViews();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(option =>
+            {
+                option.Cookie.Name = "TokenBearer";
+                option.ExpireTimeSpan = TimeSpan.FromDays(1);
+                option.LoginPath = "/user/login";
+                option.LogoutPath = "/user/logout";
+                option.SlidingExpiration = true;
+            }); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,25 +88,9 @@ namespace MoneyFlow
             
             FileUtilites.Configure(env);
             
-            List<string> protectedBranch = new List<string> 
-            {
-                "/user", "/file", "/expense", "/expenses", "/dashboard", "/incomes", "/motivations"
-            };
+            app.UseAuthentication();
             
-            List<string> unprotectedBranch = new List<string> 
-            {
-                "/user/register"
-            };
-
-            app.UseWhen(context => 
-            (
-                !unprotectedBranch.Contains((string)context.Request.Path)
-                && protectedBranch.Exists(c => ((string)context.Request.Path).StartsWith(c))
-            ), builder =>
-            {
-                builder.UseMiddleware<AuthValidation>();
-                builder.UseAuthorization();
-            });
+            app.UseAuthorization();
 
             app.UseStaticFiles();
             

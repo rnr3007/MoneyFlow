@@ -11,9 +11,11 @@ using iv = MoneyFlow.Utils.Validator.InputValidator;
 using de = MoneyFlow.Utils.DataExtractor;
 using System.Web;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MoneyFlow.Controllers
 {
+    [Authorize]
     [Route(UriPath.INCOMES)]
     public class IncomeController : Controller
     {
@@ -39,7 +41,7 @@ namespace MoneyFlow.Controllers
                     HttpUtility.UrlDecode(filters);
                 de.TryDeserializeList(filters, out List<int> filterList);
                 TableView<Income> userIncomes = await _incomeService.GetIncomes(
-                    Request.Headers["userId"],
+                    User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                     iv.GetValidIntegerFromString(page, 1),
                     iv.GetValidIntegerFromString(limit, 10),
                     keyword ?? "",
@@ -70,7 +72,7 @@ namespace MoneyFlow.Controllers
                 if (ModelState.IsValid)
                 {
                     await _incomeService.CreateIncomes(
-                        Request.Headers["userId"],
+                        User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                         income
                     );
                     return Redirect(UriPath.INCOMES);
@@ -89,7 +91,7 @@ namespace MoneyFlow.Controllers
             {
                 ViewData["Title"] = "Ubah Pendapatan";
                 return View(await _incomeService.GetIncome(
-                    Request.Headers["userId"],
+                    User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                     incomeId
                 ));
             } catch (Exception e)
@@ -112,7 +114,7 @@ namespace MoneyFlow.Controllers
                 if (ModelState.IsValid)
                 {
                     await _incomeService.UpdateIncomes(
-                        Request.Headers["userId"],
+                        User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                         incomeId,
                         income
                     );
@@ -136,7 +138,7 @@ namespace MoneyFlow.Controllers
             try
             {
                 await _incomeService.DeleteIncomes(
-                    Request.Headers["userId"],
+                    User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                     incomeId
                 );
                 return Redirect(UriPath.INCOMES);

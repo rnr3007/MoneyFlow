@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.IdentityModel.Tokens;
 using MoneyFlow.Constants;
 using MoneyFlow.Data;
@@ -15,23 +18,26 @@ namespace MoneyFlow.Utils
         private static readonly string jwtIssuer = Startup.StaticConfiguration.GetSection("JWT_ISSUER").Value;
         public static string GenerateJwt(User user)
         {
-            var securityKey = new SymmetricSecurityKey(
+            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(jwtKey)
             );
-            var credentials = new SigningCredentials(
+            SigningCredentials credentials = new SigningCredentials(
                 securityKey, 
                 SecurityAlgorithms.HmacSha256
             );
-            var claims = new[]
+
+            List<Claim> claims = new List<Claim>
             {
                 new Claim("id", user.Id)
             };
-            var token = new JwtSecurityToken(
+            
+            JwtSecurityToken token = new JwtSecurityToken(
                 issuer: jwtIssuer,
                 claims: claims,
                 signingCredentials: credentials,
                 expires: DateTime.UtcNow.AddDays(1)
             );
+            
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
