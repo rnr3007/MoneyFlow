@@ -3,6 +3,6 @@
     var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
     string imageUrl = $"{baseUrl}/file/{Model}";
 }
-<div class="container m-2 p-4 rounded" style="border-radius: 1rem !important;">
+<div class="container m-2 rounded row justify-content-center" style="border-radius: 1rem !important;">
     <img src="@imageUrl" class="img-fluid" style="max-height: 360p: max-width: 400p">
 </div>
