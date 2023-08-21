@@ -127,6 +127,7 @@ namespace MoneyFlow.Controllers
         {
             try
             {
+                ViewData["Title"] = "Ubah Pengeluaran";
                 return View(await _expenseService.GetExpense(
                     User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                     expenseId
@@ -145,6 +146,7 @@ namespace MoneyFlow.Controllers
         [HttpPost(UriPath.EXPENSE_UPDATE)]
         public async Task<IActionResult> UpdateExpense(string expenseId, Expense expense, IFormFile formFile)
         {
+            ViewData["Title"] = "Ubah Pengeluaran";
             try
             {
                 ModelState.Remove("UserId");

@@ -59,6 +59,7 @@ namespace MoneyFlow.Controllers
         [HttpPost(UriPath.MOTIVATIONS_CREATE)]
         public async Task<IActionResult> CreateMotivations(Motivation motivation, IFormFile formFile)
         {
+            ViewData["Title"] = "Buat barang impian";
             try
             {
                 if (formFile == null || !iv.IsFileValid(formFile, new string[]{"image"}))
@@ -118,6 +119,7 @@ namespace MoneyFlow.Controllers
         [HttpPost(UriPath.MOTIVATIONS_UPDATE)]
         public async Task<IActionResult> UpdateMotivations(string motivationId, Motivation motivation, IFormFile formFile)
         {
+            ViewData["Title"] = "Ubah barang impian";
             try
             {
                 if (formFile == null || !iv.IsFileValid(formFile, new string[]{"image"}))

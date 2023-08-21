@@ -60,12 +60,14 @@ namespace MoneyFlow.Controllers
         [HttpGet(UriPath.INCOMES_CREATE)]
         public IActionResult CreateIncomes()
         {
+            ViewData["Title"] = "Buat Pendapatan";
             return View();
         }
 
         [HttpPost(UriPath.INCOMES_CREATE)]
         public async Task<IActionResult> CreateIncomes(Income income)
         {
+            ViewData["Title"] = "Buat Pendapatan";
             try
             {
                 ModelState.Remove("UserId");
@@ -87,9 +89,9 @@ namespace MoneyFlow.Controllers
         [HttpGet(UriPath.INCOMES_UPDATE)]
         public async Task<IActionResult> UpdateIncomes(string incomeId)
         {
+            ViewData["Title"] = "Ubah Pendapatan";
             try
             {
-                ViewData["Title"] = "Ubah Pendapatan";
                 return View(await _incomeService.GetIncome(
                     User.FindFirst(MiscConstants.USER_ID_CLAIM).Value,
                     incomeId
@@ -108,6 +110,7 @@ namespace MoneyFlow.Controllers
         [HttpPost(UriPath.INCOMES_UPDATE)]
         public async Task<IActionResult> UpdateIncomes(string incomeId, Income income)
         {
+            ViewData["Title"] = "Ubah Pendapatan";
             try
             {
                 ModelState.Remove("UserId");
