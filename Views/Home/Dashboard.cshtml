@@ -1,4 +1,5 @@
 @model MoneyFlow.Models.SummaryView;
+@using MoneyFlow.Models;
 @using MoneyFlow.Data;
 @using MoneyFlow.Constants;
 @using System.Collections.Generic;
@@ -16,6 +17,7 @@
     float savingPosition = maxTarget == 0 ? 100 : ((float)Model.Savings / maxTarget) * (float)100;
     List<string> ballons = new List<string>();
     List<long> itemPrices = new List<long>();
+    List<ModalView<string>> modalBuys = new List<ModalView<string>>();
 }
 
 <div class="text-center">
@@ -36,18 +38,43 @@
             @foreach (Motivation motivation in Model.MotivationList)
             {
                 zIndex += 1;
-                var ballonId = $"balloonBarId{motivation.Id}";
-                var imgUrl = $"{baseUrl}/file/image/{GeneralConstants.PURPOSE_MOTIVATIONS}/{motivation.TargetImage}";
-                var pointerType = Model.Savings <= motivation.TargetPrice ? "pointer-warning" : "pointer-success";
+                string ballonId = $"balloonBarId{motivation.Id}";
+                string imgUrl = $"{baseUrl}/file/image/{GeneralConstants.PURPOSE_MOTIVATIONS}/{motivation.TargetImage}";
                 ballons.Add(ballonId);
                 itemPrices.Add(motivation.TargetPrice);
+
                 <div id='@ballonId' class="balloon" >
+                @if (Model.Savings <= motivation.TargetPrice)
+                {
                     <div class="balloon-image" style="background-image: url('@imgUrl');" 
                         data-container="body" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="@motivation.TargetName">
-                        <svg class="@pointerType" width="96" height="125">
+                        <svg class="pointer-warning" width="96" height="125">
+                            <path d="M2 50 L48 125 L94 50 Z"/>
+                        </svg>
+                    </div>   
+                } else
+                {
+                    string actionUrl = $"/motivations/buy/{motivation.Id}";
+                    string submitId = $"submit{motivation.Id}";
+                    string modalId = $"modal{motivation.Id}";
+                    modalBuys.Add(new ModalView<string>(
+                        modalId,
+                        actionUrl,
+                        "Beli",
+                        motivation.TargetName
+                    ){
+                        SubmitId = submitId
+                    });
+                    <form id="@submitId" class="d-none" method="post" action="@actionUrl">
+                    </form>
+                    <div class="clickable balloon-image" style="background-image: url('@imgUrl');" 
+                        data-container="body" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="@motivation.TargetName"
+                        onclick="openModal('@modalId')">
+                        <svg class="pointer-success" width="96" height="125">
                             <path d="M2 50 L48 125 L94 50 Z"/>
                         </svg>
                     </div>
+                }
                 </div>
             }
         </div>
@@ -59,6 +86,11 @@
         </div>
     </div>
 </div>
+
+@foreach(ModalView<string> modal in modalBuys)
+{
+    @await Html.PartialAsync("~/Views/Shared/Components/DetailComponents/ModalConfirmationBuy.cshtml", modal);
+}
 
 <script>
     loadChart(

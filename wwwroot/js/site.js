@@ -82,6 +82,11 @@ function inputExcel(inputFormId, inputContainerId) {
     inputElement.click();
 }
 
+function submitUpdate(submitFormId) {
+    const submitElement = document.getElementById(submitFormId);
+    submitElement.submit();
+}
+
 function setupPopover() {
     $('[data-toggle="popover"]').popover();
 }

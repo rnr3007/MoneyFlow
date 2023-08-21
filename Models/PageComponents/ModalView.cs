@@ -10,6 +10,8 @@ namespace MoneyFlow.Models
 
         public T Data { get; set; }
 
+        public string SubmitId { get; set; }
+
         public ModalView(string modalId, string actionUrl = "", string confirmMessage = "", T data = default)
         {
             ModalId = modalId;

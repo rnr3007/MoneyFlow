@@ -119,7 +119,7 @@
     </div>
     for (int i = 0; i < modalDetailList.Count; i++)
     {
-        @await Html.PartialAsync("~/Views/Shared/Components/Modal/DeleteConfirmationModalView.cshtml", modalDeleteList[i]);
+        @await Html.PartialAsync("~/Views/Shared/Components/DetailComponents/ModalConfirmationDelete.cshtml", modalDeleteList[i]);
         @await Html.PartialAsync("~/Views/Expense/DetailExpenseModal.cshtml", modalDetailList[i]);
     }
 }
